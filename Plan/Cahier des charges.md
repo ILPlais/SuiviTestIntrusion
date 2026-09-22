@@ -181,6 +181,8 @@ Deux modes sont supportés, au choix de l'exploitant :
 
 ## Sauvegardes
 
+La gestion des sauvegardes sera faite par [Portabase](https://portabase.io/).
+
 Une sauvegarde **automatique** est paramétrable (fréquence par défaut : quotidienne) :
 
 - Dump de la base (métadonnées, utilisateurs, trousseaux chiffrés) ;

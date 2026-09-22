@@ -72,9 +72,9 @@ Détailler :
 À ajouter :
 
 - [x] Version minimale de PHP et Laravel
-- [ ] Déploiement : Docker ? Installation manuelle ?
-- [ ] Sauvegarde automatique des données
-- [ ] Logs d'audit (qui a fait quoi, quand ?)
+- [x] Déploiement : Docker ? Installation manuelle ?
+- [x] Sauvegarde automatique des données
+- [x] Logs d'audit (qui a fait quoi, quand ?)
 
 ### 8. Timeline/Gantt
 
