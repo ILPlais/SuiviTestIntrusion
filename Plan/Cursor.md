@@ -1,0 +1,354 @@
+# Specification report elements
+
+## User
+
+Fais-moi un rapport sur les élements restants à spécifier dans le Plan/Cahier des charges.md par rapport à ce que m'avait spécifier Claude dans Plan/Claude.md
+
+## Assistant
+
+Je vais comparer `Plan/Cahier des charges.md` et `Plan/Claude.md` pour lister ce qui reste à spécifier.
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\.cursor\\skills-cursor\\canvas\\SKILL.md"}
+```
+
+### Tool Glob File Search
+
+```
+{"targetDirectory":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion","globPattern":"Plan/**/*.md"}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Claude.md"}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\NotebookLM\\Cohérence.md","limit":100}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md"}
+```
+
+## Assistant
+
+Les deux documents sont assez clairs : je croise la checklist de Claude avec le contenu réel du cahier des charges pour lister ce qui manque encore.
+
+### Tool Create Plan
+
+````
+{"plan":"# Rapport : éléments restants à spécifier dans le cahier des charges\n\nComparaison de [Plan/Claude.md](Plan/Claude.md) (revue du premier jet) et de [Plan/Cahier des charges.md](Plan/Cahier des charges.md) (version actuelle).\n\n**Synthèse :** 3 blocs Claude sont globalement traités, 1 est partiel, **8 restent à rédiger**. La section « Résultats » est encore un squelette vide. Les suggestions mineures sont presque toutes reprises.\n\n```mermaid\nflowchart LR\n  done[Traites]\n  partial[Partiels]\n  missing[A specifier]\n  done --> P1[Perimetre]\n  done --> P2[Utilisateurs et auth]\n  done --> P3a[Statuts et validation client]\n  partial --> P4[GED organisation stockage]\n  partial --> P3b[Notifications]\n  missing --> P5[Risque global]\n  missing --> P6[Exports templates]\n  missing --> P7[Aspects techniques]\n  missing --> P8[Timeline Gantt]\n  missing --> P9[Collaboration]\n  missing --> P10[Remediation]\n  missing --> P11[Annexes]\n  missing --> P12[API REST]\n```\n\n---\n\n## Déjà spécifié (Claude #1, #2, #3 partiel, suggestions mineures)\n\nCes points de Claude sont présents dans le CDC actuel :\n\n- **#1 Périmètre** : une seule section, avec réseau (machines, services, utilisateurs) et diagramme Mermaid.\n- **#2 Utilisateurs** : auth locale / LDAP / AD / droits BDD ; 2FA e-mail et TOTP ; rôles root, administrateur, chef de projet, testeur, client final ; ACL par modules.\n- **#3 Workflow (partiel)** : statuts Planifié / En cours / Terminé / Validé ; le client peut valider le rapport final.\n- **Suggestions mineures** : application Web uniquement ; clause de non-responsabilité et contacts d’urgence dans le questionnaire ; mention CVSS v4.0 ; PrismJS cité pour la coloration.\n\n**Limite sur #2 :** le cloisonnement multi-tenant (« un client ne voit que ses tests ») n’est pas énoncé clairement. Les rôles le suggèrent, sans règle d’isolation des données.\n\n**Limite sur #3 :** le **système de notifications / alertes** est explicitement noté manquant dans Claude (case #3) et n’apparaît toujours pas.\n\n---\n\n## À spécifier — par point Claude\n\n### #4 Gestion documentaire (partiel)\n\n**Déjà là :** types de preuves (captures, logs, pcap), taille max paramétrable, commentaires/mots-clés, ACL, architecture GPG/OpenPGP (CEK, trousseau, flux upload/partage/révocation).\n\n**Encore à écrire — « format et organisation du stockage » :**\n\n- Emplacement physique ou logique (disque local, objet S3-compatible, hors BDD vs blobs).\n- Arborescence et convention de nommage (par test / phase / vulnérabilité).\n- Formats MIME acceptés, antivirus / scan à l’upload, conservation et purge.\n- Lien explicite entre un document et une vulnérabilité, une phase, un objectif.\n\n### #5 Section « Résultats » / Risque global (vide)\n\nLa section [Résultats](Plan/Cahier%20des%20charges.md) (titres « Risque global », « Conclusions », « Mesures à apporter », « Contre-mesures ») n’a **aucun contenu**.\n\nÀ trancher et rédiger, comme demandé par Claude :\n\n- Tableau de bord (compteurs par sévérité, par phase, par statut).\n- Graphiques de répartition des vulnérabilités.\n- Score de risque agrégé (règle de calcul : max CVSS, moyenne pondérée, matrice business, etc.).\n- Contenu attendu des conclusions, mesures et contre-mesures (champs libres vs catalogue).\n\n### #6 Exports et templates\n\nLe CDC liste les **formats** (PDF, OpenDocument, HTML, JSON, XML) mais pas le **produit rapport**.\n\nÀ spécifier :\n\n- Templates fournis par défaut (exécutif, technique, annexes preuves, etc.).\n- Personnalisation : logo client, charte, en-tête/pied, mentions légales.\n- Export de sauvegarde / migration : schéma JSON/XML, versioning, ce qui est inclus (fichiers chiffrés ? clés ?), restauration.\n\n### #7 Aspects techniques\n\nÀ ajouter (absents aujourd’hui, hors « Laravel + API REST + SQLite/MySQL/PostgreSQL ») :\n\n- Versions minimales PHP et Laravel.\n- Mode de déploiement (Docker, install manuelle, les deux).\n- Sauvegardes automatiques (fréquence, contenu, chiffrement des backups).\n- Journaux d’audit (qui a fait quoi, quand, sur quel objet).\n\n### #8 Timeline / Gantt\n\nLes phases (Reconnaissance ? Nettoyage) et les statuts existent, pas le calendrier.\n\nÀ spécifier :\n\n- Dates de début/fin **prévues** et **réelles** (test, phases, tâches).\n- Jalons (kick-off, fin d’énumération, remise du rapport, validation client).\n- Temps passé par phase (saisie manuelle vs agrégation des tâches).\n- Vue Gantt : obligatoire, optionnelle, ou hors V1.\n\n### #9 Collaboration\n\nLes rôles et l’attribution de tâches existent ; le travail **à plusieurs sur un même test** n’est pas décrit.\n\nÀ spécifier :\n\n- Plusieurs testeurs sur un même engagement (oui/non, règles d’édition concurrente).\n- Commentaires d’équipe (sur test, vulnérabilité, tâche) distincts des commentaires GED.\n- Historique des modifications (audit métier : avant/après, auteur, horodatage).\n\n### #10 Recommandations de remédiation\n\nAucune fiche remédiation par vulnérabilité (seulement des titres vides sous Conclusions).\n\nÀ spécifier pour chaque vulnérabilité :\n\n- Recommandations techniques détaillées.\n- Priorité de correction (distincte ou alignée sur l’échelle CVSS / impact business).\n- Liens / ressources (patches, docs vendeur).\n- Statut de remédiation : à faire, en cours, corrigé, vérifié (retest).\n\n### #11 Annexes et références\n\nAbsent du CDC.\n\nÀ spécifier :\n\n- Méthodologies suivies (OWASP, OSSTMM, PTES, autre) : catalogue figé vs choix par test.\n- Références réglementaires (au-delà des exemples PCI DSS / RGPD dans l’impact légal).\n- Glossaire des termes techniques.\n\n### #12 API REST\n\nL’API REST est posée comme canal unique client/serveur, sans contrat.\n\nÀ spécifier :\n\n- Authentification API (tokens Sanctum/Passport, OAuth2, clés).\n- Documentation (OpenAPI / Swagger).\n- Rate limiting, pagination, versioning d’API.\n\n**Complément mineur Claude encore flou :** langages PrismJS réellement supportés (liste, pas seulement Nmap / Metasploit / PowerShell en exemple).\n\n---\n\n## Points de cohérence à trancher en rédigeant (liés aux trous ci-dessus)\n\n[Plan/NotebookLM/Cohérence.md](Plan/NotebookLM/Cohérence.md) n’est pas la liste Claude, mais ces ambiguïtés bloquent une spécification propre :\n\n- **CVSS v3.1 vs v4.0** : le CDC autorise les deux ; les formules sont uniquement v3.1. Trancher : v3.1 seul, ou les deux avec deux moteurs.\n- **Auth « droits utilisateurs sur la base de données »** vs Laravel / LDAP / AD : garder, retirer, ou limiter à un mode d’install.\n- **ACL documents vs trousseau cryptographique** : qui déclenche le partage de CEK quand un admin change une ACL.\n- **Implication SPA** : le déchiffrement 100 % client (JS) n’est pas nommé comme contrainte d’architecture front.\n- **Notifications** : canal (e-mail, in-app), événements (changement de statut, validation client, partage de fichier).\n\n---\n\n## Ordre de rédaction recommandé\n\nSi l’étape suivante est de compléter le CDC, l’ordre le plus utile pour le développement est :\n\n1. **#5 Risque global + #10 remédiation** (cœur métier encore vide).\n2. **#7 technique + #12 API** (cadre d’implémentation).\n3. **#6 templates/exports** et **#4 organisation stockage**.\n4. **#8 Gantt**, **#9 collaboration**, **#3 notifications**, **#11 annexes**.\n5. Trancher les 4–5 points de cohérence ci-dessus dans les sections concernées.\n\nCe rapport ne propose pas encore de rédiger le CDC : uniquement l’inventaire des manques par rapport à Claude.\n","todos":[{"id":"fill-resultats-remediation","content":"Rédiger #5 Risque global / Conclusions et #10 fiches de remédiation","status":"TODO_STATUS_PENDING","createdAt":"1790016505005","updatedAt":"1790016505005","dependencies":[]},{"id":"fill-tech-api","content":"Rédiger #7 versions/déploiement/sauvegardes/audit et #12 contrat API REST","status":"TODO_STATUS_PENDING","createdAt":"1790016505005","updatedAt":"1790016505005","dependencies":[]},{"id":"fill-exports-ged","content":"Rédiger #6 templates/exports et #4 organisation du stockage GED","status":"TODO_STATUS_PENDING","createdAt":"1790016505005","updatedAt":"1790016505005","dependencies":[]},{"id":"fill-collab-gantt-annexes","content":"Rédiger #8 Gantt, #9 collaboration, notifications, #11 annexes, et trancher cohérence CVSS/ACL/SPA","status":"TODO_STATUS_PENDING","createdAt":"1790016505005","updatedAt":"1790016505005","dependencies":[]}],"overview":"Rapport d’écart entre les 12 points (et suggestions mineures) de Plan/Claude.md et l’état actuel de Plan/Cahier des charges.md : ce qui est déjà couvert, ce qui est partiel, et ce qu’il reste à rédiger.","name":"Rapport écarts CDC","isProject":false,"phases":[]}
+````
+
+## User
+
+Rapport : éléments restants à spécifier dans le cahier des charges
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+## Assistant
+
+Je commence par le premier lot du plan : risque global, conclusions et fiches de remédiation, puis j’enchaîne sur le reste du cahier des charges.
+
+### Tool Get Mcp Tools
+
+```
+{"server":"cursor","toolName":"TodoWrite","toolCallId":"call-011acd47-cac4-40da-b4c4-15a1c8e9d74d-6\nfc_adb3ed75-9d7c-947b-9f2d-27a6707ac71e_0"}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":1,"limit":50}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":145,"limit":50}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":380,"limit":140}
+```
+
+### Tool Todo Write
+
+```
+{"todos":[{"id":"fill-resultats-remediation","content":"Rédiger #5 Risque global / Conclusions et #10 fiches de remédiation","status":"TODO_STATUS_IN_PROGRESS","createdAt":"1790016505005","updatedAt":"1790016562895","dependencies":[]},{"id":"fill-tech-api","content":"Rédiger #7 versions/déploiement/sauvegardes/audit et #12 contrat API REST","status":"TODO_STATUS_PENDING","createdAt":"1790016505005","updatedAt":"1790016562895","dependencies":[]},{"id":"fill-exports-ged","content":"Rédiger #6 templates/exports et #4 organisation du stockage GED","status":"TODO_STATUS_PENDING","createdAt":"1790016505005","updatedAt":"1790016562895","dependencies":[]},{"id":"fill-collab-gantt-annexes","content":"Rédiger #8 Gantt, #9 collaboration, notifications, #11 annexes, et trancher cohérence CVSS/ACL/SPA","status":"TODO_STATUS_PENDING","createdAt":"1790016505005","updatedAt":"1790016562895","dependencies":[]}],"merge":true}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"| **? 4** | Dégradation de la marque |\n\n#### Remédiation\n\nChaque vulnérabilité dispose d’une **fiche de remédiation**, distincte de la description du constat. Elle contient :\n\n- **Recommandations techniques détaillées** : actions concrètes (configuration, correctif, architecture, compensation). Champ texte riche, éventuellement structuré en étapes.\n- **Priorité de correction** : saisie par le chef de projet, **indépendante** du score CVSS (celui-ci reste un indicateur de gravité technique). Valeurs :\n\t- **P1** — immédiat (blocage ou exposition critique) ;\n\t- **P2** — court terme ;\n\t- **P3** — moyen terme ;\n\t- **P4** — opportunité / durcissement.\n\tPar défaut, une suggestion automatique est proposée à partir du niveau CVSS (Critique ? P1, Majeur ? P2, Important ? P3, Mineur/Aucun ? P4) et **peut être surchargée** en tenant compte de l’impact business.\n- **Ressources** : liens vers patches, avis vendeur, documentation, bulletins CVE/CWE, procédures internes.\n- **Statut de remédiation** :\n\t- À faire ;\n\t- En cours ;\n\t- Corrigé (déclaré par le client ou l’équipe) ;\n\t- Vérifié (retest par un testeur, avec date et résultat).\n- **Preuves de correction** : documents GED liés (captures après patch, tickets, extraits de config).\n\nLes mesures agrégées du rapport (section Résultats) sont dérivées de ces fiches, avec un texte de synthèse éditable.\n\n### Documents"}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"## Résultats\n\nCette section alimente le **tableau de bord** du test et les chapitres de synthèse des rapports exportés. Les indicateurs sont calculés à partir des vulnérabilités **non clôturées** (statut de remédiation différent de **Vérifié**), sauf mention contraire.\n\n### Risque global\n\nLe risque global d’un test est présenté sous trois formes complémentaires, toutes visibles sur le tableau de bord :\n\n1. **Score de gravité technique (titre)** : le **maximum** des scores CVSS de base des vulnérabilités ouvertes, affiché avec le niveau associé (Aucun ? Critique). C’est l’indicateur principal du bandeau d’en-tête.\n2. **Score agrégé optionnel** : moyenne arithmétique des scores CVSS de base, **pondérée** par la priorité de correction (P1 = 4, P2 = 3, P3 = 2, P4 = 1). Affiché à titre informatif, jamais à la place du maximum.\n3. **Profil d’impact business** : pour chaque axe (opérationnel, légal, financier, image), le **maximum** des niveaux saisis sur les vulnérabilités ouvertes.\n\nLe tableau de bord affiche également :\n\n- Compteurs par **niveau de sévérité** (Aucun, Mineur, Important, Majeur, Critique) ;\n- Compteurs par **phase** et par **statut de remédiation** ;\n- Compteurs par **priorité** P1–P4.\n\n#### Graphiques\n\nLes graphiques suivants sont générés automatiquement (exportables dans les rapports PDF / HTML / OpenDocument) :\n\n- Répartition des vulnérabilités par niveau de sévérité (camembert ou barres) ;\n- Répartition par phase du test ;\n- Évolution du stock ouvert vs corrigé / vérifié dans le temps (si l’historique de remédiation est renseigné) ;\n- Matrice sévérité × impact business (vue synthèse).\n\n### Conclusions\n\nChamp de **synthèse narrative** rédigé par le chef de projet ou le testeur désigné. Il doit couvrir :\n\n- Le contexte et le périmètre réellement testé ;\n- Les constats majeurs (en renvoyant aux vulnérabilités P1/P2) ;\n- Les limites du test (exclusions, indisponibilités, 0-day hors périmètre) ;\n- L’appréciation globale du niveau de maîtrise.\n\nUn brouillon peut être pré-rempli à partir des compteurs et du score de gravité technique, puis **obligatoirement relu et validé** avant export du rapport.\n\n#### Mesures à apporter\n\nListe ordonnée des actions recommandées, **agrégée** depuis les fiches de remédiation (libellé, priorité, vulnérabilités liées). Le rédacteur peut :\n\n- Réordonner, fusionner ou scinder des mesures ;\n- Ajouter des mesures transverses absentes des fiches (gouvernance, sensibilisation, supervision).\n\nChaque mesure du rapport pointe vers une ou plusieurs vulnérabilités. Le catalogue n’est pas figé : pas de liste unique imposée, afin de rester atomique et contextualisé.\n\n#### Contre-mesures\n\nInventaire des **contrôles déjà en place** observés pendant le test (pare-feu, MFA, durcissement, supervision, sauvegardes, procédures). Pour chaque contre-mesure :\n\n- Description ;\n- Composants concernés ;\n- Efficacité constatée (empêche, détecte, limite, contourné) ;\n- Lien éventuel vers une vulnérabilité (contrôle insuffisant) ou vers une mesure (renforcement).\n\nCes éléments nourrissent le rapport pour distinguer ce qui existe déjà de ce qui reste à faire."}
+```
+
+### Tool Todo Write
+
+```
+{"todos":[{"id":"fill-resultats-remediation","content":"Rédiger #5 Risque global / Conclusions et #10 fiches de remédiation","status":"TODO_STATUS_COMPLETED","createdAt":"1790016505005","updatedAt":"1790016592114","dependencies":[]},{"id":"fill-tech-api","content":"Rédiger #7 versions/déploiement/sauvegardes/audit et #12 contrat API REST","status":"TODO_STATUS_IN_PROGRESS","createdAt":"1790016505005","updatedAt":"1790016592114","dependencies":[]}],"merge":true}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"Le projet se présentera comme une **application Web** de type **SPA** (_Single Page Application_) côté client. Le serveur Laravel ne traite **jamais** le contenu en clair des preuves chiffrées : génération des clés, chiffrement et déchiffrement s’exécutent **dans le navigateur**. Laravel expose uniquement l’API REST, le stockage des blobs chiffrés et les métadonnées."}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"## Technologies\n\n### Versions\n\n- **PHP** : version **8.3** ou supérieure ;\n- **Laravel** : version **11** ou supérieure (branche LTS au moment de l’implémentation) ;\n- **Node.js** (outillage front / build de la SPA) : version **20** ou supérieure.\n\n### Serveur et API\n\nLa partie serveur sera codée en PHP à l'aide du Framework **Laravel**.\n\nLes communications entre le serveur et les applications clientes se feront **uniquement** à l'aide d'une **API REST** versionnée (`/api/v1/…`).\n\n#### Authentification API\n\n- Sessions navigateur et jetons personnels via **Laravel Sanctum** (jetons Bearer) ;\n- **OAuth2** n’est pas requis en V1 ; une évolution Passport / OIDC pourra être ajoutée sans changer le contrat de ressources.\n- Chaque jeton est révocable, scopé (lecture, écriture, export) et horodaté.\n\n#### Documentation, pagination, limites\n\n- Documentation **OpenAPI 3** générée (Swagger UI) à l’installation, protégée par authentification administrateur.\n- Pagination cursor ou page/limit sur toutes les collections (défaut : 50 éléments, maximum : 200).\n- **Rate limiting** par utilisateur authentifié (défaut : 60 requêtes / minute) et plus strict sur les routes d’export et d’upload ; valeurs paramétrables.\n- Réponses d’erreur JSON normalisées (`code`, `message`, `details`).\n\n### Bases de données\n\nLes bases de données utilisées dépendront de la quantité de données à gérer. Ce sera à l'utilisateur de choisir lors de la mise en place du serveur.\n\nLes systèmes de bases de données à gérer seront :\n- SQLite ;\n- MySQL / MariaDB ;\n- PostgreSQL.\n\nLe compte utilisé par Laravel pour se connecter au SGBD est un **compte technique** défini à l’installation. Il ne constitue **pas** un mode d’authentification des utilisateurs métier (voir Gestion des utilisateurs).\n\n### Déploiement\n\nDeux modes sont supportés, au choix de l’exploitant :\n\n- **Docker Compose** (recommandé) : services `app`, `web` (HTTPS), `queue`, `database` optionnelle, volume des preuves chiffrées ;\n- **Installation manuelle** sur un hôte PHP (documentation pas-à-pas : PHP-FPM, file d’attente, cron, permissions du stockage).\n\n### Sauvegardes\n\nUne sauvegarde **automatique** est paramétrable (fréquence par défaut : quotidienne) :\n\n- Dump de la base (métadonnées, utilisateurs, trousseaux chiffrés) ;\n- Copie du stockage des fichiers **déjà chiffrés** (pas de déchiffrement côté serveur) ;\n- Horodatage, rétention paramétrable (défaut : 14 jours), journal du succès / échec.\n\nLes archives de sauvegarde peuvent être chiffrées avec une clé d’exploitant distincte (GPG). La restauration est documentée et testable hors production.\n\n### Journaux d’audit\n\nToute action sensible est consignée : auteur, horodatage, objet (test, vulnérabilité, document, utilisateur), action, résumé avant/après lorsque c’est pertinent. Les journaux d’audit ne contiennent **jamais** de secret en clair (mots de passe, CEK, clé privée). Conservation alignée sur la politique de rétention paramétrable.\n\nLes événements audités incluent au minimum : connexions, changements d’ACL, partage / révocation de documents, exports, changements de statut de test ou de remédiation, validation client.\n\n### Exports et templates\n\nLes données saisies par l'utilisateur pourront être exportées sous forme de rapports en **PDF**, de documents aux formats **OpenDocument** ou **HTML**, ainsi que des exports de données aux formats **JSON** et **XML**.\n\n#### Templates de rapport par défaut\n\nTrois modèles sont fournis, sélectionnables à l’export (et combinables : un export peut inclure plusieurs modèles) :\n\n- **Exécutif** : contexte, risque global, graphiques, conclusions, mesures prioritaires (P1/P2), sans annexes techniques ni preuves brutes ;\n- **Technique** : objectifs, phases, outils, vulnérabilités complètes (CVSS, business, remédiation), contre-mesures ;\n- **Annexes preuves** : index des documents GED liés, métadonnées, extraits autorisés (le binaire chiffré n’est joint que si l’exportateur détient la CEK et a choisi l’option « inclure les fichiers »).\n\n#### Personnalisation\n\nPar **entreprise prestataire** et, en surcharge, par **client** :\n\n- Logo, couleurs de charte, typographie si le format le permet ;\n- En-tête et pied de page (raison sociale, confidentialité, numérotation) ;\n- Mentions légales et clause de non-responsabilité (préremplies depuis le questionnaire).\n\nLes templates restent des modules atomiques : l’utilisateur choisit les sections à inclure.\n\n#### Sauvegarde / migration applicative\n\nL’export **JSON** (et XML équivalent) sert aussi à la **migration** entre instances :\n\n- Schéma versionné (`schema_version`) ;\n- Entités : références, engagement, périmètre, objectifs, vulnérabilités, planning, commentaires, métadonnées GED, trousseaux (toujours chiffrés) ;\n- Les blobs de preuves sont un paquet à part (archive) référencé par identifiants ;\n- Les clés privées utilisateurs **ne sont pas** incluses par défaut ; option explicite « export des coffres utilisateurs » réservée à une migration contrôlée.\n- L’import vérifie la version du schéma et refuse un paquet incomplet."}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"Le système d'authentification **applicative** (utilisateurs métier) pourra utiliser ces technologies, gérées par Laravel :\n- Local (comptes stockés dans l’application) ;\n- LDAP ;\n- Active Directory.\n\nLes « droits utilisateurs sur la base de données » ne sont **pas** un fournisseur d’identité pour les testeurs ou les clients. Ils désignent uniquement le **compte technique SGBD** et les privilèges SQL accordés à Laravel à l’installation (lecture/écriture, pas de `SUPER`/`FILE` inutiles). Les utilisateurs finaux ne se connectent jamais avec un login SQL."}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"- Client final\n\t- Accès en lecture seule au rapport final ;\n\t- Accès aux détails des tests effectués **de son organisation uniquement** ;\n\t- Validation du rapport final ;\n\t- Etc.\n\n### Isolation des données (multi-tenant)\n\nChaque **client** (organisation) est un tenant. Un utilisateur ne voit que les tests, documents, utilisateurs et exports de **ses tenants autorisés**.\n\n- L’administrateur d’instance peut gérer plusieurs tenants.\n- Le chef de projet et les testeurs sont rattachés à un ou plusieurs tenants (missions).\n- Le client final n’appartient qu’à **son** tenant ; aucune énumération des autres clients n’est possible via l’API.\n- Toutes les requêtes API filtrent par tenant ; un identifiant d’objet hors tenant renvoie `404`.\n\n### Notifications et alertes\n\nNotifications **in-app** (centre de notifications) et **e-mail** (paramétrable par utilisateur). Événements au minimum :\n\n- Changement de statut du test (planifié ? en cours ? terminé ? validé) ;\n- Attribution ou modification d’une tâche ;\n- Commentaire mentionnant un utilisateur ;\n- Demande ou aboutissement d’un partage de document (CEK) ;\n- Validation ou rejet du rapport par le client ;\n- Passage d’une vulnérabilité en corrigé / vérifié ;\n- Échec de sauvegarde (administrateurs uniquement).\n\nPas de SMS en V1. Les notifications ne contiennent pas de données sensibles en clair (pas d’extrait de preuve, pas de mot de passe)."}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"Le code devra être affiché avec sa coloration syntaxique. [PrismJS](https://prismjs.com/) sera utilisé. Langages supportés **au minimum** : `bash`, `shell`, `powershell`, `python`, `php`, `javascript`, `sql`, `json`, `xml`, `yaml`, `markup`, `http`, `diff`, `ini`. Les autres grammaires PrismJS peuvent être activées par module sans changer le cœur."}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"- Validé.\n\n### Planning (timeline / Gantt)\n\nChaque test, chaque **phase** et chaque **tâche** portent :\n\n- Date et heure de début **prévues** ;\n- Date et heure de fin **prévues** ;\n- Date et heure de début **réelles** (saisies ou déduites du passage « En cours ») ;\n- Date et heure de fin **réelles** (saisies ou déduites du passage « Terminé »).\n\n**Jalons** prédéfinis, datables et cochables :\n\n- Kick-off / signature de l’engagement ;\n- Fin de reconnaissance ;\n- Fin d’énumération ;\n- Fin d’exploitation ;\n- Remise du rapport ;\n- Validation client.\n\nLe **temps passé par phase** est la somme des durées réelles des tâches de la phase. Une saisie manuelle d’ajustement reste possible (commentaire obligatoire).\n\nUne **vue Gantt** (phases et jalons) est fournie en V1 dans l’interface du test ; elle est optionnelle à l’export (case à cocher dans le template technique).\n\n### Collaboration\n\nPlusieurs **testeurs** peuvent être affectés au **même test**. Le chef de projet attribue les tâches ; un testeur peut s’attribuer une tâche encore libre.\n\n- L’édition concurrente d’un même champ : le dernier enregistrement validé l’emporte ; un avertissement est affiché si la ressource a changé depuis le chargement (verrou optimiste).\n- **Commentaires d’équipe** (fil de discussion) sur : le test, une tâche, une vulnérabilité, une mesure. Distincts des commentaires GED attachés à un fichier.\n- **Historique des modifications** métier (audit lisible) : auteur, date, champ, ancienne valeur, nouvelle valeur, sur les entités principales. Pas de secret en clair.\n\n### Statuts"}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":250,"limit":80}
+```
+
+### Tool Ripgrep Raw Search
+
+```
+{"pattern":"CVSS v3\\.1 ou du CVSS v4","path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","caseInsensitive":false,"multiline":false,"toolCallId":"call-315a7fd5-77d0-4fc4-b126-4ad9dbcada92-22\nfc_0a5f83b6-e765-9549-a9c2-650930905517_1","offset":0}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"### Vulnérabilités"}
+```
+
+### Tool Ripgrep Raw Search
+
+```
+{"pattern":"### Documents","path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","caseInsensitive":false,"multiline":false,"toolCallId":"call-315a7fd5-77d0-4fc4-b126-4ad9dbcada92-23\nfc_0a5f83b6-e765-9549-a9c2-650930905517_2","offset":0}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":198,"limit":30}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":325,"limit":30}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":530,"limit":220}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"Nous n'utiliserons pas ici ni la métrique temporelle, ni la métrique environnementale. En effet, à la différence des métriques de base, celles-ci évoluent en fonction du temps ou de l'environnement dans lequel évolue le système analysé.\n\n**Version CVSS :** le moteur **par défaut** est **CVSS v3.1**. Les formules et coefficients de cette section (8,22, 6,42, vecteur AV/AC/PR/UI/S/C/I/A) s’appliquent **uniquement** à la v3.1. Ils ne doivent pas servir à calculer un score v4.0.\n\n**CVSS v4.0** est un **second moteur optionnel**, au choix par vulnérabilité (ou par politique d’instance). Il utilise le vecteur et le calcul officiels FIRST v4.0 (métriques AT, VC/VI/VA, etc.), **sans** réutiliser les équations ci-dessous. L’échelle de niveaux (Aucun ? Critique) reste la même pour l’affichage. Le tableau de bord agrège les scores **dans la version choisie pour chaque fiche** ; un mélange v3.1 / v4.0 sur un même test est autorisé mais signalé.\n\nLe score du niveau de risque (v3.1) est une combinaison des métriques d'exploitabilité et d'impact. Il est compris entre **$0.0$** à **$10.0$**, la valeur **$10.0$** correspondant aux vulnérabilités les plus graves."}
+```
+
+### Tool Edit File V2
+
+```
+{}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"Il sera possible de stocker les preuves récoltées lors des tests dans un système de gestion des documents (GED). Les fichiers qui pourront être stockés seront :\n- Les captures d'écran ;\n- Les logs et captures réseaux ;\n- Etc.\n\nChaque document est **lié** à au moins un objet métier : test, phase, objectif, vulnérabilité, mesure ou contre-mesure. Un même fichier peut être rattaché à plusieurs objets.\n\n#### Organisation du stockage\n\n- Les **blobs** (fichiers chiffrés) sont stockés **hors base de données**, sur un disque local (volume Docker ou répertoire configuré) ou un stockage objet **S3-compatible**, au choix à l’installation.\n- La base ne conserve que les **métadonnées** (nom, MIME, taille, hash du ciphertext, liens, ACL, identifiant de trousseau).\n- Convention de clés / chemins : `{tenant_id}/{test_id}/{yyyy}/{mm}/{document_uuid}.bin` (pas de nom original dans le chemin, pour limiter les fuites).\n- **Types MIME** acceptés par défaut (liste paramétrable) : images (`image/png`, `image/jpeg`, `image/webp`, `image/gif`), `application/pdf`, `text/plain`, `text/csv`, archives (`application/zip`, `application/gzip`), captures réseau (`application/vnd.tcpdump.pcap`, `application/octet-stream` pour `.pcap`/`.pcapng`), extraits de logs. Les exécutables (`.exe`, `.dll`, `.msi`, ELF) sont **refusés** par défaut.\n- Un **scan antivirus** à l’upload (ClamAV ou équivalent) est recommandé et activable ; en cas de détection, le fichier est rejeté et l’événement est audité.\n- **Rétention et purge** : durée paramétrable par tenant (défaut : durée de vie du test + 24 mois). La purge efface blob, métadonnées et trousseau. Une purge anticipée est possible pour le propriétaire ou l’administrateur, avec audit.\n\n#### Gestion\n\nPour chaque document, des commentaires, ainsi que des mots-clés, pourront être ajoutés par les différents intervenants.\n\nL'accès à ces documents sera soumis à des **ACL** (qui *peut* demander l’accès) **et** au **trousseau cryptographique** (qui *peut* déchiffrer). Les deux conditions sont nécessaires (ET logique).\n\nSi un administrateur ou un chef de projet **accorde** une ACL :\n\n1. Le serveur enregistre le droit et crée une **demande de partage CEK** ;\n2. Une notification est envoyée aux détenteurs actuels de la CEK (propriétaire en priorité) ;\n3. Un détenteur, **côté client**, chiffre la CEK avec la clé publique du bénéficiaire et met à jour le trousseau ;\n4. Tant que l’étape 3 n’est pas faite, le bénéficiaire voit le document dans la liste mais **ne peut pas** le déchiffrer.\n\nUn administrateur **ne peut pas** contourner le chiffrement. Il peut seulement gérer les ACL, révoquer, et (s’il est déjà dans le trousseau) participer au partage.\n\nLa taille maximale des fichiers sera paramétrable."}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"#### Révocation d'un utilisateur\n\nLa révocation **par défaut** pour un départ d’équipe, un changement de tenant ou un incident est la **révocation forte** :\n\n1. Le propriétaire (ou un détenteur encore autorisé) génère une **nouvelle CEK**, rechiffre le fichier côté client, reconstruit le trousseau **sans** l’utilisateur révoqué, et remplace le blob sur le serveur ;\n2. L’ancienne entrée de trousseau et l’ancienne ACL sont supprimées ; l’événement est audité.\n\nLa révocation **douce** (simple suppression de l’entrée de trousseau, sans rechiffrement) reste disponible pour un retrait temporaire. Elle **n’empêche pas** un utilisateur qui aurait déjà téléchargé le fichier et la CEK de conserver une copie hors ligne. Cette limite doit être affichée à l’opérateur avant confirmation.\n\n#### Points de vigilance\n\n**Architecture SPA :** le déchiffrement 100 % client impose une SPA (ou un composant JavaScript équivalent). Le serveur PHP ne lit jamais le contenu des preuves. Les exports « avec fichiers » se construisent dans le navigateur de l’utilisateur qui possède les CEK.\n\n**Confiance dans le serveur :** le serveur distribue les clés publiques. Un serveur compromis pourrait substituer une clé publique malveillante lors de l'ajout d'un destinataire, permettant à un attaquant de récupérer la CEK. Une mitigation est de permettre aux utilisateurs de vérifier les empreintes (_fingerprints_) de leurs clés hors bande.\n\n**Rotation du mot de passe :** si un utilisateur change son mot de passe, il faut rechiffrer sa clé privée avec la nouvelle clé dérivée – pas rechiffrer les fichiers.\n\n**Mémoire côté client :** la clé privée déchiffrée vit en mémoire JavaScript. Il faut explicitement la détruire après usage et encadrer les délais de session."}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"Ces éléments nourrissent le rapport pour distinguer ce qui existe déjà de ce qui reste à faire.\n\n## Annexes et références\n\n### Méthodologies\n\nLe test peut déclarer une ou plusieurs méthodologies **parmi un catalogue** (modules atomiques, activables par engagement) :\n\n- [PTES](http://www.pentest-standard.org/) ;\n- [OWASP Testing Guide](https://owasp.org/www-project-web-security-testing-guide/) (applications Web) ;\n- [OSSTMM](https://www.isecom.org/OSSTMM.3.pdf) ;\n- Autre (libellé libre).\n\nAucune méthodologie n’est imposée à tous les tests. Les phases internes (Reconnaissance ? Nettoyage) restent le fil conducteur de l’outil, mappées si besoin vers la méthodologie choisie.\n\n### Références réglementaires\n\nCatalogue paramétrable par instance (exemples : RGPD, NIS2, PCI DSS, ISO/IEC 27001, HDS, directives sectorielles). Un test peut lier des **exigences** à des vulnérabilités ou à l’impact légal. Ce catalogue est distinct des niveaux d’impact business (qui restent une grille 0–4).\n\n### Glossaire\n\nTermes à documenter dans l’interface (aide contextuelle) et dans l’annexe du rapport :\n\n- **CEK** — clé symétrique de contenu d’un fichier GED ;\n- **CVSS** — système de score de gravité des vulnérabilités (FIRST) ;\n- **CVE / CWE** — identifiants public de faille / de faiblesse ;\n- **GED** — gestion électronique des documents (preuves) ;\n- **SPA** — application Web dont la logique s’exécute principalement dans le navigateur ;\n- **Tenant** — organisation cliente isolée des autres sur la même instance ;\n- **ACL** — liste de contrôle d’accès applicative ;\n- **TOTP** — mot de passe à usage unique basé sur le temps ;\n- **BlackBox / GreyBox / WhiteBox / RedTeam** — types d’engagement du questionnaire.\n\nLe glossaire est extensible par module linguistique."}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":314,"limit":20}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":680,"limit":40}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":730,"limit":80}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"### Vulnérabilités\n\n- Référence ;\n- Identifications [_Common Vulnerability and Exposures_](https://www.cve.org/) et/ou [_Common Weakness Enumeration_](https://cwe.mitre.org/).\n- Description ;\n- Phase ;\n- Composants concernés ;\n- Documents GED liés (preuves, extraits, captures)."}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":1,"limit":50}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":224,"limit":40}
+```
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":334,"limit":25}
+```
+
+### Tool Todo Write
+
+```
+{"todos":[{"id":"fill-tech-api","content":"Rédiger #7 versions/déploiement/sauvegardes/audit et #12 contrat API REST","status":"TODO_STATUS_COMPLETED","createdAt":"1790016505005","updatedAt":"1790016702705","dependencies":[]},{"id":"fill-exports-ged","content":"Rédiger #6 templates/exports et #4 organisation du stockage GED","status":"TODO_STATUS_COMPLETED","createdAt":"1790016505005","updatedAt":"1790016702705","dependencies":[]},{"id":"fill-collab-gantt-annexes","content":"Rédiger #8 Gantt, #9 collaboration, notifications, #11 annexes, et trancher cohérence CVSS/ACL/SPA","status":"TODO_STATUS_COMPLETED","createdAt":"1790016505005","updatedAt":"1790016702705","dependencies":[]}],"merge":true}
+```
+
+### Tool Edit File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"- **CVE / CWE** — identifiants publics de faille / de faiblesse ;"}
+```
+
+## Assistant
+
+Le cahier des charges dans [`Plan/Cahier des charges.md`](Plan/Cahier des charges.md) reprend maintenant les points encore ouverts de la revue Claude, plus les choix de cohérence.
+
+**Métier :** fiche de remédiation (reco, P1–P4, liens, statuts, preuves), tableau de bord (max CVSS, moyenne pondérée, impacts business, graphiques), conclusions / mesures / contre-mesures, planning Gantt, collaboration multi-testeurs, notifications in-app et e-mail, isolation par tenant.
+
+**Technique :** SPA (crypto uniquement dans le navigateur), PHP 8.3+ / Laravel 11+, Docker ou install manuelle, Sanctum + OpenAPI + rate limiting, sauvegardes et journaux d’audit, templates Exécutif / Technique / Annexes, export de migration JSON versionné.
+
+**GED :** stockage hors BDD (disque ou S3), chemins par tenant, MIME, scan, rétention. L’ACL et le trousseau sont en **ET** : un droit admin crée une demande de partage CEK, sans contourner le chiffrement. La révocation **forte** (rechiffrement) est le défaut.
+
+**Tranches :** CVSS **v3.1 par défaut** (formules actuelles) ; v4.0 en moteur optionnel séparé. L’auth « droits BDD » n’est plus un SSO SQL, seulement le compte technique SGBD. Annexes : PTES / OWASP / OSSTMM, catalogue réglementaire, glossaire. PrismJS a une liste minimale de langages.
+
+## User
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+## User
+
+```diff
+--- a/Plan/Cahier des charges.md
++++ b/Plan/Cahier des charges.md
+@@ -33,0 +33,1 @@
++#### Documentation, pagination, limites
+```
+ détails cette section.
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":13,"limit":50}
+```
+
+### Tool Edit File V2
+
+````
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","streamContent":"#### Documentation, pagination, limites\n\n##### Documentation OpenAPI\n\nLe contrat HTTP est décrit en **OpenAPI 3.1**, généré à partir du code Laravel (annotations / attributs) et publié à l’installation.\n\n- **Swagger UI** (et le JSON/YAML brut) sont exposés sous `/api/documentation` et `/api/openapi.json` (chemins paramétrables).\n- Accès **réservé aux administrateurs d’instance** (même authentification Sanctum que le reste de l’API, ou session navigateur admin). Désactivable en production via configuration.\n- Chaque ressource documente : méthode, chemin, scopes Sanctum requis, codes HTTP, schéma de corps, exemples, et le tenant implicite (jamais passé en clair dans l’URL publique si ce n’est pas nécessaire).\n- Un changement cassant (renommage de champ, suppression d’endpoint) impose une **nouvelle version** (`/api/v2/…`). La v1 reste disponible au moins jusqu’à la version majeure suivante de l’application. Les ajouts rétrocompatibles (champ optionnel, nouvel endpoint) restent en v1.\n\n##### Pagination\n\nToutes les listes (`index`) sont paginées. Deux modes, au choix de l’instance (défaut : **curseur**) :\n\n- **Curseur** (`cursor`, `limit`) : stable si des lignes sont insérées pendant le parcours (exports, fils de commentaires, journaux d’audit). Le curseur est opaque (identifiant + tri).\n- **Page** (`page`, `limit`) : pour les tableaux UI (vulnérabilités, documents) où un numéro de page est plus lisible.\n\nParamètres communs :\n\n- `limit` par défaut : **50** ; maximum **200** (erreur `422` au-delà).\n- Tri explicite via `sort` (liste blanche de colonnes par ressource) et `order` (`asc` | `desc`). Défaut documenté par endpoint (souvent `updated_at desc`).\n- Filtres en query string (`filter[statut]`, `filter[phase]`, recherche texte) ; les filtres acceptés figurent dans OpenAPI.\n\nEnveloppe JSON des collections :\n\n```json\n{\n\t\"data\": [],\n\t\"meta\": {\n\t\t\"limit\": 50,\n\t\t\"count\": 50,\n\t\t\"next_cursor\": \"…\",\n\t\t\"prev_cursor\": null,\n\t\t\"page\": 1,\n\t\t\"last_page\": 4,\n\t\t\"total\": 180\n\t}\n}\n```\n\nLes champs `page` / `last_page` / `total` ne sont renseignés qu’en mode page. En mode curseur, `total` est omis (coût d’un `COUNT` évité sur les grandes tables). Une ressource **n’est jamais** renvoyée en tableau nu sans `data` / `meta`.\n\n##### Limites de débit (rate limiting)\n\nLe plafonnement s’applique **par utilisateur authentifié** (et par IP pour les routes publiques restantes, essentiellement la connexion). Compteurs distincts par **classe de route**. Valeurs par défaut, toutes **paramétrables** à l’installation :\n\n| Classe | Exemples | Défaut |\n| --- | --- | --- |\n| Standard | CRUD métier, lecture | 60 requêtes / minute |\n| Écriture lourde | uploads GED, partage CEK | 20 requêtes / minute, et 1 upload concurrent par utilisateur |\n| Export | PDF, OpenDocument, JSON/XML de migration | 5 requêtes / minute, 2 exports simultanés par utilisateur |\n| Auth | login, refresh, 2FA | 10 tentatives / minute / IP, au-delà temporisation progressive |\n\nEn cas de dépassement : HTTP **429**, en-têtes `Retry-After`, `X-RateLimit-Limit`, `X-RateLimit-Remaining`. Le corps suit le format d’erreur ci-dessous (`code` = `rate_limited`). Les 429 sont audités (sans secret) pour détecter un abus.\n\nTaille maximale du corps JSON : alignée sur `post_max_size` PHP, défaut applicatif **2 Mo** (hors upload fichier, régi par la taille GED paramétrable).\n\n##### Erreurs\n\nToutes les erreurs API (4xx / 5xx) utilisent le même objet JSON. Aucun HTML d’erreur Laravel n’est renvoyé aux clients API.\n\n```json\n{\n\t\"code\": \"validation_failed\",\n\t\"message\": \"La requête est invalide.\",\n\t\"details\": {\n\t\t\"limit\": [\"La valeur ne peut pas dépasser 200.\"]\n\t}\n}\n```\n\n- `code` : identifiant stable machine (`unauthenticated`, `forbidden`, `not_found`, `conflict`, `validation_failed`, `rate_limited`, `payload_too_large`, `internal_error`). Les clients s’appuient sur `code`, pas sur le texte `message`.\n- `message` : phrase traduite selon la langue de l’utilisateur (en-tête `Accept-Language` ou préférence de profil).\n- `details` : objet optionnel (erreurs de validation par champ, identifiant de conflit, etc.). Jamais de trace, SQL, chemin serveur ou secret.\n\nCodes HTTP associés : 401 (`unauthenticated`), 403 (`forbidden`), 404 (`not_found` — y compris objet hors tenant), 409 (`conflict`, verrou optimiste), 413 (`payload_too_large`), 422 (`validation_failed`), 429 (`rate_limited`), 500 (`internal_error` sans détail interne)."}
+````
+
+## Assistant
+
+La section **Documentation, pagination, limites** du cahier des charges est maintenant détaillée en quatre blocs.
+
+**OpenAPI :** contrat 3.1 généré, Swagger UI réservé aux admins, versioning (`/api/v1` vs v2) et règle de rétrocompatibilité.
+
+**Pagination :** curseur par défaut (listes longues, audit) ou page (tableaux UI) ; `limit` 50 / max 200 ; tri et filtres en liste blanche ; enveloppe `data` + `meta` (pas de tableau nu).
+
+**Débit :** quotas par classe (standard, upload, export, auth), 429 avec `Retry-After`, plafond de corps JSON 2 Mo hors GED.
+
+**Erreurs :** schéma unique `code` / `message` / `details`, codes stables pour les clients, HTTP associés, jamais de trace serveur.
+
+## User
+
+```markdown:c:\Users\ILP\Documents\Hacking\SuiviTestIntrusion\Plan\Cahier des charges.md
+Documentation, pagination, limites
+```
+ Je n'ai pas de connaissances sur les technologies. Peux-tu détailler leurs fonctionnements ?
+
+### Tool Read File V2
+
+```
+{"path":"C:\\Users\\ILP\\Documents\\Hacking\\SuiviTestIntrusion\\Plan\\Cahier des charges.md","offset":33,"limit":120}
+```
+
+## Assistant
+
+Je vais réécrire cette section du cahier des charges en expliquant le rôle de chaque mécanisme, pas seulement les paramètres techniques.
+
+### Tool Edit File V2
+
+## Assistant
+
+La section **Documentation, pagination, limites** du cahier des charges explique maintenant le *pourquoi* et le *comment*, pas seulement les réglages.
+
+**OpenAPI / Swagger** : mode d’emploi de l’API (liste des appels, formats, droits). Swagger UI est une page pour tester ces appels. Réservé aux admins, version `/api/v1` puis `/api/v2` si on casse la compatibilité.
+
+**Pagination** : on n’envoie jamais 10 000 lignes d’un coup. *Pages* (comme un livre, pratique à l’écran) vs *curseur* (reprendre après tel élément, plus fiable pendant un export si quelqu’un ajoute des lignes).
+
+**Rate limiting** : compte-gouttes par utilisateur (et par IP à la connexion) pour ne pas saturer le serveur ni brute-forcer les mots de passe. Si trop d’appels : réponse 429 « réessayer dans X secondes ».
+
+**Erreurs** : un même JSON (`code` pour le programme, `message` pour l’humain) et un tableau qui relie 401, 403, 404, etc. à ce que ça veut dire pour l’utilisateur.

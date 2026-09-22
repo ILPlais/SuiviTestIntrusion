@@ -1,0 +1,18 @@
+{
+  "serverUrl": "https://api.languagetoolplus.com",
+  "urlMode": "premium",
+  "showRibbonIcon": false,
+  "glassBg": false,
+  "shouldAutoCheck": true,
+  "autoCheckDelay": 3000,
+  "pickyMode": false,
+  "apiKeyStorage": "secret",
+  "username": "lionel.plais@ilp-web.net",
+  "staticLanguage": "auto",
+  "englishVeriety": "en-US",
+  "germanVeriety": "de-DE",
+  "portugueseVeriety": "pt-PT",
+  "catalanVeriety": "ca-ES",
+  "motherTongue": "fr",
+  "apikeySecretName": "obsidian"
+}
