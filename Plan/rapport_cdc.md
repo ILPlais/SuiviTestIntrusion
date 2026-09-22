@@ -1,0 +1,307 @@
+# Rapport d'analyse — Cahier des charges v2
+
+Le document a considérablement maturé depuis la v1. La v2 couvre de façon très solide l'API, le chiffrement, les exports, la gestion des utilisateurs et le CVSS. Ce rapport se concentre sur les **lacunes restantes**, les **incohérences détectées** et les **points à préciser**.
+
+---
+
+## 1. Incohérences et ambiguïtés
+
+### 1.1 GPG/OpenPGP vs AES-256-GCM — deux formats distincts
+
+La section *Documents* annonce un **chiffrement GPG/OpenPGP**, mais les séquences de téléversement décrivent **AES-256-GCM avec CEK**. Ces deux approches ne sont pas équivalentes :
+
+- **GPG/OpenPGP** est un *format de message complet* (en-têtes, compression, signature optionnelle, paquet symétrique interne). Il implique des bibliothèques dédiées (`openpgp.js` côté client).
+- **AES-256-GCM + trousseau CEK** est un schéma *custom* qui n'utilise pas le format de paquet OpenPGP.
+
+**Action requise :** choisir l'un des deux et le documenter sans mélanger les termes. Si c'est un schéma custom, retirer toute référence à GPG/OpenPGP et préciser le format de sérialisation du ciphertext (IV, tag GCM, payload, version du schéma).
+
+### 1.2 LDAP/AD vs dérivation de clé par mot de passe ⚠️ Point critique
+
+La clé privée de l'utilisateur est protégée par **son mot de passe** (dérivation côté client). Or, si l'utilisateur s'authentifie via **LDAP ou Active Directory**, il n'y a pas de mot de passe local connu de l'application.
+
+**Questions en suspens :**
+- Une *passphrase de coffre* distincte du mot de passe de session est-elle saisie à chaque connexion LDAP ?
+- Une *clé de récupération* (fichier ou code de secours) est-elle générée à l'enrôlement ?
+- L'authentification LDAP/AD implique-t-elle de renoncer au chiffrement côté client pour ces utilisateurs ?
+
+Ce point peut bloquer entièrement l'usage de LDAP/AD dans l'architecture proposée.
+
+### 1.3 Fonction de dérivation de clé (KDF) — non spécifiée ⚠️
+
+Le document ne précise pas quelle **KDF** est utilisée pour dériver la clé de chiffrement de la clé privée depuis le mot de passe. Il s'agit pourtant d'un choix de sécurité critique :
+
+| KDF | Statut recommandé |
+| --- | --- |
+| PBKDF2-HMAC-SHA256 | Acceptable (NIST SP 800-132) |
+| bcrypt | Déconseillé pour la dérivation de clé (limite 72 octets) |
+| scrypt | Bon mais moins standardisé côté navigateur |
+| **Argon2id** | **Recommandé** (OWASP, gagnant PHC 2015) |
+
+**Action requise :** spécifier l'algorithme, les paramètres (mémoire, itérations, parallélisme) et le format de stockage du sel.
+
+### 1.4 Score global avec mélange CVSS v3.1 / v4.0
+
+Le document autorise un mélange des deux versions sur un même test, mais ne précise pas comment est calculé le **score global** dans ce cas. Les échelles ne sont pas directement comparables (CVSS v4.0 a abandonné la portée et introduit des métriques supplémentaires).
+
+**Action requise :** définir la règle d'agrégation pour un test mixte (ex. : afficher deux maximums séparés, interdire la pondération croisée).
+
+### 1.5 Coloration des emojis dans la table CVSS — incohérence visuelle mineure
+
+Dans la table *Portée (S)*, les emojis ⚫/🔴 indiquent respectivement *Changée* (plus sévère) et *Inchangée* (moins sévère), ce qui est cohérent avec la convention du document. Cependant, contrairement aux autres tables CVSS, il n'y a **pas de colonne « Valeur »**, ce qui est correct per spec (la portée n'a pas de valeur numérique propre), mais devrait être noté explicitement pour éviter la confusion.
+
+---
+
+## 2. Éléments fonctionnels manquants
+
+### 2.1 Périmètre — couverture partielle
+
+La section *Périmètre* ne couvre que le **réseau** (machines, services, utilisateurs). Or le questionnaire d'engagement mentionne des cibles bien plus larges qui ne sont nulle part trackées dans le système :
+
+| Type de périmètre | Présent dans questionnaire | Présent dans périmètre |
+| --- | :---: | :---: |
+| Réseau / IP | ✅ | ✅ |
+| Applications web / API / mobile | ❌ | ❌ |
+| Ressources cloud (AWS, Azure, GCP…) | ❌ | ❌ |
+| Sites physiques (RedTeam) | ✅ | ❌ |
+| Wi-Fi / Bluetooth / RFID | ✅ | ❌ |
+| Cibles d'ingénierie sociale | ✅ | ❌ |
+
+**Action requise :** étendre la section *Périmètre* avec des sous-modules atomiques (activables selon le type d'engagement).
+
+### 2.2 Modèle de données d'une « tâche »
+
+Les *phases* sont listées (Reconnaissance → Nettoyage) et le planning décrit des dates par phase, mais la notion de **tâche** à l'intérieur d'une phase n'est pas définie. L'attribution collaborative le laisse deviner, mais son modèle reste absent :
+
+- Titre, description ;
+- Assigné(s) ;
+- Statut (à faire, en cours, terminé, vérifié) ;
+- Durée réelle ;
+- Liens vers des outils, des vulnérabilités, des objets du périmètre.
+
+Sans ce modèle, le planning et la collaboration restent incomplets.
+
+### 2.3 Structure d'une exécution d'outil
+
+La section *Outils* précise PrismJS et les langages supportés, mais pas la **structure de données d'une exécution** :
+
+- Bloc texte libre (commande + sortie) ou liste de paires `(commande → réponse)` ?
+- Version de l'outil trackée ?
+- Lien vers la phase / tâche / vulnérabilité découverte ?
+- **Import de sorties natives** : Nmap XML, `.nessus`, Burp Suite XML, OWASP ZAP DAST… Cette fonctionnalité est très attendue dans les outils de ce type et réduirait considérablement la saisie manuelle.
+
+### 2.4 Liaisons entre objets métier
+
+Le document ne spécifie pas explicitement les **liens entre entités** :
+
+- Machine du périmètre ↔ vulnérabilités qui l'affectent
+- Outil utilisé ↔ vulnérabilités découvertes lors de son usage
+- Phase ↔ machines testées pendant cette phase
+- Tâche ↔ objectif
+
+Un schéma entité-relation (même simplifié) aiderait à formaliser ces liens avant le développement.
+
+### 2.5 Comparaison inter-tests (même client)
+
+Aucune mention de la possibilité de **comparer deux tests successifs** pour un même client :
+
+- Évolution du nombre de vulnérabilités ouvertes/corrigées ;
+- Vulnérabilités récurrentes (présentes dans le test N et N+1) ;
+- Indicateur de progression globale de la posture de sécurité.
+
+### 2.6 Cycle de vie des utilisateurs
+
+- **Invitation** : comment un nouvel utilisateur est-il invité à un tenant ? (lien email, création manuelle par admin ?)
+- **Désactivation / suppression** : que devient le trousseau cryptographique d'un utilisateur supprimé ? Ses CEK restent dans les trousseaux — doivent-elles être révoquées automatiquement (révocation forte sur tous les fichiers) ?
+- **Transfert de propriété** : si le propriétaire d'un fichier part, qui hérite des droits de partage ?
+
+### 2.7 Versionnement des documents GED
+
+Peut-on **remplacer un document** (nouvelle version d'une capture d'écran après exploitation) tout en conservant l'historique des versions précédentes ? Ou faut-il supprimer l'ancien et uploader un nouveau ?
+
+### 2.8 Phases — fixité vs configurabilité
+
+Les phases 1-5 semblent fixes. Pour un outil modulaire :
+
+- Peut-on **désactiver une phase** non applicable (ex. pas de post-exploitation sur un BlackBox externe limité) ?
+- Peut-on ajouter une **phase personnalisée** (ex. « Analyse des logs » en WhiteBox) ?
+- L'ordre est-il figé ou peut-il être réorganisé ?
+
+### 2.9 Participation du client au questionnaire
+
+Le rôle *Client final* est limité à la lecture et la validation du rapport. Or le questionnaire d'engagement est rempli *avec* le client. Peut-il remplir lui-même certaines sections (contacts d'urgence, liste de matériel exclu) via son accès ?
+
+### 2.10 Validation formelle de l'engagement
+
+Le questionnaire est très complet, mais il n'y a aucune mention d'une **validation juridiquement opposable** :
+
+- Signature électronique (eIDAS, DocuSign…) de la lettre d'engagement ?
+- Export PDF signable du questionnaire rempli ?
+- Horodatage certifié de l'acceptation ?
+
+### 2.11 Tableau de bord global (vue multi-tests)
+
+Il existe un tableau de bord par test, mais aucune vue d'ensemble pour un chef de projet ou un administrateur montrant :
+
+- Tous les tests en cours et leur statut ;
+- Les vulnérabilités P1/P2 ouvertes sur l'ensemble des missions actives ;
+- Charge des testeurs (tâches assignées, disponibilité).
+
+### 2.12 Diagramme réseau Mermaid — précisions manquantes
+
+- Un seul diagramme par test ou un par phase ?
+- Peut-il être **généré automatiquement** depuis les machines déclarées dans le périmètre, ou uniquement saisi manuellement ?
+- Est-il **versionné** (historique des modifications) ?
+- Collaboration simultanée : qui peut le modifier (tous les testeurs ? seulement le chef de projet) ?
+
+---
+
+## 3. Éléments techniques à préciser
+
+### 3.1 Framework front-end — non spécifié
+
+Le document parle de SPA mais ne précise pas le **framework JavaScript** (Vue.js, React, Angular, Svelte…). Ce choix impacte les bibliothèques cryptographiques disponibles (`openpgp.js`, `WebCrypto API`), les dépendances PrismJS et la pile de tests E2E.
+
+### 3.2 Sécurité HTTP
+
+Aucune mention de :
+
+- **CORS** : politique d'origine croisée pour l'API (`Access-Control-Allow-Origin` restreint aux origines connues) ;
+- **TLS** : version minimale (TLS 1.2 ou 1.3 ? HSTS ?) et gestion des certificats (Let's Encrypt automatique dans Docker ?) ;
+- **Flags de cookies** : `Secure`, `HttpOnly`, `SameSite=Strict` pour les cookies de session Sanctum ;
+- **CSP (Content Security Policy)** : **critique** pour une SPA qui manipule des clés en mémoire. Une CSP stricte limite considérablement les vecteurs XSS qui pourraient exfiltrer la clé privée déchiffrée.
+
+### 3.3 File d'attente et workers
+
+Le Compose mentionne un service `queue` mais sans préciser :
+
+- Driver (Redis/Horizon, database, Beanstalkd) ;
+- Gestion des jobs longs (exports PDF volumineux, antivirus, rechiffrement de révocation forte) ;
+- Stratégie de retry et de dead-letter.
+
+### 3.4 Configuration e-mail
+
+Le système envoie des notifications. Il faut préciser :
+
+- Driver (SMTP, Mailgun, Postmark…) ;
+- Authentification DKIM/SPF/DMARC pour éviter le classement en spam ;
+- Possibilité de désactiver les e-mails (instance sans accès Internet).
+
+### 3.5 Valeur par défaut de la taille maximale des fichiers GED
+
+La taille est *paramétrable* mais aucune valeur par défaut n'est donnée. Une référence (ex. 100 Mo par fichier, 10 Go par tenant) permettrait de dimensionner le stockage.
+
+### 3.6 Recherche dans la GED
+
+Le stockage est bien décrit, mais la **recherche** est absente :
+
+- Recherche par nom, tag, type MIME, date, objet lié, hash ?
+- Recherche full-text sur les métadonnées uniquement (le contenu étant chiffré, le full-text sur le blob est impossible côté serveur) ?
+
+### 3.7 Stratégie de test du code
+
+Pour un projet de sécurité, l'absence de toute mention d'une **stratégie de tests** (unitaires, intégration, E2E) est un risque. Au minimum :
+
+- Tests unitaires PHPUnit sur le calcul CVSS et les formules d'agrégation ;
+- Tests d'intégration sur les routes API critiques (ACL, isolation tenant) ;
+- Tests E2E sur le flux de chiffrement/déchiffrement.
+
+---
+
+## 4. Sécurité de l'application elle-même
+
+### 4.1 Politique de mots de passe locaux
+
+Complexité minimale, interdiction de réutilisation, durée de validité ? Surtout critique puisque le mot de passe protège directement la clé privée.
+
+### 4.2 Verrouillage de compte
+
+Après combien de tentatives échouées ? Durée du verrouillage ? Notification à l'administrateur ? (distinct du rate limiting IP déjà décrit).
+
+### 4.3 Durée de vie de la clé privée en mémoire
+
+La section *Points de vigilance* mentionne qu'il faut « détruire la clé après usage », mais sans précisions :
+
+- Durée maximale de rétention en mémoire (ex. 30 minutes d'inactivité) ;
+- Comportement lors de la mise en veille de l'onglet ou du PC ;
+- Aucune protection n'est possible contre l'inspection de la mémoire par un accès physique ou un autre onglet malveillant — cette limite devrait être documentée.
+
+### 4.4 Protection XSS et clé privée
+
+La clé privée déchiffrée vivant en mémoire JavaScript, **un XSS réussi compromet immédiatement la clé**. Une **CSP stricte** (`script-src 'self' 'nonce-...'`, sans `unsafe-inline`) est la principale contre-mesure. Ce point mérite une section dédiée plutôt qu'une mention dans les points de vigilance.
+
+### 4.5 Validation du contenu des fichiers uploadés
+
+La liste MIME est décrite, mais la validation devrait se faire sur les **magic bytes** du fichier (pas uniquement sur le `Content-Type` HTTP ou l'extension, tous deux contrôlables par l'attaquant). L'antivirus ClamAV est mentionné comme recommandé ; dans un outil de sécurité stockant des preuves potentiellement malveillantes, il devrait être **obligatoire par défaut**.
+
+### 4.6 Audit de sécurité de l'outil lui-même
+
+Ironiquement, un outil de suivi de tests d'intrusion stockant des informations extrêmement sensibles (credentials découverts, cartes réseau, stratégies d'attaque) devrait lui-même faire l'objet d'un **test d'intrusion** avant déploiement en production.
+
+---
+
+## 5. Gouvernance et conformité
+
+### 5.1 RGPD de l'application elle-même
+
+Le document traite du RGPD comme d'un risque *client*, mais l'application elle-même traite des données à caractère personnel :
+
+- **Données des testeurs** : nom, prénom, adresse e-mail ;
+- **Données des clients** : identité des contacts, parfois des noms d'employés cibles (ingénierie sociale) ;
+- **Données techniques** : adresses IP internes, noms d'hôtes, credentials découverts.
+
+À préciser : registre des traitements, durée de conservation des données personnelles, procédure d'exercice du droit à l'effacement (distincte de la purge technique), nécessité d'un DPA entre l'éditeur et les prestataires sous-traitants.
+
+### 5.2 Licence du projet
+
+Open source (MIT, AGPL, Apache 2.0) ou propriétaire ? Ce choix conditionne les bibliothèques utilisables (notamment les libs cryptographiques et celles de génération PDF).
+
+### 5.3 Feuille de route V2 (section dédiée)
+
+Plusieurs mentions de « non requis en V1 » (OAuth, SMS, app mobile) sont dispersées dans le document. Une **section Roadmap** centralisée permettrait de distinguer clairement le périmètre V1 des évolutions futures.
+
+---
+
+## 6. Expérience utilisateur
+
+### 6.1 Accessibilité (WCAG)
+
+Aucune mention. WCAG 2.1 niveau AA est souvent attendu dans les marchés publics et les grandes entreprises. À minima, préciser si c'est dans le périmètre V1 ou reporté.
+
+### 6.2 Responsive / mobile
+
+Un testeur sur le terrain peut vouloir saisir des notes depuis un smartphone ou une tablette. La SPA sera-t-elle **responsive** ? Un affichage mobile minimal (saisie de notes, consultation du planning) suffirait.
+
+### 6.3 Internationalisation — à détailler
+
+La mention « multilingue de base » est une intention, pas une spec. À préciser :
+
+- Langues supportées en V1 (français et anglais au minimum ?) ;
+- Format des dates/heures selon la locale (DD/MM/YYYY vs MM/DD/YYYY) et timezone par utilisateur ;
+- Support des langues RTL (arabe, hébreu) — si non, le préciser explicitement ;
+- Mécanisme de sélection : préférence utilisateur, en-tête `Accept-Language`, ou paramètre d'instance ?
+
+### 6.4 Tableau de bord — export des graphiques
+
+Les graphiques (répartition des vulnérabilités, matrice sévérité × business) sont mentionnés pour les exports PDF/HTML. Préciser s'ils sont également **exportables indépendamment** (PNG, SVG) pour être intégrés dans des présentations.
+
+---
+
+## Synthèse des priorités suggérées
+
+| Priorité | Élément | Section |
+| --- | --- | --- |
+| 🔴 Bloquant | LDAP/AD vs dérivation de clé par mot de passe | 1.2 |
+| 🔴 Bloquant | KDF non spécifiée | 1.3 |
+| 🔴 Bloquant | GPG/OpenPGP vs AES-256-GCM — ambiguïté de format | 1.1 |
+| 🟠 Important | Périmètre applicatif / physique / cloud | 2.1 |
+| 🟠 Important | Modèle de données d'une tâche | 2.2 |
+| 🟠 Important | CSP stricte et XSS / clé privée | 4.4 |
+| 🟠 Important | Liaison entre objets métier (ERD) | 2.4 |
+| 🟠 Important | Validation formelle de l'engagement | 2.10 |
+| 🟡 Utile | Import de sorties d'outils (Nmap, Burp…) | 2.3 |
+| 🟡 Utile | Cycle de vie des utilisateurs (invitation, suppression) | 2.6 |
+| 🟡 Utile | Comparaison inter-tests | 2.5 |
+| 🟡 Utile | RGPD de l'application elle-même | 5.1 |
+| 🟢 V2 | Responsive / mobile | 6.2 |
+| 🟢 V2 | Accessibilité WCAG | 6.1 |
+| 🟢 V2 | Signature électronique de l'engagement | 2.10 |
