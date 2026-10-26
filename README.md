@@ -33,7 +33,7 @@ Le dépôt est un coffre [Obsidian](https://obsidian.md/).
 | [`Plan/Cahier des charges.md`](Plan/Cahier%20des%20charges.md) | Spécification de référence |
 | [`Plan/rapport_cdc.md`](Plan/rapport_cdc.md) | Analyse des lacunes du cahier des charges |
 | `Plan/Claude.md`, `Plan/Cursor.md`, `Plan/NotebookLM/` | Revues antérieures du cahier des charges |
-| `.stories/` | Backlog : 10 epics, 60 stories, sprints |
+| `.stories/` | Backlog : 10 epics, 61 stories, sprints |
 | `CLAUDE.md`, `.claude/` | Contexte et configuration pour Claude Code et le plugin ECC |
 
 ## Planification
