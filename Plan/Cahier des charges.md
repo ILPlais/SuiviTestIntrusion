@@ -878,14 +878,37 @@ Ces éléments nourrissent le rapport pour distinguer ce qui existe déjà de ce
 
 ## Méthodologies
 
-Le test peut déclarer une ou plusieurs méthodologies **parmi un catalogue** (modules atomiques, activables par engagement) :
+Le test peut déclarer une ou plusieurs méthodologies **parmi un catalogue** (modules atomiques, activables par engagement). Chaque entrée du catalogue porte un **nom**, une **version**, une **date de publication**, un **lien** et un **état de maintenance**. À la sélection, l'outil signale une méthodologie qui n'est plus maintenue.
 
-- [PTES](http://www.pentest-standard.org/) ;
-- [OWASP Testing Guide](https://owasp.org/www-project-web-security-testing-guide/) (applications Web) ;
-- [OSSTMM](https://www.isecom.org/OSSTMM.3.pdf) ;
-- Autre (libellé libre).
+Catalogue initial (état vérifié le 26/10/2026) :
 
-Aucune méthodologie n'est exigée à tous les tests. Les phases internes (Reconnaissance → Nettoyage) restent le fil conducteur de l'outil, mappées de préférence, la méthodologie choisie.
+| Méthodologie | Portée | Version | Maintenance | Remarque |
+| --- | --- | --- | --- | --- |
+| [PTES](http://www.pentest-standard.org/) | Test d'intrusion générique, du pré-engagement au rapport | v1.1 | ❌ Non maintenue (v2.0 jamais publiée) | Référence de fait pour le découpage en phases |
+| [OWASP WSTG](https://owasp.org/www-project-web-security-testing-guide/) | Applications Web | v4.2 (décembre 2020) | ✅ Active (v5.0 en cours) | Identifiants de test `WSTG-xxxx-nn` réutilisables comme tâches |
+| [OWASP MASTG](https://mas.owasp.org/MASTG/) | Applications mobiles (Android, iOS) | Publication continue | ✅ Active | Pendant mobile du WSTG, associé au standard MASVS |
+| [Référentiel PASSI (ANSSI)](https://cyber.gouv.fr/sites/default/files/document/PASSI_Referentiel-exigences_v2.2.pdf) | Exigences des prestataires d'audit qualifiés, dont l'activité « test d'intrusion » | v2.2 | ✅ En vigueur | Référence attendue par les clients français, notamment publics |
+| [NIST SP 800-115](https://csrc.nist.gov/pubs/sp/800/115/final) | Évaluation et test de sécurité (planification, découverte, attaque, rapport) | Septembre 2008 | ⚠️ Jamais révisée, toujours en vigueur | Souvent demandée en contexte de conformité |
+| [OSSTMM](https://www.isecom.org/OSSTMM.3.pdf) | Sécurité opérationnelle et métriques | v3 (2010) | ⚠️ v4 en développement, non publiée | Optionnelle |
+| Autre | Libellé libre | Libre | — | Version et date saisies par l'utilisateur |
+
+ISSAF (abandonnée depuis 2006) n'est pas proposée. Un cadre de test « red team » réglementé (TIBER-EU, TLPT au sens de DORA) pourra être ajouté au catalogue si le besoin apparaît.
+
+Aucune méthodologie n'est exigée à tous les tests. Les phases internes (Reconnaissance → Nettoyage) restent le fil conducteur de l'outil, mappées, de préférence, sur la méthodologie choisie :
+
+| Phase interne | PTES | NIST SP 800-115 |
+| --- | --- | --- |
+| (questionnaire d'engagement) | Pre-engagement Interactions | Planning |
+| Reconnaissance | Intelligence Gathering, Threat Modeling | Discovery |
+| Énumération | Vulnerability Analysis | Discovery |
+| Exploitation | Exploitation | Attack |
+| Post-exploitation | Post Exploitation | Attack |
+| Nettoyage | (non décrite) | (non décrite) |
+| (rapport) | Reporting | Reporting |
+
+### Référentiel de techniques : MITRE ATT&CK
+
+[MITRE ATT&CK](https://attack.mitre.org/) n'est pas une méthodologie de test mais un référentiel de tactiques et de techniques adverses. Il n'apparaît donc pas dans le catalogue ci-dessus. Les **tâches** et les **vulnérabilités** peuvent référencer un ou plusieurs identifiants de technique (`Txxxx` ou `Txxxx.yyy`). Ces liens alimentent le rapport technique et la description des contre-mesures. La version d'ATT&CK utilisée est enregistrée avec le test.
 
 ## Références réglementaires
 
