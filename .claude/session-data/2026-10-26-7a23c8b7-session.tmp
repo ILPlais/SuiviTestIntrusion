@@ -1,7 +1,7 @@
 # Session: 2026-10-26
 **Date:** 2026-10-26
 **Started:** 23:22
-**Last Updated:** 23:39
+**Last Updated:** 23:49
 **Project:** SuiviTestIntrusion
 **Branch:** main
 **Worktree:** /home/ilp/Git/ILPlais/SuiviTestIntrusion
@@ -17,16 +17,21 @@
 - Peut-on voir les améliorations à effectuer dans @"Plan/Cahier des charges.md" à partir des remarques de @Plan/rapport_cdc.md en utilisant ECC ?
 - Peut-on voir pour les valeurs de portée à partir des spécifications CVSS ?
 - Oui, ajoute la règle Impact ≤ 0
+- Gére le versionnement dans GitHub des travaux avec Claude Code, ainsi que ECC, afin pouvoir les reprendre ailleurs.
+- Dernière modification pour aujourd'hui : remplir le fichier @README.md avec une description du projet en cours.
 
 ### Files Modified
 - /home/ilp/.claude/plans/foamy-crunching-spring.md
 - /home/ilp/Git/ILPlais/SuiviTestIntrusion/Plan/Cahier des charges.md
+- /home/ilp/Git/ILPlais/SuiviTestIntrusion/.claude/settings.json
+- /home/ilp/Git/ILPlais/SuiviTestIntrusion/CLAUDE.md
+- /home/ilp/Git/ILPlais/SuiviTestIntrusion/README.md
 
 ### Tools Used
 Bash, AskUserQuestion, Write, ToolSearch, ExitPlanMode, Edit
 
 ### Stats
-- Total user messages: 5
+- Total user messages: 7
 <!-- ECC:SUMMARY:END -->
 
 ### Notes for Next Session
