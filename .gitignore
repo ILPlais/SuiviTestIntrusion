@@ -215,3 +215,9 @@ auth.json
 # 2. unignore data.json in the plugin folders
 .obsidian/plugins/*/**
 !.obsidian/plugins/*/data.json
+###############################################################################
+# Claude Code #################################################################
+###############################################################################
+
+# Réglages personnels de Claude Code (non partagés)
+.claude/settings.local.json

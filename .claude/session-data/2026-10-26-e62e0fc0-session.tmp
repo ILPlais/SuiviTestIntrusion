@@ -1,0 +1,36 @@
+# Session: 2026-10-26
+**Date:** 2026-10-26
+**Started:** 23:19
+**Last Updated:** 23:19
+**Project:** SuiviTestIntrusion
+**Branch:** main
+**Worktree:** /home/ilp/Git/ILPlais/SuiviTestIntrusion
+**Repo:** /home/ilp/Git/ILPlais/SuiviTestIntrusion/.git
+
+---
+<!-- ECC:SUMMARY:START -->
+## Session Summary
+
+### Tasks
+- Utilise ECC pour gérer la plannification du projet. Lit les fichiers utiles du répertoire @Plan/
+- Base directory for this skill: /home/ilp/.claude/plugins/cache/ecc/ecc/2.2.3/skills/story-lifecycle  # Story Lifecycle  A self-contained, file-based delivery loop: **Epic → Stories → Sprint → Implemen
+
+### Files Modified
+- /home/ilp/.claude/plans/utilise-ecc-pour-g-rer-purrfect-sparrow.md
+- /tmp/claude-1000/-home-ilp-Git-ILPlais-SuiviTestIntrusion/756d04b6-253a-473f-85b4-4876e62e0fc0/scratchpad/gen_backlog.py
+- /home/ilp/.claude/projects/-home-ilp-Git-ILPlais-SuiviTestIntrusion/memory/planification-ecc.md
+
+### Tools Used
+Bash, Read, AskUserQuestion, Write, ToolSearch, ExitPlanMode, Skill
+
+### Stats
+- Total user messages: 2
+<!-- ECC:SUMMARY:END -->
+
+### Notes for Next Session
+-
+
+### Context to Load
+```
+[relevant files]
+```
