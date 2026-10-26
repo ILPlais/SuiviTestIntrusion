@@ -452,9 +452,9 @@ Plusieurs **testeurs** peuvent être affectés au **même test**. Le chef de pro
 
 L'échelle de risque utilisée pour évaluer les vulnérabilités identifiées est la suivante :
 
-| **Niveau**       | **Score**  | **Description**                                                                                                                                                                                          |
-| ---------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **⚪ Aucun**      | $0.0$       |                                                                                                                                                                                                          |
+| **Niveau**       | **Score**      | **Description**                                                                                                                                                                                          |
+| ---------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **⚪ Aucun**      | $0.0$          |                                                                                                                                                                                                          |
 | **🟢 Mineur**    | $0.1 \to 3.9$  | Le risque est **faible** et n'a qu'un **impact mineur** sur le système d'information. Il peut être **corrigé sans nuire** au fonctionnement du système.                                                  |
 | **🟡 Important** | $4.0 \to 6.9$  | Le risque est **modéré** et peut avoir un **impact significatif** sur le système d'information. Il doit être **corrigé à moyen terme** pour éviter des perturbations importantes.                        |
 | **🟠 Majeur**    | $7.0 \to 8.9$  | Le risque est **grave** et peut avoir un **impact catastrophique** sur le système d'information. Il doit être **corrigé à court terme** pour éviter une interruption totale du système.                  |
@@ -510,12 +510,16 @@ $$
 
 $$
 \begin{align}
-	\text{Si} &(\text{Portée} = \text{Inchangée})\\
+	\text{Si} &(\text{Impact} \leq 0)\\
+		& \text{ScoreBase} = 0\\
+	\text{Sinon, si} &(\text{Portée} = \text{Inchangée})\\
 		& \text{ScoreBase} = \text{ArrondiSupérieur}(\min[(\text{Impact} + \text{Exploitabilité}), 10])\\
-	\text{Si} &(\text{Portée} = \text{Changée})\\
+	\text{Sinon, si} &(\text{Portée} = \text{Changée})\\
 		& \text{ScoreBase} = \text{ArrondiSupérieur}(\min[1.08 \times (\text{Impact} + \text{Exploitabilité}), 10])
 \end{align}
 $$
+
+La condition $\text{Impact} \leq 0$ est évaluée **en premier** ([spécification CVSS v3.1](https://www.first.org/cvss/v3.1/specification-document), §7.1) : une vulnérabilité sans impact sur la confidentialité, l'intégrité et la disponibilité ($C = I = A = \text{Aucune}$) obtient un score de $0.0$, quelle que soit son exploitabilité.
 
 La fonction $\text{ArrondiSupérieur}$ arrondit au dixième supérieur (par exemple, $4.02$ devient $4.1$).
 
@@ -564,10 +568,12 @@ L'interaction de l'utilisateur est une métrique qui mesure le niveau d'**intera
 
 La portée est une métrique qui mesure l'**étendue potentielle de l'impact** d'une vulnérabilité. Elle est établie sur les données ou les systèmes qui peuvent être affectés par l'exploitation de la vulnérabilité.
 
-| **Portée**           | **Description**                                                                                                                                                                  |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **⚫ Changée (C)**   | La vulnérabilité affecte **les données ou les systèmes qui sont indirectement accessibles** à l'attaquant, tels que les données partagées ou les systèmes connectés à un réseau. |
-| **🔴 Inchangée (U)** | La vulnérabilité affecte uniquement **les données ou les systèmes qui sont directement accessibles** à l'attaquant.                                                              |
+| **Portée**           | **Description**                                                                                                                                                                  | **Valeur** |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| **⚫ Changée (C)**    | La vulnérabilité affecte **les données ou les systèmes qui sont indirectement accessibles** à l'attaquant, tels que les données partagées ou les systèmes connectés à un réseau. | _Pas de valeur propre_ : $\text{PrivilègesRequis}$ (L = $0.68$, H = $0.5$), formule d'$\text{Impact}$ « Changée », facteur $1.08$ sur le $\text{ScoreBase}$ |
+| **🔴 Inchangée (U)** | La vulnérabilité affecte uniquement **les données ou les systèmes qui sont directement accessibles** à l'attaquant.                                                              | _Pas de valeur propre_ : $\text{PrivilègesRequis}$ (L = $0.62$, H = $0.27$), $\text{Impact} = 6.42 \times \text{ImpactSousScore}$, pas de facteur |
+
+Conformément à la [spécification CVSS v3.1](https://www.first.org/cvss/v3.1/specification-document) (§7.4), la portée **n'a pas de coefficient numérique** : elle n'entre pas dans les équations comme un multiplicateur, mais **sélectionne** les valeurs de $\text{PrivilègesRequis}$, la formule d'$\text{Impact}$ et le calcul du $\text{ScoreBase}$ décrits ci-dessus.
 
 #### Métrique d'impact
 

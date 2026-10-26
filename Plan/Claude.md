@@ -11,10 +11,10 @@ J'ai lu attentivement votre cahier des charges. C'est un excellent premier jet 
  - [x] [[#4. Gestion documentaire]]
  - [x] [[#5. Section « Résultats »]]
  - [x] [[#6. Exports et modèles]]
- - [ ] [[#7. Aspects techniques]]
- - [ ] [[#8. Timeline/Gantt]]
- - [ ] [[#9. Collaboration]]
- - [ ] [[#10. Recommandations de remédiation]]
+ - [x] [[#7. Aspects techniques]]
+ - [x] [[#8. Timeline/Gantt]]
+ - [x] [[#9. Collaboration]]
+ - [x] [[#10. Recommandations de remédiation]]
  - [ ] [[#11. Annexes et références]]
  - [ ] [[#12. API REST]]
 
@@ -80,40 +80,40 @@ Détailler :
 
 Pour suivre l'avancement du test :
 
-- [ ] Dates de début/fin prévues et réelles
-- [ ] Jalons importants
-- [ ] Temps écoulé par phase
+- [x] Dates de début/fin prévues et réelles
+- [x] Jalons importants
+- [x] Temps écoulé par phase
 
 ### 9. Collaboration
 
-- [ ] Plusieurs pentesters sur un même test ?
-- [ ] Système de commentaires entre membres de l'équipe ?
-- [ ] Historique des modifications
+- [x] Plusieurs pentesters sur un même test ?
+- [x] Système de commentaires entre membres de l'équipe ?
+- [x] Historique des modifications
 
 ### 10. Recommandations de remédiation
 
 Pour chaque vulnérabilité, prévoir :
 
-- [ ] Recommandations techniques détaillées
-- [ ] Niveau de priorité de correction
-- [ ] Ressources/liens utiles (patches, documentation)
-- [ ] Statut de remédiation (à faire, en cours, corrigé, vérifié)
+- [x] Recommandations techniques détaillées
+- [x] Niveau de priorité de correction
+- [x] Ressources/liens utiles (patches, documentation)
+- [x] Statut de remédiation (à faire, en cours, corrigé, vérifié)
 
 ### 11. Annexes et références
 
 Section pour :
 
-- [ ] Méthodologies suivies (OWASP, OSSTMM, PTES ?)
-- [ ] Références réglementaires
-- [ ] Glossaire des termes techniques
+- [x] Méthodologies suivies (OWASP, OSSTMM, PTES ?)
+- [x] Références réglementaires
+- [x] Glossaire des termes techniques
 
 ### 12. API REST
 
 Préciser :
 
-- [ ] Authentification API (tokens, OAuth2 ?)
-- [ ] Documentation API (Swagger/OpenAPI ?)
-- [ ] Rate limiting
+- [x] Authentification API (tokens, OAuth2 ?)
+- [x] Documentation API (Swagger/OpenAPI ?)
+- [x] Rate limiting
 
 ## Suggestions mineures
 

@@ -1,0 +1,28 @@
+# Story: Questionnaire d'engagement
+
+**ID:** engagement-3
+**Epic:** engagement
+**Sprint:** unassigned
+**Status:** todo
+**Points:** 5
+
+## Context
+
+En tant que chef de projet, je veux remplir le questionnaire avec le client.
+
+## Acceptance Criteria
+
+- [ ] Toutes les rubriques du CDC, sections conditionnelles (étages, gardes…)
+- [ ] Clause de non-responsabilité et contacts d'urgence
+- [ ] Questions configurables par module
+- [ ] Remplissage partiel par le client décidé et implémenté (rapport §2.9)
+
+## Technical Notes
+
+Dépend de engagement-2.
+
+## Definition of Done
+
+- [ ] Tests written first cover the acceptance criteria
+- [ ] Code review and verification loop passed
+- [ ] Code merged to main
