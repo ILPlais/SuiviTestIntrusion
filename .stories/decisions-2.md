@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant qu'architecte, je veux spécifier la KDF et ses paramètres afin de protéger correctement la clé privée (Plan/rapport_cdc.md §1.3).
+En tant qu'architecte, je veux spécifier la KDF et ses paramètres afin de protéger correctement la clé privée (12.01 Rapport d'analyse du CDC §1.3).
 
 ## Acceptance Criteria
 

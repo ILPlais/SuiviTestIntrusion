@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant qu'exploitant, je veux connaître les choix d'infrastructure (Plan/rapport_cdc.md §3.2–3.5).
+En tant qu'exploitant, je veux connaître les choix d'infrastructure (12.01 Rapport d'analyse du CDC §3.2–3.5).
 
 ## Acceptance Criteria
 

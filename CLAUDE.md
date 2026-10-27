@@ -4,9 +4,15 @@ Application Web de suivi de tests d'intrusion. Le projet est en **phase de spéc
 
 ## Documents
 
-- `Plan/Cahier des charges.md` — spécification de référence.
-- `Plan/rapport_cdc.md` — analyse des lacunes du CDC (sections §1 à §6 citées par les stories).
-- `Plan/Claude.md`, `Plan/Cursor.md`, `Plan/NotebookLM/` — revues antérieures du CDC.
+`docs/` est classé en Johnny.Decimal (domaine `10-19` / catégorie `11` / identifiant `11.01`, en tête du nom de fichier). Index complet : `docs/00-09 Système/00 Index/00.00 Index.md`. Les documents se citent par leur identifiant ; `xx.00` = index de la catégorie ; un identifiant n'est jamais réutilisé.
+
+- `11.01 Cahier des charges` — spécification de référence.
+- `12.01 Rapport d'analyse du CDC` — lacunes du CDC (sections §1 à §6 citées par les stories) ; `12.02`–`12.05` — revues antérieures (Claude, Cursor, NotebookLM).
+- `13.xx` — ADR (index `13.00`, modèle `01.01`).
+- `21.01` organisation du code ; `31.01` stratégie de tests, `32.xx` campagnes ; `41.01` versionnage et livraison (`CHANGELOG.md` à la racine).
+- `51.01` traitement des retours ; `52.xx` bugs, `53.xx` améliorations ; une fiche acceptée devient une story dans `.stories/`.
+- `01 Modèles` — modèles Obsidian (dossier configuré dans `.obsidian/templates.json`).
+- Hors classement : `.stories/`, `CHANGELOG.md`, et le code prévu dans `backend/` (Laravel) et `frontend/` (Vue), créés par `socle-1`.
 
 ## Choix techniques retenus
 

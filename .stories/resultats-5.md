@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant que client, je veux mesurer la progression de ma sécurité (Plan/rapport_cdc.md §2.5).
+En tant que client, je veux mesurer la progression de ma sécurité (12.01 Rapport d'analyse du CDC §2.5).
 
 ## Acceptance Criteria
 

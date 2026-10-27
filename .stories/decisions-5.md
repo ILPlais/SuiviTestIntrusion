@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant que porteur du projet, je veux fixer la licence et le périmètre i18n/UX (Plan/rapport_cdc.md §5.2, §6).
+En tant que porteur du projet, je veux fixer la licence et le périmètre i18n/UX (12.01 Rapport d'analyse du CDC §5.2, §6).
 
 ## Acceptance Criteria
 

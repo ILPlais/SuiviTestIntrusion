@@ -1,4 +1,10 @@
 {
   "showLineNumber": true,
-  "tabSize": 2
+  "tabSize": 2,
+  "userIgnoreFilters": [
+    "node_modules/",
+    "vendor/",
+    "backend/storage/",
+    "frontend/dist/"
+  ]
 }

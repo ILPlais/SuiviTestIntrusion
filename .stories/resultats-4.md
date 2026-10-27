@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant que chef de projet, je veux une vue d'ensemble des missions (Plan/rapport_cdc.md §2.11).
+En tant que chef de projet, je veux une vue d'ensemble des missions (12.01 Rapport d'analyse du CDC §2.11).
 
 ## Acceptance Criteria
 

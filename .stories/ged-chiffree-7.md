@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant qu'exploitant, je veux bloquer les fichiers dangereux (Plan/rapport_cdc.md §4.5).
+En tant qu'exploitant, je veux bloquer les fichiers dangereux (12.01 Rapport d'analyse du CDC §4.5).
 
 ## Acceptance Criteria
 

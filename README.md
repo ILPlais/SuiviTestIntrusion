@@ -17,24 +17,35 @@ Application Web de **suivi de tests d'intrusion** : elle accompagne une mission 
 
 ## Technologies prévues
 
-| Partie | Choix |
-| --- | --- |
-| Serveur | PHP 8.3+, Laravel 11+, API REST versionnée `/api/v1/`, Laravel Sanctum |
-| Client | SPA Vue 3 + Vite + Pinia + vue-i18n |
-| Bases de données | SQLite, MySQL / MariaDB ou PostgreSQL, au choix |
-| Déploiement | Docker Compose (recommandé) ou installation manuelle |
+| **Partie**       | **Choix**                                                              |
+| ---------------- | ---------------------------------------------------------------------- |
+| Serveur          | PHP 8.3+, Laravel 11+, API REST versionnée `/api/v1/`, Laravel Sanctum |
+| Client           | SPA Vue 3 + Vite + Pinia + vue-i18n                                    |
+| Bases de données | SQLite, MySQL / MariaDB ou PostgreSQL, au choix                        |
+| Déploiement      | Docker Compose (recommandé) ou installation manuelle                   |
 
 ## Contenu du dépôt
 
 Le dépôt est un coffre [Obsidian](https://obsidian.md/).
 
-| Chemin | Contenu |
-| --- | --- |
-| [`Plan/Cahier des charges.md`](Plan/Cahier%20des%20charges.md) | Spécification de référence |
-| [`Plan/rapport_cdc.md`](Plan/rapport_cdc.md) | Analyse des lacunes du cahier des charges |
-| `Plan/Claude.md`, `Plan/Cursor.md`, `Plan/NotebookLM/` | Revues antérieures du cahier des charges |
-| `.stories/` | Backlog : 10 epics, 61 stories, sprints |
-| `CLAUDE.md`, `.claude/` | Contexte et configuration pour Claude Code et le plugin ECC |
+La documentation de [`docs/`](docs/) est classée selon le système [Johnny.Decimal](https://johnnydecimal.com/) ; l'index complet est la note [`00.00 Index`](docs/00-09%20Syst%C3%A8me/00%20Index/00.00%20Index.md).
+
+| **Domaine**           | **Catégories**                                                   |
+| --------------------- | ---------------------------------------------------------------- |
+| `00-09 Système`       | 00 Index, 01 Modèles (Obsidian)                                  |
+| `10-19 Conception`    | 11 Cahier des charges, 12 Analyses et revues, 13 Décisions (ADR) |
+| `20-29 Développement` | 21 Organisation et conventions                                   |
+| `30-39 Tests`         | 31 Stratégie, 32 Campagnes                                       |
+| `40-49 Publication`   | 41 Livraison                                                     |
+| `50-59 Retours`       | 51 Traitement, 52 Bugs, 53 Améliorations                         |
+
+Hors de `docs/` :
+
+| **Chemin**                                       | **Contenu**                                                 |
+| ------------------------------------------------ | ----------------------------------------------------------- |
+| [`.stories/`](.stories/)                         | Backlog : 10 epics, 61 stories, sprints                     |
+| [`CHANGELOG.md`](CHANGELOG.md)                   | Historique des versions                                     |
+| [`CLAUDE.md`](CLAUDE.md), [`.claude/`](.claude/) | Contexte et configuration pour Claude Code et le plugin ECC |
 
 ## Planification
 

@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant qu'utilisateur, je veux que ma clé déchiffrée ne traîne pas en mémoire (Plan/rapport_cdc.md §4.3).
+En tant qu'utilisateur, je veux que ma clé déchiffrée ne traîne pas en mémoire (12.01 Rapport d'analyse du CDC §4.3).
 
 ## Acceptance Criteria
 

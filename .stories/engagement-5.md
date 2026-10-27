@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant que chef de projet, je veux couvrir toutes les cibles du questionnaire (Plan/rapport_cdc.md §2.1).
+En tant que chef de projet, je veux couvrir toutes les cibles du questionnaire (12.01 Rapport d'analyse du CDC §2.1).
 
 ## Acceptance Criteria
 

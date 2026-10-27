@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant qu'architecte, je veux concilier LDAP/AD avec la clé privée dérivée du mot de passe (Plan/rapport_cdc.md §1.2).
+En tant qu'architecte, je veux concilier LDAP/AD avec la clé privée dérivée du mot de passe (12.01 Rapport d'analyse du CDC §1.2).
 
 ## Acceptance Criteria
 

@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant que chef de projet, je veux un score global sans comparaison abusive (Plan/rapport_cdc.md §1.4).
+En tant que chef de projet, je veux un score global sans comparaison abusive (12.01 Rapport d'analyse du CDC §1.4).
 
 ## Acceptance Criteria
 

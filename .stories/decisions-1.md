@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant qu'architecte, je veux trancher entre OpenPGP (openpgp.js) et un schéma AES-256-GCM + trousseau CEK, afin de supprimer l'ambiguïté signalée dans Plan/rapport_cdc.md §1.1.
+En tant qu'architecte, je veux trancher entre OpenPGP (openpgp.js) et un schéma AES-256-GCM + trousseau CEK, afin de supprimer l'ambiguïté signalée dans 12.01 Rapport d'analyse du CDC §1.1.
 
 ## Acceptance Criteria
 

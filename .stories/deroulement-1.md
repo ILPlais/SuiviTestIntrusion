@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant que chef de projet, je veux découper le test en phases et tâches (Plan/rapport_cdc.md §2.2, §2.8).
+En tant que chef de projet, je veux découper le test en phases et tâches (12.01 Rapport d'analyse du CDC §2.2, §2.8).
 
 ## Acceptance Criteria
 

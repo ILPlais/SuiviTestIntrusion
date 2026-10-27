@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant qu'administrateur, je veux inviter, désactiver et supprimer des utilisateurs (Plan/rapport_cdc.md §2.6).
+En tant qu'administrateur, je veux inviter, désactiver et supprimer des utilisateurs (12.01 Rapport d'analyse du CDC §2.6).
 
 ## Acceptance Criteria
 

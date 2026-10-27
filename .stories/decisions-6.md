@@ -14,7 +14,7 @@ En tant que porteur du projet, je veux un CDC cohérent avec les ADR et une road
 
 - [ ] Toutes les décisions des ADR reportées dans le CDC
 - [ ] Section Roadmap distinguant V1 et V2 (OAuth, SMS, mobile, signature électronique…)
-- [ ] Points 🔴 et 🟠 de rapport_cdc.md marqués traités ou reportés
+- [ ] Points 🔴 et 🟠 du rapport 12.01 marqués traités ou reportés
 
 ## Technical Notes
 

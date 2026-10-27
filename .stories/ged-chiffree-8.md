@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant qu'utilisateur, je veux retrouver et maintenir les preuves (Plan/rapport_cdc.md §2.7, §3.6).
+En tant qu'utilisateur, je veux retrouver et maintenir les preuves (12.01 Rapport d'analyse du CDC §2.7, §3.6).
 
 ## Acceptance Criteria
 

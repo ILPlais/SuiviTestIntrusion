@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant que testeur, je veux consigner les commandes et leurs sorties (Plan/rapport_cdc.md §2.3).
+En tant que testeur, je veux consigner les commandes et leurs sorties (12.01 Rapport d'analyse du CDC §2.3).
 
 ## Acceptance Criteria
 
