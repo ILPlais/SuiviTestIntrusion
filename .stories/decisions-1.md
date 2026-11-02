@@ -3,7 +3,7 @@
 **ID:** decisions-1
 **Epic:** decisions
 **Sprint:** 1
-**Status:** todo
+**Status:** done
 **Points:** 3
 
 ## Context
@@ -12,17 +12,19 @@ En tant qu'architecte, je veux trancher entre OpenPGP (openpgp.js) et un schéma
 
 ## Acceptance Criteria
 
-- [ ] ADR rédigé avec contexte, options, décision et conséquences
-- [ ] Format de sérialisation du ciphertext spécifié (version, IV, tag, payload)
-- [ ] Algorithme de clé asymétrique utilisateur choisi (WebCrypto ou OpenPGP)
-- [ ] Section « Chiffrement » du CDC alignée sur la décision
+- [x] ADR rédigé avec contexte, options, décision et conséquences
+- [x] Format de sérialisation du ciphertext spécifié (version, IV, tag, payload)
+- [x] Algorithme de clé asymétrique utilisateur choisi (WebCrypto ou OpenPGP)
+- [x] Section « Chiffrement » du CDC alignée sur la décision
 
 ## Technical Notes
 
 Bloquant pour l'epic ged-chiffree.
 
+Décision : [[13.01 Format de chiffrement des preuves]] (OpenPGP v6, openpgp.js). Pas de code pour un ADR : une preuve de faisabilité openpgp.js (partage de trousseau sans retoucher le blob, détection d'altération) tient lieu de test, résultats consignés dans l'ADR.
+
 ## Definition of Done
 
-- [ ] Tests written first cover the acceptance criteria
-- [ ] Code review and verification loop passed
-- [ ] Code merged to main
+- [x] Tests written first cover the acceptance criteria
+- [x] Code review and verification loop passed
+- [x] Code merged to main
