@@ -1,4 +1,4 @@
-# Story: Périmètre étendu (applicatif, physique, radio, ingénierie sociale)
+# Story: Périmètre étendu (physique, radio, ingénierie sociale)
 
 **ID:** engagement-5
 **Epic:** engagement
@@ -13,11 +13,11 @@ En tant que chef de projet, je veux couvrir toutes les cibles du questionnaire (
 ## Acceptance Criteria
 
 - [ ] Sous-modules atomiques activables par type d'engagement
-- [ ] Applications web/API, cloud, sites physiques, Wi-Fi/Bluetooth/RFID, cibles d'ingénierie sociale
+- [ ] Sites physiques, Wi-Fi/Bluetooth/RFID, cibles d'ingénierie sociale
 
 ## Technical Notes
 
-Dépend de engagement-4.
+Dépend de engagement-4. Champs : CDC « Périmètre › Sites physiques », « Radio » et « Ingénierie sociale ». Applications et ressources cloud/SaaS : engagement-7.
 
 ## Definition of Done
 

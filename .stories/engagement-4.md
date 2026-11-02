@@ -14,10 +14,11 @@ En tant que testeur, je veux déclarer machines, services et comptes du périmè
 
 - [ ] Machines (IP, noms), services, utilisateurs
 - [ ] Exclusions et plages horaires interdites
+- [ ] Objets du périmètre communs (inclus/exclu, commentaire, plages interdites, liens vers tâches et vulnérabilités), réutilisés par engagement-5 et engagement-7
 
 ## Technical Notes
 
-Dépend de engagement-2. Les identifiants découverts relèvent d'une protection renforcée.
+Dépend de engagement-2. Les secrets (mots de passe, identifiants découverts) sont chiffrés dans le navigateur comme les preuves (13.01). Champs : CDC « Périmètre › Objets du périmètre » et « Périmètre › Réseau ».
 
 ## Definition of Done
 

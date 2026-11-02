@@ -13,6 +13,7 @@ Saisir le cadre d'un test : acteurs, questionnaire d'engagement, périmètre, ob
 - Références
 - Questionnaire
 - Périmètre étendu
+- Périmètre applicatif et ressources
 - Diagramme réseau
 - Objectifs et méthodologies
 
@@ -29,5 +30,6 @@ Saisir le cadre d'un test : acteurs, questionnaire d'engagement, périmètre, ob
 | engagement-2 | Création d'un test et statuts | todo |
 | engagement-3 | Questionnaire d'engagement | todo |
 | engagement-4 | Périmètre réseau | todo |
-| engagement-5 | Périmètre étendu (applicatif, physique, radio, ingénierie sociale) | todo |
+| engagement-5 | Périmètre étendu (physique, radio, ingénierie sociale) | todo |
 | engagement-6 | Diagramme réseau Mermaid, objectifs et méthodologies | todo |
+| engagement-7 | Périmètre applicatif et ressources | todo |
