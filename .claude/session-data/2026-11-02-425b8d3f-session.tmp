@@ -1,0 +1,31 @@
+# Session: 2026-11-02
+**Date:** 2026-11-02
+**Started:** 18:58
+**Last Updated:** 19:00
+**Project:** SuiviTestIntrusion
+**Branch:** main
+**Worktree:** C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion
+**Repo:** C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\.git
+
+---
+<!-- ECC:SUMMARY:START -->
+## Session Summary
+
+### Tasks
+- # Projects Command  List project registry entries and per-project instinct/observation counts for continuous-learning-v2.  ## Implementation  Run the instinct CLI using the plugin root path:  \`\`\`bash 
+- # Instinct Import Command  ## Implementation  Run the instinct CLI using the plugin root path:  \`\`\`bash python3 "C:/Users/ILP/.claude/plugins/cache/ecc/ecc/2.2.3/skills/continuous-learning-v2/scripts/
+
+### Tools Used
+Bash, Glob
+
+### Stats
+- Total user messages: 2
+<!-- ECC:SUMMARY:END -->
+
+### Notes for Next Session
+-
+
+### Context to Load
+```
+[relevant files]
+```

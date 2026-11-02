@@ -1,0 +1,88 @@
+# Session: 2026-11-02
+
+**Started:** ~23:15
+**Last Updated:** 23:18
+**Project:** SuiviTestIntrusion (C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion)
+**Branch:** main
+**Topic:** Reprise de contexte (resume-session, sessions list) — aucun travail de fond
+
+---
+
+## What We Are Building
+
+Application Web de suivi de tests d'intrusion (Laravel 11+ / PHP 8.3+, API REST `/api/v1/` avec Sanctum ; SPA Vue 3 + Vite + Pinia + vue-i18n). Les preuves sont chiffrées 100 % côté navigateur ; le serveur ne voit jamais le clair. Le projet est en phase de spécification : aucun code applicatif. Le dépôt est un coffre Obsidian classé en Johnny.Decimal (`docs/`), langue de travail française.
+
+Le backlog (10 epics, 62 stories, sprint 1 du 2026-10-27 au 2026-11-09) est suivi avec `ecc:story-lifecycle` dans `.stories/`. Toute écriture dans `.stories/` passe par `ledger.js` (`C:/Users/ILP/.claude/plugins/cache/ecc/ecc/2.2.3/skills/story-lifecycle/scripts/ledger.js`). L'epic `decisions` (ADR) doit être terminé avant tout code.
+
+Cette session n'a servi qu'à reprendre le contexte : chargement de la session `da99b752`, vérification de l'état git et du ledger, liste des sessions. Aucun fichier du projet n'a été modifié.
+
+---
+
+## What WORKED (with evidence)
+
+- **ADR 13.01 — chiffrement des preuves OpenPGP v6 (decisions-1)** — confirmed by: commit `e4bc9f9`, ledger `status: done`
+- **ADR 13.02 — dérivation de clé Argon2id (decisions-2)** — confirmed by: commit `7e86620`, ledger `status: done`
+- **ADR 13.03 — authentification locale et coffre de clés (decisions-3)** — confirmed by: commit `3caf891`, ledger `status: done`
+- **Périmètre applicatif et ressources (CDC 11.01, 12.01 §2.1, stories engagement-3/4/5 + nouvelle engagement-7)** — confirmed by: commit `1a15161` dont le message correspond au plan `~/.claude/plans/stories-engagement-3-md-stories-engagem-dreamy-orbit.md`
+- **Ledger cohérent** — confirmed by: `ledger.js status --root .` → `drift: []`, `recoveryPending: false`, 3 done / 59 todo
+
+---
+
+## What Did NOT Work (and why)
+
+- **Premier appel Bash / premier Write bloqués par le hook GateGuard** — failed because: les hooks `pre:bash:gateguard-fact-force` et `pre:edit-write:gateguard-fact-force` exigent, avant la première commande Bash et avant la création d'un fichier, d'énoncer des faits (demande en une phrase, objet de la commande ; pour un fichier : appelants, absence de doublon, format des données, citation de la demande). Solution : énoncer ces faits puis relancer la même opération.
+- **Lecture du statut des stories par `grep '^status:'`** — failed because: les stories utilisent `**Status:** todo` (gras Markdown), pas un frontmatter YAML. Utiliser `ledger.js status --root .` à la place.
+
+---
+
+## What Has NOT Been Tried Yet
+
+- `story-lifecycle implement decisions-4` (ADR infrastructure : driver de file Redis/database + retry, e-mail désactivable hors ligne, CSP/CORS/TLS-HSTS/cookies Sanctum, taille max GED ; source 12.01 §3.2–3.5)
+- `decisions-5` (ADR licence, langues V1, accessibilité) puis `decisions-6` (mise à jour du CDC et Roadmap V1/V2)
+- Copier les notes de session récentes dans `.claude/session-data/` du dépôt (convention de CLAUDE.md pour la reprise sur un autre poste ; ne contient que deux sessions du 2026-10-26)
+
+---
+
+## Current State of Files
+
+No files modified this session.
+
+État du dépôt (antérieur à la session, non commité) :
+
+| File | Status | Notes |
+| ---- | ------ | ----- |
+| `.obsidian/app.json`, `.obsidian/appearance.json`, `.obsidian/themes/Catppuccin/*` | Modifié hors travail | Changement de thème Catppuccin (~1 600 lignes) ; non commité |
+| `.stories/decisions-2.md` | Modifié (fins de ligne) | Diff vide avec `--ignore-cr-at-eol` : LF/CRLF uniquement |
+| `docs/00-09 Système/00 Index/00.00 Index.md` | Modifié (fins de ligne) | Idem, aucun changement de contenu |
+| `.stories.md` | Non suivi, vide | 0 octet, probablement créé par erreur |
+
+---
+
+## Decisions Made
+
+No major decisions made this session.
+
+Rappel des décisions déjà actées (ne pas les rediscuter) : OpenPGP v6 pour les preuves (13.01), Argon2id pour la KDF (13.02), authentification locale + coffre de clés (13.03), périmètre découpé en sous-modules activables (réseau, applications, cloud/SaaS, sites physiques, radio, ingénierie sociale) avec la nouvelle story engagement-7.
+
+---
+
+## Blockers & Open Questions
+
+- Commiter ou écarter les modifications `.obsidian/` (thème) ?
+- Supprimer `.stories.md` (vide, non suivi) ?
+- Normaliser ou ignorer les écarts de fins de ligne sur `decisions-2.md` et `00.00 Index.md` (penser à un `.gitattributes` ?)
+- Décision 12.01 §2.9 (remplissage partiel du questionnaire par le client) toujours ouverte, portée par engagement-3.
+
+---
+
+## Exact Next Step
+
+Lancer `story-lifecycle implement decisions-4` : rédiger l'ADR 13.04 « Infrastructure (file d'attente, e-mail, sécurité HTTP) » à partir de 12.01 §3.2–3.5 (modèle 01.01, index 13.00), cocher les AC de `.stories/decisions-4.md` via `ledger.js`, puis commit en français sur `main`.
+
+---
+
+## Environment & Setup Notes
+
+- Le hook GateGuard impose d'énoncer des faits avant le premier Bash et avant chaque création de fichier (contournements : `GATEGUARD_BASH_ROUTINE_DISABLED=1`, `GATEGUARD_EXEMPT_GLOBS`).
+- Ledger : `node C:/Users/ILP/.claude/plugins/cache/ecc/ecc/2.2.3/skills/story-lifecycle/scripts/ledger.js status --root .`
+- Le hook ECC crée aussi automatiquement `2026-11-02-23cdb44c-session.tmp` (résumé brut) pour cette session ; le présent fichier est le bilan rédigé.
