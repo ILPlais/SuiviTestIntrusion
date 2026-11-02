@@ -11,7 +11,7 @@
 | --- | --- | --- | --- |
 | decisions-1 | ADR : format de chiffrement des preuves | 3 | done |
 | decisions-2 | ADR : dérivation de clé (KDF) et protection de la clé privée | 2 | done |
-| decisions-3 | ADR : authentification LDAP/AD et coffre de clés | 3 | todo |
+| decisions-3 | ADR : authentification LDAP/AD et coffre de clés | 3 | done |
 | decisions-4 | ADR : infrastructure (file d'attente, e-mail, sécurité HTTP) | 2 | todo |
 | decisions-5 | ADR : licence, langues V1 et accessibilité | 1 | todo |
 | decisions-6 | Mise à jour du cahier des charges et Roadmap V1/V2 | 2 | todo |

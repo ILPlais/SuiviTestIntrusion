@@ -10,7 +10,7 @@ Authentifier les utilisateurs, appliquer les rôles et ACL, isoler strictement l
 
 ## Scope
 
-- Auth locale, LDAP, AD, 2FA
+- Auth locale, 2FA
 - Sanctum et jetons scopés
 - Rôles, ACL, multi-tenant
 - Audit
@@ -18,6 +18,7 @@ Authentifier les utilisateurs, appliquer les rôles et ACL, isoler strictement l
 
 ## Out of Scope
 
+- LDAP / Active Directory (V2, story identite-2 conservée)
 - OAuth2 / OIDC (V2)
 - SMS (V2)
 

@@ -20,6 +20,8 @@ En tant qu'administrateur, je veux inviter, désactiver et supprimer des utilisa
 
 Dépend de identite-5. Le volet trousseaux sera complété dans ged-chiffree.
 
+Enrôlement avec clé de récupération, mot de passe oublié et réinitialisation du coffre validée par un administrateur : [[13.03 Authentification locale et coffre de clés]].
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria
