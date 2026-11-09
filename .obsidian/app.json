@@ -6,5 +6,6 @@
     "vendor/",
     "backend/storage/",
     "frontend/dist/"
-  ]
+  ],
+  "showUnsupportedFiles": true
 }

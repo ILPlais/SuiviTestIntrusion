@@ -1,5 +1,7 @@
 {
   "cssTheme": "Catppuccin",
-  "textFontFamily": "CaskaydiaCove Nerd Font,Cascadia Code NF",
-  "baseFontSize": 11
+  "textFontFamily": "CaskaydiaCove Nerd Font",
+  "baseFontSize": 11,
+  "accentColor": "#a6e3a1",
+  "baseFontSizeAction": true
 }
