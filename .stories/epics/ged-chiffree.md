@@ -6,7 +6,7 @@
 
 ## Goal
 
-Stocker les preuves chiffrées dans le navigateur ; le serveur ne voit jamais le clair (CDC « Documents », « Chiffrement »).
+Stocker les preuves chiffrées dans le navigateur ; le serveur ne voit jamais le clair (CDC 11.11).
 
 ## Scope
 

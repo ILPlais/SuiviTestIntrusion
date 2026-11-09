@@ -23,7 +23,7 @@ En tant que chef de projet, je veux faire signer l'engagement par le client avec
 
 Dépend de engagement-3 et exports-2.
 
-Reportée en V2 : en V1, seul le jalon « Kick-off / signature de l'engagement », daté et coché par le chef de projet, trace l'acceptation ; la lettre est signée hors de l'application ([[11.01 Cahier des charges]], Questionnaire d'engagement › Validation de l'engagement).
+Reportée en V2 : en V1, seul le jalon « Kick-off / signature de l'engagement », daté et coché par le chef de projet, trace l'acceptation ; la lettre est signée hors de l'application ([[11.05 Engagement]], Validation de l'engagement).
 
 Point à trancher dans l'ADR : le document signé revient du prestataire de signature en clair, ce qui contredit le principe de la GED selon lequel le serveur ne voit jamais le clair. Il faut soit le récupérer et le chiffrer dans le navigateur, soit l'exclure explicitement des preuves chiffrées.
 

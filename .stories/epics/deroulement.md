@@ -6,7 +6,7 @@
 
 ## Goal
 
-Suivre l'exécution : phases, tâches, planning, collaboration et traces des outils (CDC « Phases » à « Collaboration »).
+Suivre l'exécution : phases, tâches, planning, collaboration et traces des outils (CDC 11.08).
 
 ## Scope
 

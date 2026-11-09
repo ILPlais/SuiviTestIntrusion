@@ -6,7 +6,7 @@
 
 ## Goal
 
-Lever les points bloquants et les zones floues du cahier des charges avant d'écrire du code crypto ou d'authentification. Succès : chaque décision est tracée dans un ADR `13.xx` (catégorie 13 Décisions d'architecture) et reportée dans le CDC `11.01`.
+Lever les points bloquants et les zones floues du cahier des charges avant d'écrire du code crypto ou d'authentification. Succès : chaque décision est tracée dans un ADR `13.xx` (catégorie 13 Décisions d'architecture) et reportée dans le CDC (`11.01` à `11.13`).
 
 ## Scope
 

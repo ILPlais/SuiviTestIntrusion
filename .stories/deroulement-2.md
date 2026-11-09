@@ -18,7 +18,7 @@ En tant que testeur, je veux m'attribuer une tâche libre sans écraser le trava
 
 ## Technical Notes
 
-Dépend de deroulement-1. Règles : 11.01, Objectifs › Tâches et Collaboration.
+Dépend de deroulement-1. Règles : 11.08, Tâches et Collaboration.
 
 ## Definition of Done
 

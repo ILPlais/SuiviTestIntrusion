@@ -20,7 +20,7 @@ En tant que chef de projet, je veux suivre dates prévues et réelles.
 
 ## Technical Notes
 
-Dépend de deroulement-1. Temps passé : 11.01, Objectifs › Tâches › Temps passé.
+Dépend de deroulement-1. Temps passé : 11.08, Tâches › Temps passé.
 
 ## Definition of Done
 

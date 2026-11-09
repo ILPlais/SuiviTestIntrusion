@@ -19,7 +19,7 @@ En tant que testeur, je veux visualiser le réseau et déclarer les objectifs du
 
 ## Technical Notes
 
-Dépend de engagement-4. Catalogue initial et correspondance des phases : CDC « Annexes et références › Méthodologies ». Les références MITRE ATT&CK sur tâches et vulnérabilités relèvent de vulnerabilites-7.
+Dépend de engagement-4. Catalogue initial et correspondance des phases : 11.13, « Méthodologies ». Les références MITRE ATT&CK sur tâches et vulnérabilités relèvent de vulnerabilites-7.
 
 ## Definition of Done
 

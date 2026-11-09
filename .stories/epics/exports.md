@@ -6,7 +6,7 @@
 
 ## Goal
 
-Produire les rapports et les exports de migration (CDC « Exports et modèles »).
+Produire les rapports et les exports de migration (CDC 11.04).
 
 ## Scope
 

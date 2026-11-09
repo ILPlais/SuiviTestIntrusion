@@ -6,7 +6,7 @@
 
 ## Goal
 
-Disposer d'un squelette Laravel + SPA Vue 3 déployable, testé en CI, qui applique dès le départ les conventions de l'API v1 décrites dans le CDC (« Serveur et API », « Déploiement »).
+Disposer d'un squelette Laravel + SPA Vue 3 déployable, testé en CI, qui applique dès le départ les conventions de l'API v1 décrites dans le CDC (11.03, 11.02 « Déploiement »).
 
 ## Scope
 

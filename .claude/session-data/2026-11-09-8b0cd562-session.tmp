@@ -1,0 +1,46 @@
+# Session: 2026-11-09
+**Date:** 2026-11-09
+**Started:** 18:20
+**Last Updated:** 18:50
+**Project:** SuiviTestIntrusion
+**Branch:** main
+**Worktree:** C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion
+**Repo:** C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\.git
+
+---
+<!-- ECC:SUMMARY:START -->
+## Session Summary
+
+### Tasks
+- Le CDC 11.01 (1 111 lignes) devient difficile à lire : le scinder en plusieurs parties dans « 11 Cahier des charges »
+- Choix : 11.01 reste le point d'entrée (objectifs du projet + sommaire), les liens [[11.01 Cahier des charges]] restent valides ; parties 11.02 à 11.13 dans l'ordre d'origine du CDC
+
+### Files Modified
+- docs/10-19 Conception/11 Cahier des charges/11.01 Cahier des charges.md (réduit à la présentation et au sommaire)
+- docs/10-19 Conception/11 Cahier des charges/11.02 à 11.13 (nouveaux) : Socle technique, Serveur et API REST, Exports et modèles de rapport, Engagement, Gestion des utilisateurs, Périmètre, Déroulement du test, Vulnérabilités et remédiation, Cotation CVSS, Documents et chiffrement, Résultats, Annexes et références
+- docs/00-09 Système/00 Index/00.00 Index.md
+- docs/00-09 Système/01 Modèles/01.01 Modèle ADR.md, 01.03 Modèle amélioration.md
+- docs/10-19 Conception/12 Analyses et revues/12.01 Rapport d'analyse du CDC.md
+- docs/10-19 Conception/13 Décisions d'architecture/13.00, 13.01, 13.02, 13.03
+- docs/10-19 Conception/14 Modèle de données/14.01 Schéma des objets métier.md
+- CLAUDE.md
+- .stories/ (via ledger.js apply) : deroulement-1/2/3, engagement-4/5/6/7/8, exports-1, vulnerabilites-6/7 et les 10 epics
+
+### Tools Used
+Bash, Read, Grep, Write, Edit
+
+### Stats
+- Total user messages: 1
+<!-- ECC:SUMMARY:END -->
+
+### Notes for Next Session
+- Découpage mécanique : chaque ligne de l'ancien 11.01 est reprise une seule fois (contrôle de couverture par script) ; seuls les titres de section remplacés par les titres de document ont disparu, et les niveaux de titre sont remontés.
+- Texte ajouté : sommaire de 11.01, phrase de renvoi 11.09 → 11.10 et 11.10 → 11.09, liens Obsidian à la place des renvois « voir *X* » devenus externes, « cette section » → « cette partie ».
+- Références mises à jour quand elles visent une section précise (12.01, 13.01-13.03, 14.01, stories, epics) ; les mentions génériques du « CDC » ou de [[11.01 Cahier des charges]] sont conservées. 12.03 (revue Cursor) et les anciennes notes de session restent inchangées (historique).
+- 142 liens [[…]] du coffre vérifiés, ancres de titre comprises : 0 cassé. Rendu des liens vers des titres contenant « ( » ou « / » à contrôler dans Obsidian.
+
+### Context to Load
+```
+docs/10-19 Conception/11 Cahier des charges/11.01 Cahier des charges.md
+docs/00-09 Système/00 Index/00.00 Index.md
+```

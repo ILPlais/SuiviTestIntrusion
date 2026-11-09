@@ -6,7 +6,7 @@
 
 ## Goal
 
-Documenter chaque vulnérabilité, calculer sa gravité CVSS et piloter sa remédiation (CDC « Vulnérabilités », « Remédiation »).
+Documenter chaque vulnérabilité, calculer sa gravité CVSS et piloter sa remédiation (CDC 11.09 et 11.10).
 
 ## Scope
 

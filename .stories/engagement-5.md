@@ -17,7 +17,7 @@ En tant que chef de projet, je veux couvrir toutes les cibles du questionnaire (
 
 ## Technical Notes
 
-Dépend de engagement-4. Champs : CDC « Périmètre › Sites physiques », « Radio » et « Ingénierie sociale ». Applications et ressources cloud/SaaS : engagement-7.
+Dépend de engagement-4. Champs : 11.07, « Sites physiques », « Radio » et « Ingénierie sociale ». Applications et ressources cloud/SaaS : engagement-7.
 
 ## Definition of Done
 

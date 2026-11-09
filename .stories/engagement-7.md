@@ -21,7 +21,7 @@ En tant que chef de projet, je veux déclarer les applications et les ressources
 
 ## Technical Notes
 
-Dépend de engagement-4 (objets du périmètre communs). Champs : CDC « Périmètre › Applications » et « Périmètre › Ressources cloud et SaaS ». Les méthodologies OWASP WSTG et MASTG relèvent de engagement-6.
+Dépend de engagement-4 (objets du périmètre communs). Champs : 11.07, « Applications » et « Ressources cloud et SaaS ». Les méthodologies OWASP WSTG et MASTG relèvent de engagement-6.
 
 ## Definition of Done
 

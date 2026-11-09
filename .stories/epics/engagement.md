@@ -6,7 +6,7 @@
 
 ## Goal
 
-Saisir le cadre d'un test : acteurs, questionnaire d'engagement, périmètre, objectifs et méthodologies (CDC « Références », « Questionnaire d'engagement », « Périmètre », « Annexes »).
+Saisir le cadre d'un test : acteurs, questionnaire d'engagement, périmètre, objectifs et méthodologies (CDC 11.05, 11.07 et 11.13).
 
 ## Scope
 

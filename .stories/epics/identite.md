@@ -6,7 +6,7 @@
 
 ## Goal
 
-Authentifier les utilisateurs, appliquer les rôles et ACL, isoler strictement les tenants et tracer toute action sensible (CDC « Gestion des utilisateurs », « Journaux d'audit »).
+Authentifier les utilisateurs, appliquer les rôles et ACL, isoler strictement les tenants et tracer toute action sensible (CDC 11.06, 11.02 « Journaux d'audit »).
 
 ## Scope
 

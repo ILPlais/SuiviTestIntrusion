@@ -6,7 +6,7 @@
 
 ## Goal
 
-Synthétiser le risque d'un test et l'avancement global (CDC « Résultats »).
+Synthétiser le risque d'un test et l'avancement global (CDC 11.12).
 
 ## Scope
 

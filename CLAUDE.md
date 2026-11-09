@@ -6,7 +6,7 @@ Application Web de suivi de tests d'intrusion. Le projet est en **phase de spéc
 
 `docs/` est classé en Johnny.Decimal (domaine `10-19` / catégorie `11` / identifiant `11.01`, en tête du nom de fichier). Index complet : `docs/00-09 Système/00 Index/00.00 Index.md`. Les documents se citent par leur identifiant ; `xx.00` = index de la catégorie ; un identifiant n'est jamais réutilisé.
 
-- `11.01 Cahier des charges` — spécification de référence.
+- `11.01 Cahier des charges` — spécification de référence : objectifs du projet et sommaire ; `11.02`–`11.13` — ses parties (socle, API, exports, engagement, utilisateurs, périmètre, déroulement, vulnérabilités, cotation CVSS, documents et chiffrement, résultats, annexes).
 - `12.01 Rapport d'analyse du CDC` — lacunes du CDC (sections §1 à §6 citées par les stories) ; `12.02`–`12.05` — revues antérieures (Claude, Cursor, NotebookLM).
 - `13.xx` — ADR (index `13.00`, modèle `01.01`).
 - `14.01 Schéma des objets métier` — liaisons entre objets métier (schéma simplifié), base des modèles Eloquent et des migrations ; liens à détailler avant la première migration métier.
@@ -38,4 +38,4 @@ Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 e
 ## Conventions
 
 - Commits en français, directement sur `main`.
-- Formules CVSS en LaTeX dans le CDC ; les tableaux contiennent des espaces insécables après les emojis.
+- Formules CVSS en LaTeX dans le CDC (`11.10`) ; les tableaux contiennent des espaces insécables après les emojis.

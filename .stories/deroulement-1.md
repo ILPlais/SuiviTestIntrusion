@@ -13,7 +13,7 @@ En tant que chef de projet, je veux découper le test en phases et tâches (12.0
 ## Acceptance Criteria
 
 - [ ] Cinq phases par défaut, désactivables et extensibles
-- [x] Modèle de tâche documenté dans le CDC (11.01, Objectifs › Tâches)
+- [x] Modèle de tâche documenté dans le CDC (11.08, Tâches)
 - [ ] Tâche : référence, titre, description, phase, assignés, statut et motif, résultat, dates prévues et réelles, temps passé
 - [ ] Six statuts (À faire, En cours, Bloquée, Terminée, Vérifiée, Abandonnée) et transitions du CDC ; motif obligatoire pour Bloquée et Abandonnée ; passage à Vérifiée et réouverture d'une tâche vérifiée réservés au chef de projet
 - [ ] Résultat (Vulnérable, Non vulnérable, Non applicable, Non concluant) obligatoire pour passer à Terminée ; « Vulnérable » exige au moins une vulnérabilité liée
@@ -21,7 +21,7 @@ En tant que chef de projet, je veux découper le test en phases et tâches (12.0
 
 ## Technical Notes
 
-Dépend de engagement-2. Modèle : 11.01, Objectifs › Tâches. Les références ATT&CK relèvent de vulnerabilites-7, les exécutions d'outils de deroulement-6 ; un lien vers une entité pas encore livrée est ajouté par la story qui la livre (engagement-4/5/7, vulnerabilites-3, deroulement-6).
+Dépend de engagement-2. Modèle : 11.08, Tâches. Les références ATT&CK relèvent de vulnerabilites-7, les exécutions d'outils de deroulement-6 ; un lien vers une entité pas encore livrée est ajouté par la story qui la livre (engagement-4/5/7, vulnerabilites-3, deroulement-6).
 
 ## Definition of Done
 

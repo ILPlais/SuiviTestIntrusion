@@ -8,7 +8,7 @@
 
 ## Context
 
-En tant que testeur, je veux rattacher mes tâches et mes constats aux techniques MITRE ATT&CK pour qualifier ce qui a été tenté ou trouvé (CDC « Annexes et références › Méthodologies › Référentiel de techniques »).
+En tant que testeur, je veux rattacher mes tâches et mes constats aux techniques MITRE ATT&CK pour qualifier ce qui a été tenté ou trouvé (11.13, « Méthodologies › Référentiel de techniques »).
 
 ## Acceptance Criteria
 
