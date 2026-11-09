@@ -1,0 +1,47 @@
+# Session: 2026-11-09
+**Date:** 2026-11-09
+**Started:** 17:45
+**Last Updated:** 18:10
+**Project:** SuiviTestIntrusion
+**Branch:** main
+**Worktree:** C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion
+**Repo:** C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\.git
+
+---
+<!-- ECC:SUMMARY:START -->
+## Session Summary
+
+### Tasks
+- /ecc:plan Liaison entre les objets métier (12.01 §2.4) : ajouter un schéma simplifié ; les liens seront développés dans une prochaine version ; garder en mémoire cette possibilité pour le MVC et la modélisation des bases de données
+- Choix : nouveau document 14.01 (nouvelle catégorie « 14 Modèle de données ») ; mémoire Claude + convention dans 21.01 ; §2.4 marqué ✅ Traité
+
+### Files Modified
+- C:\Users\ILP\.claude\plans\docs-10-19-conception-12-analyses-et-glistening-pearl.md
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\docs\10-19 Conception\14 Modèle de données\14.01 Schéma des objets métier.md (nouveau)
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\docs\10-19 Conception\11 Cahier des charges\11.01 Cahier des charges.md
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\docs\10-19 Conception\12 Analyses et revues\12.01 Rapport d'analyse du CDC.md
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\docs\00-09 Système\00 Index\00.00 Index.md
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\docs\20-29 Développement\21 Organisation et conventions\21.01 Organisation du code et conventions.md
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\CLAUDE.md
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\README.md
+- C:\Users\ILP\.claude\projects\C--Users-ILP-Documents-GitHub-ILPlais-SuiviTestIntrusion\memory\schema-objets-metier-base-modele.md et MEMORY.md (mémoire Claude, hors dépôt)
+
+### Tools Used
+Bash, Read, Grep, Glob, AskUserQuestion, Write, ToolSearch, ExitPlanMode, Edit, PowerShell
+
+### Stats
+- Total user messages: 1
+<!-- ECC:SUMMARY:END -->
+
+### Notes for Next Session
+- 14.01 : erDiagram Mermaid de 16 entités et 24 liens, sans attributs. Syntaxe validée avec le parseur de Mermaid 11.4.1 et 10.9.1 (Node + jsdom, dans le scratchpad) ; aucun navigateur Chromium sur le poste, donc rendu visuel à contrôler dans Obsidian.
+- Liens du §2.4 : objet du périmètre ↔ vulnérabilité et tâche ↔ objectif directs ; phase ↔ objets testés et outil ↔ vulnérabilité via la tâche.
+- Avant la première migration métier, détailler 14.01 dans une nouvelle version et trancher sa liste « À préciser » (exécution d'outil §2.3, phases configurables §2.8, mesures transverses, preuves de correction, sous-types d'objets du périmètre, rattachement au tenant). Convention notée dans 21.01 et dans la mémoire Claude.
+- Points 🟠 encore ouverts dans la synthèse du 12.01 : §4.4 (CSP stricte et XSS / clé privée).
+
+### Context to Load
+```
+docs/10-19 Conception/14 Modèle de données/14.01 Schéma des objets métier.md
+docs/10-19 Conception/12 Analyses et revues/12.01 Rapport d'analyse du CDC.md
+docs/20-29 Développement/21 Organisation et conventions/21.01 Organisation du code et conventions.md
+```

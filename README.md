@@ -30,14 +30,14 @@ Le dépôt est un coffre [Obsidian](https://obsidian.md/).
 
 La documentation de [`docs/`](docs/) est classée selon le système [Johnny.Decimal](https://johnnydecimal.com/) ; l'index complet est la note [`00.00 Index`](docs/00-09%20Syst%C3%A8me/00%20Index/00.00%20Index.md).
 
-| **Domaine**           | **Catégories**                                                   |
-| --------------------- | ---------------------------------------------------------------- |
-| `00-09 Système`       | 00 Index, 01 Modèles (Obsidian)                                  |
-| `10-19 Conception`    | 11 Cahier des charges, 12 Analyses et revues, 13 Décisions (ADR) |
-| `20-29 Développement` | 21 Organisation et conventions                                   |
-| `30-39 Tests`         | 31 Stratégie, 32 Campagnes                                       |
-| `40-49 Publication`   | 41 Livraison                                                     |
-| `50-59 Retours`       | 51 Traitement, 52 Bugs, 53 Améliorations                         |
+| **Domaine**           | **Catégories**                                                                         |
+| --------------------- | -------------------------------------------------------------------------------------- |
+| `00-09 Système`       | 00 Index, 01 Modèles (Obsidian)                                                        |
+| `10-19 Conception`    | 11 Cahier des charges, 12 Analyses et revues, 13 Décisions (ADR), 14 Modèle de données |
+| `20-29 Développement` | 21 Organisation et conventions                                                         |
+| `30-39 Tests`         | 31 Stratégie, 32 Campagnes                                                             |
+| `40-49 Publication`   | 41 Livraison                                                                           |
+| `50-59 Retours`       | 51 Traitement, 52 Bugs, 53 Améliorations                                               |
 
 Hors de `docs/` :
 

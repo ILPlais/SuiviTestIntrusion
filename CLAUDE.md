@@ -9,6 +9,7 @@ Application Web de suivi de tests d'intrusion. Le projet est en **phase de spéc
 - `11.01 Cahier des charges` — spécification de référence.
 - `12.01 Rapport d'analyse du CDC` — lacunes du CDC (sections §1 à §6 citées par les stories) ; `12.02`–`12.05` — revues antérieures (Claude, Cursor, NotebookLM).
 - `13.xx` — ADR (index `13.00`, modèle `01.01`).
+- `14.01 Schéma des objets métier` — liaisons entre objets métier (schéma simplifié), base des modèles Eloquent et des migrations ; liens à détailler avant la première migration métier.
 - `21.01` organisation du code ; `31.01` stratégie de tests, `32.xx` campagnes ; `41.01` versionnage et livraison (`CHANGELOG.md` à la racine).
 - `51.01` traitement des retours ; `52.xx` bugs, `53.xx` améliorations ; une fiche acceptée devient une story dans `.stories/`.
 - `01 Modèles` — modèles Obsidian (dossier configuré dans `.obsidian/templates.json`).
