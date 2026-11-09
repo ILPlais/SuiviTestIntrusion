@@ -1,0 +1,35 @@
+# Session: 2026-11-09
+**Date:** 2026-11-09
+**Started:** 18:39
+**Last Updated:** 18:43
+**Project:** SuiviTestIntrusion
+**Branch:** main
+**Worktree:** C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion
+**Repo:** C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\.git
+
+---
+<!-- ECC:SUMMARY:START -->
+## Session Summary
+
+### Tasks
+- Ajouter dans 11.08 un diagramme expliquant l'évolution du statut d'une tâche
+
+### Files Modified
+- docs/10-19 Conception/11 Cahier des charges/11.08 Déroulement du test.md (diagramme d'états Mermaid « Cycle de vie d'une tâche » sous le tableau « Statuts d'une tâche »)
+
+### Tools Used
+Grep, Read, Edit, Bash, Write
+
+### Stats
+- Total user messages: 2
+<!-- ECC:SUMMARY:END -->
+
+### Notes for Next Session
+- Diagramme `stateDiagram-v2` : les 6 statuts et les 13 transitions du tableau, plus une entrée (création) et deux sorties (Vérifiée, Abandonnée, qui restent réouvrables). Libellés = condition de la transition (motif, résultat saisi, chef de projet, commentaire).
+- Rendu contrôlé par l'utilisateur dans Obsidian : sans erreur, plus lisible que dans VS Code.
+- Le texte de 11.08 contient des espaces insécables avant « : » et « ; » : en tenir compte pour les remplacements exacts.
+
+### Context to Load
+```
+docs/10-19 Conception/11 Cahier des charges/11.08 Déroulement du test.md
+```
