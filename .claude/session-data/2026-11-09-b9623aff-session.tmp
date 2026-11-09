@@ -1,0 +1,44 @@
+# Session: 2026-11-09
+**Date:** 2026-11-09
+**Started:** 16:41
+**Last Updated:** 17:05
+**Project:** SuiviTestIntrusion
+**Branch:** main
+**Worktree:** C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion
+**Repo:** C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\.git
+
+---
+<!-- ECC:SUMMARY:START -->
+## Session Summary
+
+### Tasks
+- /ecc:plan Modèle de données d'une « tâche » (12.01 §2.2)
+- Choix : six statuts (À faire, En cours, Bloquée, Terminée, Vérifiée, Abandonnée), plusieurs assignés, temps passé saisi et pré-rempli, résultat du test distinct du statut (Vulnérable, Non vulnérable, Non applicable, Non concluant)
+
+### Files Modified
+- C:\Users\ILP\.claude\plans\mod-le-de-donn-es-d-une-quiet-pebble.md
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\docs\10-19 Conception\11 Cahier des charges\11.01 Cahier des charges.md
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\docs\10-19 Conception\12 Analyses et revues\12.01 Rapport d'analyse du CDC.md
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\.stories\deroulement-1.md (via ledger.js)
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\.stories\deroulement-2.md (via ledger.js)
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\.stories\deroulement-3.md (via ledger.js)
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\.stories\exports-1.md (via ledger.js)
+
+### Tools Used
+Grep, Bash, Read, AskUserQuestion, Write, ToolSearch, ExitPlanMode, Edit
+
+### Stats
+- Total user messages: 1
+<!-- ECC:SUMMARY:END -->
+
+### Notes for Next Session
+- 12.01 §2.2 traité. Points voisins encore ouverts : §2.3 (structure d'une exécution d'outil), §2.4 (liaisons entre objets métier, ERD), §2.8 (phases configurables).
+- La ligne « Traité » du 12.01 §1.5 avait disparu de la copie de travail avant cette session (probablement un enregistrement Obsidian) ; elle a été restaurée depuis HEAD.
+- Le CDC met une espace insécable avant « ; : ? ! » ; le 12.01 et les stories utilisent des espaces ordinaires.
+
+### Context to Load
+```
+docs/10-19 Conception/11 Cahier des charges/11.01 Cahier des charges.md (Objectifs › Tâches)
+docs/10-19 Conception/12 Analyses et revues/12.01 Rapport d'analyse du CDC.md
+.stories/deroulement-1.md
+```

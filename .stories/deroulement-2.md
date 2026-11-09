@@ -12,12 +12,13 @@ En tant que testeur, je veux m'attribuer une tâche libre sans écraser le trava
 
 ## Acceptance Criteria
 
-- [ ] Attribution par le chef de projet ou auto-attribution
+- [ ] Attribution par le chef de projet, un ou plusieurs assignés par tâche
+- [ ] Auto-attribution d'une tâche libre (sans assigné)
 - [ ] Conflit 409 si la ressource a changé depuis le chargement, avec avertissement dans l'interface
 
 ## Technical Notes
 
-Dépend de deroulement-1.
+Dépend de deroulement-1. Règles : 11.01, Objectifs › Tâches et Collaboration.
 
 ## Definition of Done
 

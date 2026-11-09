@@ -18,7 +18,7 @@ En tant que chef de projet, je veux générer un rapport à partir des sections 
 
 ## Technical Notes
 
-Dépend de resultats-3.
+Dépend de resultats-3. Le modèle Technique liste les tâches avec leur résultat ; les tâches abandonnées y figurent comme non testées, avec leur motif (11.01, Exports et modèles ; Objectifs › Tâches › Résultat).
 
 ## Definition of Done
 
