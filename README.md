@@ -43,7 +43,7 @@ Hors de `docs/` :
 
 | **Chemin**                                       | **Contenu**                                                 |
 | ------------------------------------------------ | ----------------------------------------------------------- |
-| [`.stories/`](.stories/)                         | Backlog : 10 epics, 61 stories, sprints                     |
+| [`.stories/`](.stories/)                         | Backlog : 10 epics, 63 stories, sprints                     |
 | [`CHANGELOG.md`](CHANGELOG.md)                   | Historique des versions                                     |
 | [`CLAUDE.md`](CLAUDE.md), [`.claude/`](.claude/) | Contexte et configuration pour Claude Code et le plugin ECC |
 

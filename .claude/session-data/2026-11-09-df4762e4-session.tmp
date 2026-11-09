@@ -1,0 +1,46 @@
+# Session: 2026-11-09
+**Date:** 2026-11-09
+**Started:** 17:20
+**Last Updated:** 17:40
+**Project:** SuiviTestIntrusion
+**Branch:** main
+**Worktree:** C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion
+**Repo:** C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\.git
+
+---
+<!-- ECC:SUMMARY:START -->
+## Session Summary
+
+### Tasks
+- /ecc:plan Prévoir la validation formelle de l'engagement dans une prochaine version (12.01 §2.10)
+- Choix : en V1, jalon seul (« Kick-off / signature de l'engagement », daté et coché par le chef de projet ; signature hors application) ; en V2, signature électronique eIDAS, export PDF signable du questionnaire, horodatage qualifié, suivis par la story engagement-8
+
+### Files Modified
+- C:\Users\ILP\.claude\plans\docs-10-19-conception-12-analyses-et-jazzy-anchor.md
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\docs\10-19 Conception\11 Cahier des charges\11.01 Cahier des charges.md
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\docs\10-19 Conception\12 Analyses et revues\12.01 Rapport d'analyse du CDC.md
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\.stories\engagement-8.md (via ledger.js)
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\.stories\epics\engagement.md (via ledger.js)
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\.stories\epics\exports.md (via ledger.js)
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\CLAUDE.md
+- C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion\README.md
+
+### Tools Used
+Grep, Bash, Read, AskUserQuestion, Write, ToolSearch, ExitPlanMode, Edit
+
+### Stats
+- Total user messages: 1
+<!-- ECC:SUMMARY:END -->
+
+### Notes for Next Session
+- 12.01 §2.10 reporté en V2 : nouveau statut « ⏭️ Reporté en V2 » dans la colonne « Traité » de la synthèse (deux lignes 2.10).
+- engagement-8 (V2, 8 points, non assignée) : un ADR devra fixer le niveau de signature, le prestataire de confiance et l'horodatage, et trancher le cas du document signé renvoyé en clair par le prestataire (contraire au principe de la GED chiffrée).
+- Compteur du backlog corrigé dans CLAUDE.md et README.md : 63 stories (il en restait 61 alors que le ledger en comptait déjà 62).
+- Les fichiers d'epic ont des fins de ligne mixtes dans la copie de travail (CRLF pour la partie manuelle, LF pour le tableau régénéré) ; Git normalise en LF.
+
+### Context to Load
+```
+docs/10-19 Conception/11 Cahier des charges/11.01 Cahier des charges.md (Questionnaire d'engagement › Validation de l'engagement)
+docs/10-19 Conception/12 Analyses et revues/12.01 Rapport d'analyse du CDC.md
+.stories/engagement-8.md
+```

@@ -19,7 +19,7 @@ Saisir le cadre d'un test : acteurs, questionnaire d'engagement, périmètre, ob
 
 ## Out of Scope
 
-- Signature électronique (V2)
+- Validation formelle de l'engagement : signature électronique, PDF signable, horodatage qualifié (V2, story engagement-8 conservée)
 
 ## Stories
 
@@ -33,3 +33,4 @@ Saisir le cadre d'un test : acteurs, questionnaire d'engagement, périmètre, ob
 | engagement-5 | Périmètre étendu (physique, radio, ingénierie sociale) | todo |
 | engagement-6 | Diagramme réseau Mermaid, objectifs et méthodologies | todo |
 | engagement-7 | Périmètre applicatif et ressources | todo |
+| engagement-8 | Validation formelle de l'engagement | todo |

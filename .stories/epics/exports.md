@@ -17,7 +17,7 @@ Produire les rapports et les exports de migration (CDC « Exports et modèles »
 
 ## Out of Scope
 
-- Signature électronique de l'engagement (V2)
+- Signature électronique de l'engagement (V2, story engagement-8)
 
 ## Stories
 
