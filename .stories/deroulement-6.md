@@ -20,6 +20,8 @@ En tant que testeur, je veux consigner les commandes et leurs sorties (12.01 Rap
 
 Dépend de deroulement-1.
 
+Rendu PrismJS selon [[13.04 Protection de la clé privée contre le XSS]] : texte brut coloré par `Prism.highlight`, inséré par le module de rendu.
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria

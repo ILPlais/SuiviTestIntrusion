@@ -14,7 +14,7 @@ En tant qu'exploitant, je veux connaître les choix d'infrastructure (12.01 Rapp
 
 - [ ] Driver de file choisi (Redis ou database) avec stratégie de retry / échec
 - [ ] Configuration e-mail (driver, désactivation possible hors ligne)
-- [ ] Politique CSP stricte, CORS, TLS/HSTS et flags de cookies Sanctum
+- [ ] CORS, TLS/HSTS et flags de cookies Sanctum (la CSP relève de 13.04)
 - [ ] Taille maximale GED par défaut fixée
 
 ## Definition of Done

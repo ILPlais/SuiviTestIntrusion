@@ -14,10 +14,13 @@ En tant qu'utilisateur autorisé, je veux consulter une preuve.
 
 - [ ] Déchiffrement local de la CEK puis du fichier
 - [ ] Vérification du hash du ciphertext
+- [ ] Aperçu en ligne limité aux images PNG, JPEG, WebP et GIF et au texte ; autres types téléchargés seulement (13.04)
 
 ## Technical Notes
 
 Dépend de ged-chiffree-3.
+
+Règles d'aperçu et de téléchargement : [[13.04 Protection de la clé privée contre le XSS]].
 
 ## Definition of Done
 

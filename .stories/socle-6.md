@@ -12,12 +12,13 @@ En tant qu'administrateur, je veux la documentation de l'API et une SPA protég�
 
 ## Acceptance Criteria
 
-- [ ] `/api/openapi.json` généré et `/api/documentation` réservé aux administrateurs, désactivable
-- [ ] CSP sans `unsafe-inline`, HSTS, CORS restreint, cookies `Secure`/`HttpOnly`/`SameSite`
+- [ ] `/api/openapi.json` généré et `/api/documentation` réservé aux administrateurs, désactivable, avec sa propre CSP à nonce
+- [ ] CSP de 13.04 sur toutes les réponses de la SPA (Trusted Types, rapports vers `/api/v1/csp-reports`) et en-têtes de l'API ; HSTS, CORS restreint, cookies `Secure`/`HttpOnly`/`SameSite`
+- [ ] Tests E2E sous Firefox et Chromium : aucune violation CSP inattendue, charges XSS affichées comme texte, rapports de violation reçus en HTTPS
 
 ## Technical Notes
 
-Dépend de socle-4 et decisions-4.
+Dépend de socle-4, decisions-4 et decisions-7. Politique, en-têtes et preuve de faisabilité : [[13.04 Protection de la clé privée contre le XSS]].
 
 ## Definition of Done
 

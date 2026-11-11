@@ -21,6 +21,8 @@ En tant que testeur, je veux visualiser le réseau et déclarer les objectifs du
 
 Dépend de engagement-4. Catalogue initial et correspondance des phases : 11.13, « Méthodologies ». Les références MITRE ATT&CK sur tâches et vulnérabilités relèvent de vulnerabilites-7.
 
+Mermaid en `securityLevel: 'strict'`, SVG inséré par le module de rendu ; CSP et politique Trusted Types `default` selon [[13.04 Protection de la clé privée contre le XSS]].
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria

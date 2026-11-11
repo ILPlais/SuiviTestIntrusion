@@ -20,6 +20,8 @@ En tant qu'utilisateur, je veux que ma clé déchiffrée ne traîne pas en mémo
 
 Dépend de ged-chiffree-1.
 
+Verrouiller revient à arrêter le Worker crypto (`terminate()`) ; un nouveau Worker reste verrouillé jusqu'à la ressaisie du mot de passe ([[13.04 Protection de la clé privée contre le XSS]]).
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria

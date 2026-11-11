@@ -14,6 +14,7 @@ En tant que client, je veux recevoir le rapport dans le format attendu.
 
 - [ ] PDF, ODT et HTML avec graphiques
 - [ ] Classe de rate limiting Export appliquée, export audité
+- [ ] Rapport HTML : contenu saisi échappé, CSP en `<meta>` qui interdit tout script (13.04)
 
 ## Technical Notes
 

@@ -15,6 +15,7 @@ En tant que développeur, je veux une CI qui bloque les régressions.
 - [ ] Pest/PHPUnit, Vitest et Playwright exécutés en CI
 - [ ] Lint PHP et JS, analyse statique
 - [ ] Matrice de tests sur les trois SGBD
+- [ ] Règles ESLint de 13.04 bloquantes : `vue/no-v-html`, `no-eval`, `no-implied-eval`, `no-new-func`, écritures HTML hors du module de rendu
 
 ## Technical Notes
 
