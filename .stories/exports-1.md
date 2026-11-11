@@ -20,6 +20,8 @@ En tant que chef de projet, je veux générer un rapport à partir des sections 
 
 Dépend de resultats-3. Le modèle Technique liste les tâches avec leur résultat ; les tâches abandonnées y figurent comme non testées, avec leur motif (11.04 ; 11.08, Tâches › Résultat).
 
+Les exécutions d'outils y figurent par leurs métadonnées (outil, version, dates, cibles, liens), sans commande ni sortie, qui sont chiffrées (11.04 ; 11.08, Outils).
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria

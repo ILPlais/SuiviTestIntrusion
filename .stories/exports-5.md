@@ -21,6 +21,8 @@ En tant qu'administrateur, je veux migrer des données entre instances.
 
 Dépend de exports-1.
 
+Entités : le catalogue d'outils et les exécutions d'outils en font partie ; le contenu chiffré des exécutions rejoint le paquet des blobs (11.04).
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria

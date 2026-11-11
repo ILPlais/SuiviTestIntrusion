@@ -14,6 +14,7 @@ En tant qu'exportateur détenteur des CEK, je veux joindre les preuves.
 
 - [ ] Option « inclure les fichiers » construite côté client
 - [ ] Index et métadonnées sinon
+- [ ] Commandes, sorties et transcriptions asciinema des exécutions d'outils déchiffrées et jointes côté client
 
 ## Technical Notes
 

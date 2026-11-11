@@ -14,7 +14,7 @@ En tant que testeur, je veux documenter un constat.
 
 - [ ] Référence, CVE/CWE, description, phase, composants concernés
 - [ ] Score CVSS et niveau (Aucun → Critique)
-- [ ] Liens vers objets du périmètre (machines, applications, ressources) et outils
+- [ ] Liens vers objets du périmètre (machines, applications, ressources) et exécutions d'outils (deroulement-6)
 
 ## Technical Notes
 
