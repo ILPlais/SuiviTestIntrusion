@@ -1,0 +1,107 @@
+# Session: 2026-11-11
+
+**Started:** ~15:00
+**Last Updated:** 15:52
+**Project:** SuiviTestIntrusion (C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion)
+**Topic:** Traitement du §4.4 « Protection XSS et clé privée » de 12.01 : ADR 13.04, story decisions-7
+
+---
+
+## What We Are Building
+
+Le §4.4 du rapport 12.01 était le dernier point 🟠 encore ouvert. La clé privée OpenPGP déchiffrée vit dans le navigateur, et un XSS la compromettrait aussitôt. Or les données d'un test d'intrusion contiennent couramment des charges XSS.
+
+Sur choix de l'utilisateur, via `/ecc:plan` puis AskUserQuestion :
+- un ADR dédié 13.04, avec la nouvelle story `decisions-7` ;
+- l'isolation de la clé dans un **Web Worker dédié** ;
+- une **preuve de faisabilité dans un vrai navigateur**.
+
+La décision est reportée dans le CDC (11.01, 11.03, 11.04, 11.11), dans 12.01 (§4.4 traité et synthèse ✅), dans 13.00 et dans dix stories d'application.
+
+---
+
+## What WORKED (with evidence)
+
+- **CSP cible + Trusted Types + Worker crypto** — confirmé par une mini SPA dans le scratchpad, servie par un serveur Node et pilotée par puppeteer-core 25.16.0 :
+  - navigateurs : Firefox 159.0.1 installé, et Chrome for Testing 157.0.8103.50 headless shell, téléchargé via `@puppeteer/browsers` ;
+  - versions : Vite 8.3.5, Vue 3.5.44, Pinia 4.1.0, vue-i18n 11.4.16, openpgp 6.1.1, argon2id 1.0.1, Mermaid 12.2.0, PrismJS 1.30.0, DOMPurify 3.4.17 ;
+  - cas passants OK (auth Argon2id, clé v6, chiffrement de 1 Mio, aperçu PNG via `blob:`, Prism, Mermaid stylé) ;
+  - toutes les attaques bloquées (inline, externe, `eval`, `new Function`, `fetch` ou image vers une autre origine, `v-html`).
+- **CSP de la SPA retenue** : `default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob:; font/connect/worker/manifest 'self'; object/frame 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; require-trusted-types-for 'script'; trusted-types sti-render sti-worker dompurify default; report-uri + report-to`.
+- **Ledger** — `ledger.js status` : drift `[]`, recoveryPending `false`, `decisions-7` à `done`, sprint 1 à 25 points.
+- **Liens** — script `check-links.js` : 200 liens `[[…]]` vérifiés, ancres comprises, 0 erreur. Espace insécable présente après ✅ sur la ligne 4.4 de la synthèse.
+- **Commit `6f50a7a`** sur `main` : « Story decisions-7 : ADR 13.04, protection de la clé privée contre le XSS. » (20 fichiers).
+
+---
+
+## What Did NOT Work (and why)
+
+- **`new Worker(url)` sous `require-trusted-types-for 'script'`** — échoue : c'est un point d'injection Trusted Types (TrustedScriptURL). Solution : politique `sti-worker` et import Vite `?worker&url`.
+- **Mermaid sous Trusted Types sans politique `default`** — échoue : il écrit du HTML brut dans `innerHTML` (balise `<style>`). Solution : politique `default` qui assainit avec DOMPurify et refuse script et URL de script.
+- **Mermaid avec `style-src 'self'` seul** — diagramme sans style (nœuds noirs) et dizaines de violations `style-src-elem` et `style-src-attr` (d3). D'où `'unsafe-inline'` pour les styles uniquement.
+- **Autoriser la politique Trusted Types `vue`** — elle laisse tout passer : `v-html` franchit alors Trusted Types.
+- **Refuser `vue` avec le build Vue par défaut** — l'application ne s'affiche plus, car le contenu statique sérialisé passe par `innerHTML`. Solution : `template.compilerOptions.hoistStatic: false`.
+- **Inlining des ressources par Vite** — `no-simd.wasm` (3,6 Ko) devenait une URL `data:`, que `connect-src 'self'` bloquerait. Solution : `build.assetsInlineLimit: 0`.
+- **Rapports CSP sous Chrome headless shell** — aucun rapport reçu, ni `report-to` ni `report-uri`, même après 70 s, en HTTP local. Firefox les envoie en moins de 2 s.
+- **chrome-devtools MCP** — Chrome n'est pas installé sur ce poste ; d'où le headless shell téléchargé dans le scratchpad.
+- **Gros heredoc bash (~200 lignes)** — « unexpected EOF while looking for matching quote ». Découper en heredocs plus petits.
+- **`sed` avec `\r\n` dans un script JS** — séquences d'échappement abîmées. Utiliser `String.fromCharCode(13/10)`.
+- **Fichiers `.stories/` en CRLF** — les regex sur `\n` échouaient. Normaliser en LF, puis restaurer CRLF avant `apply`.
+- **Hook GateGuard** — il bloque la première modification de chaque fichier tant qu'une recherche Grep sur le fichier n'a pas été faite dans le tour et que les faits n'ont pas été énoncés ; un `rm -rf` exige liste des fichiers, retour arrière et citation de la demande. Relancer après avoir énoncé les faits.
+
+---
+
+## What Has NOT Been Tried Yet
+
+- Rapports CSP sous Chrome en HTTPS, avec un vrai Chrome (critère ajouté à `socle-6`).
+- Safari / WebKit : Trusted Types non vérifié.
+- Isolation de Mermaid dans une iframe `sandbox` pour retirer `'unsafe-inline'` et la politique `default` (évolution notée dans 13.04).
+- CSP à nonce de Swagger UI posée par Laravel : décidée, non testée.
+
+---
+
+## Current State of Files
+
+| File | Status | Notes |
+| --- | --- | --- |
+| `docs/10-19 Conception/13 Décisions d'architecture/13.04 Protection de la clé privée contre le XSS.md` | PASS: Complete | ADR accepté, preuve consignée |
+| `docs/10-19 Conception/13 Décisions d'architecture/13.00 Index des ADR.md` | PASS: Complete | Ligne 13.04 |
+| `docs/10-19 Conception/11 Cahier des charges/11.11 Documents et chiffrement.md` | PASS: Complete | Section *Protection contre le XSS*, point « Mémoire côté client » |
+| `docs/10-19 Conception/11 Cahier des charges/11.03 Serveur et API REST.md` | PASS: Complete | En-têtes API, CSP Swagger UI |
+| `docs/10-19 Conception/11 Cahier des charges/11.04 Exports et modèles de rapport.md` | PASS: Complete | Rapport HTML échappé, scripts interdits |
+| `docs/10-19 Conception/11 Cahier des charges/11.01 Cahier des charges.md` | PASS: Complete | Sommaire 11.11 |
+| `docs/10-19 Conception/12 Analyses et revues/12.01 Rapport d'analyse du CDC.md` | PASS: Complete | §4.4 traité, synthèse ✅ (inclut les reformatages de tableau de l'utilisateur) |
+| `.stories/decisions-7.md` | PASS: Complete | Créée, `done` |
+| `.stories/` decisions-4, socle-3, socle-6, identite-1, ged-chiffree-1/2/4, deroulement-6, engagement-6, exports-2, epic decisions, sprint-1 | PASS: Complete | Via `ledger.js apply` |
+| `.obsidian/app.json`, `.obsidian/community-plugins.json`, `12.03 Revue Cursor.md`, `21.01 …` | Not Started | Modifiés hors tâche (12.03 et 21.01 : fins de ligne seulement), non commités volontairement |
+
+---
+
+## Decisions Made
+
+- **ADR 13.04 et story decisions-7** — raison : décision de sécurité structurante, même schéma que 13.01 à 13.03 (choix de l'utilisateur).
+- **CSP par liste blanche `'self'` plutôt que nonce** — raison : le build Vite ne contient aucun script inline, et un nonce imposerait un `index.html` dynamique. La liste blanche est sûre parce que l'API sert `nosniff`, une CSP `sandbox` et des blobs en `octet-stream` avec `attachment`.
+- **Clé privée, CEK et mot de passe dans un Web Worker dédié** — raison : choix de l'utilisateur ; un XSS ne peut plus emporter la clé, seulement s'en servir comme oracle pendant la session.
+- **`style-src 'unsafe-inline'` et politique Trusted Types `default`** — raison : imposés par Mermaid (preuve). Risque accepté : un style n'exécute pas de code, l'exfiltration est bloquée par les directives de chargement limitées à `'self'`, et la politique `default` assainit.
+- **Politique `vue` refusée, `hoistStatic: false`** — raison : `vue` laisse passer `v-html`.
+- **`decisions-4` garde CORS, TLS/HSTS et cookies** ; la CSP relève de 13.04.
+
+---
+
+## Blockers & Open Questions
+
+- Livraison des rapports CSP sous Chrome : à revérifier en HTTPS (`socle-6`).
+- Points encore ouverts dans 12.01 : §4.3 (durée de vie de la clé en mémoire, `ged-chiffree-2`), §3.2 hors CSP (`decisions-4`), §2.3, §2.5, §2.6, §5.1, §6.1, §6.2.
+
+---
+
+## Exact Next Step
+
+Committer ces notes de session dans `.claude/session-data/` (consigne de CLAUDE.md). Ensuite, prochaine story de l'epic `decisions` : `story-lifecycle implement decisions-4` (ADR infrastructure : file d'attente, e-mail, CORS, TLS/HSTS, cookies, taille GED).
+
+---
+
+## Environment & Setup Notes
+
+- Preuve dans le scratchpad de session (temporaire) : `poc-csp-13.04/` (builds `dist-hoist`, `dist-nohoist` ; `STI_HOIST=1` pour le build Vue par défaut), `poc-server/` (`server.mjs <projet> 4173`, `run.mjs <exe> firefox|chrome [variantes]`, `summary.mjs <json>`, `WAIT_MS` pour l'attente des rapports), `browsers/` (Chrome headless shell).
+- Variantes du serveur : `full`, `full-vue`, `hoist-novue`, `nott`, `nowasm`, `styleinline`, `full-default`, `default-styleinline` (cible, avec `?default=1`).
