@@ -20,6 +20,8 @@ En tant que propriétaire, je veux retirer l'accès d'un utilisateur.
 
 Dépend de ged-chiffree-5.
 
+Au départ d'un utilisateur, le défaut est fixé par [[13.05 Trousseau d'équipe et départ d'un utilisateur]] : révocation douce immédiate, révocation forte pour les tests ouverts. Ce cas relève de ged-chiffree-9.
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria

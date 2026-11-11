@@ -12,14 +12,14 @@ En tant que testeur, je veux déposer une preuve chiffrée.
 
 ## Acceptance Criteria
 
-- [ ] CEK aléatoire, chiffrement local, trousseau initial
+- [ ] CEK aléatoire, chiffrement local, trousseau initial : équipe du test (auteur, chef de projet, testeurs affectés), client final exclu (13.05)
 - [ ] Stockage hors base, chemin `{tenant}/{test}/{yyyy}/{mm}/{uuid}.bin`, local ou S3
 - [ ] Lien vers un ou plusieurs objets métier
 - [ ] Classe de rate limiting Écriture lourde appliquée
 
 ## Technical Notes
 
-Dépend de ged-chiffree-1.
+Dépend de ged-chiffree-1. Trousseau d'équipe : [[13.05 Trousseau d'équipe et départ d'un utilisateur]].
 
 ## Definition of Done
 

@@ -15,7 +15,7 @@ En tant que testeur, je veux consigner les commandes et leurs sorties, sans que 
 - [x] Structure d'une exécution d'outil documentée dans le CDC (11.08, Outils)
 - [ ] Catalogue d'outils commun au tenant, pré-rempli, complété par les testeurs : nom, lien, langages PrismJS par défaut
 - [ ] Exécution : référence, outil et version, auteur, dates de début et de fin, phase, commande facultative et sortie avec leur langage, origine
-- [ ] Commande et sortie chiffrées dans le navigateur en un contenu unique (13.01), stocké hors base ; trousseau initial : auteur, chef de projet et testeurs affectés au test ; client final exclu
+- [ ] Commande et sortie chiffrées dans le navigateur en un contenu unique (13.01), stocké hors base ; trousseau initial : équipe du test, soit auteur, chef de projet et testeurs affectés (13.05) ; client final exclu
 - [ ] Liens n-n vers les tâches, les vulnérabilités et les objets du périmètre visés
 - [ ] Métadonnées seules en clair : la recherche et l'historique n'exposent jamais le contenu
 - [ ] Coloration PrismJS sur les langages minimaux du CDC ; sortie tronquée au-delà de 1 Mio (paramétrable), texte complet téléchargeable
@@ -26,7 +26,7 @@ Dépend de deroulement-1 et ged-chiffree-3. Modèle : 11.08, Outils. Les imports
 
 Rendu PrismJS selon [[13.04 Protection de la clé privée contre le XSS]] : texte brut coloré par `Prism.highlight`, inséré par le module de rendu.
 
-Un testeur affecté après la création reçoit la CEK par le flux de partage de la GED (ged-chiffree-5).
+Un testeur affecté après la création reçoit les CEK par le partage groupé de la GED (ged-chiffree-5). Départ d'un membre : ged-chiffree-9.
 
 ## Definition of Done
 

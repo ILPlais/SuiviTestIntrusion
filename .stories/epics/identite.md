@@ -14,7 +14,7 @@ Authentifier les utilisateurs, appliquer les rôles et ACL, isoler strictement l
 - Sanctum et jetons scopés
 - Rôles, ACL, multi-tenant
 - Audit
-- Cycle de vie utilisateur
+- Cycle de vie utilisateur (invitation, désactivation, suppression)
 
 ## Out of Scope
 

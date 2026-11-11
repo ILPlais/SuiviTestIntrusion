@@ -13,6 +13,7 @@ Stocker les preuves chiffrées dans le navigateur ; le serveur ne voit jamais le
 - Paire de clés utilisateur
 - Upload/download chiffrés
 - Trousseau, partage CEK, révocation
+- Trousseau d'équipe, propriété et départ d'un utilisateur
 - Validation des fichiers, antivirus
 - Stockage, rétention, versionnement
 
@@ -33,3 +34,4 @@ Stocker les preuves chiffrées dans le navigateur ; le serveur ne voit jamais le
 | ged-chiffree-6 | Révocation forte et douce | todo |
 | ged-chiffree-7 | Validation des fichiers et antivirus | todo |
 | ged-chiffree-8 | Métadonnées, recherche, versions et rétention | todo |
+| ged-chiffree-9 | Départ d'un utilisateur : trousseaux et propriété | todo |

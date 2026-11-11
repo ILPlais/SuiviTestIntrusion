@@ -14,6 +14,7 @@ En tant que chef de projet, je veux donner accès à un document à un collègue
 
 - [ ] ACL accordée → demande de partage → notification aux détenteurs
 - [ ] Ajout de l'entrée de trousseau côté client
+- [ ] Partage groupé par test à l'affectation d'un membre : une seule demande, traitée par le navigateur d'un détenteur (13.05)
 - [ ] Document visible mais non déchiffrable tant que le partage n'est pas fait
 - [ ] Vérification des empreintes de clés hors bande
 

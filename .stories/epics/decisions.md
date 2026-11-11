@@ -10,7 +10,7 @@ Lever les points bloquants et les zones floues du cahier des charges avant d'éc
 
 ## Scope
 
-- ADR format de chiffrement, KDF, LDAP/AD vs coffre, protection XSS de la clé privée, file d'attente, sécurité HTTP, licence, i18n
+- ADR format de chiffrement, KDF, LDAP/AD vs coffre, protection XSS de la clé privée, trousseau d'équipe et départ d'un utilisateur, file d'attente, sécurité HTTP, licence, i18n
 - Mise à jour du CDC et section Roadmap V1/V2
 
 ## Out of Scope
@@ -29,3 +29,4 @@ Lever les points bloquants et les zones floues du cahier des charges avant d'éc
 | decisions-5 | ADR : licence, langues V1 et accessibilité | todo |
 | decisions-6 | Mise à jour du cahier des charges et Roadmap V1/V2 | todo |
 | decisions-7 | ADR : protection de la clé privée contre le XSS | done |
+| decisions-8 | ADR : trousseau d'équipe et départ d'un utilisateur | done |

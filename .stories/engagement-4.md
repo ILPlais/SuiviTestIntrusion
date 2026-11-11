@@ -18,7 +18,7 @@ En tant que testeur, je veux déclarer machines, services et comptes du périmè
 
 ## Technical Notes
 
-Dépend de engagement-2. Les secrets (mots de passe, identifiants découverts) sont chiffrés dans le navigateur comme les preuves (13.01). Champs : 11.07, « Objets du périmètre » et « Réseau ».
+Dépend de engagement-2. Les secrets (mots de passe, identifiants découverts) sont chiffrés dans le navigateur comme les preuves (13.01), pour l'équipe du test (13.05). Champs : 11.07, « Objets du périmètre » et « Réseau ».
 
 ## Definition of Done
 
