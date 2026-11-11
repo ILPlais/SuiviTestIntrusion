@@ -1,0 +1,92 @@
+# Session: 2026-11-11
+
+**Started:** ~18:00
+**Last Updated:** 18:42
+**Project:** SuiviTestIntrusion (C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion)
+**Topic:** Traitement du §2.6 « Cycle de vie des utilisateurs » du rapport 12.01 (ADR 13.05, CDC, stories)
+
+---
+
+## What We Are Building
+
+Le dépôt est un coffre Obsidian de spécification (aucun code applicatif). Le §2.6 de `12.01 Rapport d'analyse du CDC` posait trois questions encore ouvertes : comment inviter un utilisateur, que devient son trousseau cryptographique quand il est désactivé ou supprimé, et qui hérite des droits de partage quand le propriétaire d'un fichier part.
+
+Le problème de fond : un document GED n'était chiffré que pour son auteur (11.11), donc perdu si l'auteur partait sans l'avoir partagé ; les exécutions d'outils (11.08) l'étaient déjà pour l'équipe du test ; les secrets du périmètre (11.07) n'avaient pas de règle. La révocation forte, défaut de 11.11 pour un départ, exige le navigateur d'un détenteur (le serveur ne peut pas rechiffrer).
+
+La session a produit un nouvel ADR, 13.05 « Trousseau d'équipe et départ d'un utilisateur », reporté dans le CDC, avec une preuve openpgp.js, puis mis à jour le backlog. Tout est commité (4ba1d83).
+
+---
+
+## What WORKED (with evidence)
+
+- **Preuve de faisabilité 13.05** — confirmed by: `node run.mjs` (scratchpad `poc-13.05`, openpgp 6.1.1, Node 26.12.1) : 20 constats OK. Clés v6 (algorithmes 27/25 = Ed25519/X25519), blob SEIPD v2, PKESK 111 octets ; trousseau d'équipe lisible par l'équipe et pas par la cliente ; partage groupé sans changer les blobs ; contrôle du dernier détenteur ; suppression des entrées ; limite (ancienne entrée = ancien blob lisible) ; révocation forte sur test ouvert, douce sur test validé. Temps : partage groupé de 3 contenus 49 ms ; rechiffrement en flux de 100 Mio 1 886 ms (≈ 19 s par Gio).
+- **Modifications du CDC** — confirmed by: `apply-cdc.mjs` en DRY puis réel, chaque remplacement trouvé exactement une fois ; `git diff` relu.
+- **Liens** — confirmed by: `check-links.mjs` : 116 fichiers, 260 liens `[[…]]`, 0 erreur (ancres comprises).
+- **Ledger** — confirmed by: `ledger.js status` : 69 stories, drift `[]`, recoveryPending false ; decisions-8 done (sprint 1, total 27 points).
+- **Typographie** — confirmed by: grep : `✅` + U+00A0 devant `[[13.05` dans la synthèse de 12.01 ; 0 « : »/« ; » précédé d'une espace normale dans les lignes ajoutées de 11.02, 11.06, 11.07, 11.11, 11.13.
+
+---
+
+## What Did NOT Work (and why)
+
+- **Edit direct sur 11.02, 11.07, 11.11, 11.13** — failed because: ces fichiers emploient une espace insécable (U+00A0) avant « : », « ; » et dans les guillemets « » ; les `old_string` avec espace normale ne correspondaient pas. Contourné par un script Node (`fr()` qui pose `\u00a0`). L'usage varie selon les fichiers : 11.06/11.11/11.07/11.02/11.13 en NBSP, ADR 13.xx, 12.01, 14.01 et une partie de 11.08 en espace normale.
+- **`grep -c $'\r'` pour détecter le CRLF** — failed because: sous Git Bash il compte toutes les lignes ; les docs sont en réalité LF dans la copie de travail. Vérifier avec Node (`t.includes('\r\n')`).
+- **Premier lancement de `stories-26.mjs`** — failed because: les fichiers `.stories/*.md` sont en CRLF dans la copie de travail (index LF, `text=auto`) ; les ancres contenant `\n` ne correspondaient pas. Le script échouait avant tout `apply` (aucune écriture). Corrigé : édition en LF, restitution en CRLF.
+- **Hook GateGuard** — refuse chaque premier Write/Edit d'un fichier et le premier Bash ; il faut énoncer les faits demandés puis relancer.
+
+---
+
+## What Has NOT Been Tried Yet
+
+- Mesurer le rechiffrement en flux dans un navigateur (Firefox 159 / Chrome 157) : la preuve 13.05 ne mesure que Node.
+- Points 12.01 encore ouverts : §2.5 comparaison inter-tests, §2.7 versionnement GED, §2.8 phases configurables, §2.9 participation du client, §2.11 tableau de bord global, §2.12 diagramme réseau, §3.x (CORS/TLS/cookies, file d'attente, e-mail → decisions-4), §4.3 durée de vie de la clé en mémoire, §4.5 magic bytes / ClamAV, §5.1 RGPD, §5.2 licence, §6.x.
+
+---
+
+## Current State of Files
+
+| File | Status | Notes |
+| --- | --- | --- |
+| `docs/10-19 Conception/13 Décisions d'architecture/13.05 Trousseau d'équipe et départ d'un utilisateur.md` | PASS: Complete | ADR accepté, story decisions-8, preuve et temps consignés |
+| `docs/.../13 Décisions d'architecture/13.00 Index des ADR.md` | PASS: Complete | Ligne 13.05 |
+| `docs/.../11 Cahier des charges/11.06 Gestion des utilisateurs.md` | PASS: Complete | Section « Cycle de vie des comptes » (Invitation, Désactivation et réactivation, Suppression), ACL, notifications |
+| `docs/.../11 Cahier des charges/11.11 Documents et chiffrement.md` | PASS: Complete | Détenteurs, Propriétaire (dans Gestion), téléversement pour l'équipe, partage groupé, révocation, section « Départ d'un utilisateur » |
+| `docs/.../11.01`, `11.02`, `11.07`, `11.08`, `11.13`, `14.01` | PASS: Complete | Sommaire, audit, secrets, trousseau initial, glossaire (Détenteur, Propriétaire), objets transverses |
+| `docs/.../12.01 Rapport d'analyse du CDC.md` | PASS: Complete | §2.6 « Traité (2026-11-11) », synthèse ✅ 13.05 |
+| `.stories/decisions-8.md`, `.stories/ged-chiffree-9.md` | PASS: Complete | Nouvelles (decisions-8 done ; ged-chiffree-9 todo, 5 pts) |
+| `.stories/identite-7.md` | PASS: Complete | Réécrite, 3 → 5 pts |
+| `.stories/ged-chiffree-3/5/6`, `deroulement-6`, `engagement-4`, `epics/*`, `sprints/sprint-1.md` | PASS: Complete | Critères et scopes alignés sur 13.05 |
+| `CLAUDE.md`, `README.md` | PASS: Complete | 69 stories |
+| `.obsidian/*`, `12.03 Revue Cursor.md`, `21.01` | Not Started | Modifications hors tâche présentes avant la session, volontairement non commitées |
+
+---
+
+## Decisions Made
+
+- **Trousseau d'équipe** pour tout contenu chiffré d'un test (GED, exécutions d'outils, secrets du périmètre) : auteur, chef de projet, testeurs affectés ; client final et administrateurs non membres exclus — reason: aucun document orphelin au départ d'un membre.
+- **Départ** : désactivation réversible qui conserve les entrées ; suppression seulement après désactivation, entrées retirées aussitôt côté serveur (révocation douce), révocation forte demandée pour les tests ouverts (Planifié, En cours, Terminé), douce seule pour les tests Validés — reason: la révocation forte protège contre une CEK conservée, pas contre un clair copié ; coût ≈ 19 s/Gio.
+- **Propriétaire** : l'auteur ; transfert manuel vers un détenteur ; automatique au chef de projet du test à la désactivation.
+- **Suppression** : dernier administrateur protégé, contrôle du dernier détenteur (confirmation + proposition de purge), pseudonymisation « Utilisateur supprimé n° X ».
+- **Invitation** : administrateur (tout rôle) ou chef de projet (clients finaux de ses tenants) ; lien à usage unique de 72 h ; compte root créé par une commande `artisan` ; lien affiché à l'invitant si e-mail désactivé.
+- **Forme** : nouvel ADR 13.05 (13.01, accepté, n'est pas modifié ; 13.05 le complète, `remplace:` vide).
+
+---
+
+## Blockers & Open Questions
+
+- RGPD (12.01 §5.1) : la pseudonymisation ne règle pas à elle seule le droit à l'effacement.
+- Configuration e-mail (12.01 §3.4) relève de decisions-4.
+- Les sauvegardes (14 jours) conservent les anciennes entrées et copies de clé : limite documentée dans 13.05.
+
+---
+
+## Exact Next Step
+
+Copier ce fichier dans `.claude/session-data/` du dépôt et le commiter (règle de CLAUDE.md). Ensuite, au choix de l'utilisateur : traiter un autre point ouvert de 12.01 (par exemple §2.7 versionnement GED ou §2.8 phases configurables), ou `story-lifecycle implement decisions-4` (ADR infrastructure).
+
+---
+
+## Environment & Setup Notes
+
+- Ledger : `node C:\Users\ILP\.claude\plugins\cache\ecc\ecc\2.2.3\skills\story-lifecycle\scripts\ledger.js <status|allocate|apply> --root <repo>` ; un statut n'avance que d'un cran par `apply`.
+- Scripts de la session (temporaires) dans le scratchpad `…\995eae42-…\scratchpad\` : `poc-13.05/run.mjs`, `apply-cdc.mjs`, `stories-26.mjs`, `check-links.mjs`.
