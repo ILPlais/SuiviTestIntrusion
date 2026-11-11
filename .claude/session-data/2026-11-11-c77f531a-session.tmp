@@ -1,0 +1,109 @@
+# Session: 2026-11-11
+
+**Started:** ~17:00
+**Last Updated:** 17:56
+**Project:** SuiviTestIntrusion (C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion)
+**Topic:** Traitement du §2.3 « Structure d'une exécution d'outil » de 12.01, avec import asciinema
+
+---
+
+## What We Are Building
+
+Le §2.3 du rapport 12.01 demandait la structure de données d'une exécution d'outil : forme de la commande et de la sortie, version de l'outil, liens vers phase, tâche et vulnérabilité, et import des sorties natives (Nmap, Nessus, Burp, ZAP). Le CDC (11.08 *Outils*) n'en disait que trois lignes. 14.01 attendait cette structure pour trancher le lien outil ↔ vulnérabilité.
+
+Choix de l'utilisateur, via `/ecc:plan` puis AskUserQuestion :
+- **tout chiffré** : commande et sortie chiffrées dans le navigateur (OpenPGP, 13.01), métadonnées seules en clair ;
+- **import** : Nmap XML en V1 ; `.nessus`, Burp Suite et OWASP ZAP en V2 ;
+- **granularité** : une exécution = une commande (facultative) et sa sortie ; une session interactive = une seule exécution.
+
+Ajout de l'utilisateur en cours de route : « Gérer aussi les exports `asciinema` » (fichiers asciicast `.cast`), traités en V1 : rejeu par asciinema-player et transcription texte.
+
+---
+
+## What WORKED (with evidence)
+
+- **asciinema-player 3.17.0 sous la CSP retenue par 13.04** — confirmé par la mini SPA de 13.04, copiée dans le scratchpad et étendue d'une page `asciinema.html`, pilotée par puppeteer-core dans Firefox 159.0.1 et Chrome headless shell 157.0.8103.50 :
+  - lecture complète, pause et saut au marqueur suivant ;
+  - 0 violation, aucune requête hors origine ;
+  - charge `<img onerror>`/`<script>` affichée comme texte ; aucun lien créé par l'OSC 8 `javascript:` ; entrée `i` et OSC 52 non affichés ;
+  - transcription (événements `o`, séquences de contrôle retirées) exacte, en v2 comme en v3.
+- **Variantes de contrôle** :
+  - sans politique Trusted Types `default`, le lecteur ne se crée pas (gabarits SolidJS par `innerHTML`) ;
+  - `style-src 'self'` seul suffit au lecteur ;
+  - sans `'wasm-unsafe-eval'`, le terminal (WASM base64 intégré au JS) ne s'initialise pas.
+- **Mermaid** — le `erDiagram` de 14.01 et le `stateDiagram` de 11.08 s'analysent et se rendent dans Firefox sous la CSP retenue (page `mermaid-check.html`). Les libellés des nouveaux liens (« voit lancer », « cible », « révèle ») sont présents.
+- **Ledger** — `ledger.js status` : 67 stories, drift `[]`, recoveryPending `false`.
+- **Liens** — `check-links.js` : 217 liens `[[…]]` vérifiés, ancres comprises, 0 erreur. Espace insécable (C2 A0) confirmée après ✅ sur la ligne §2.3 de la synthèse de 12.01.
+- **Commit `323852f`** sur `main` : « Structure d'une exécution d'outil : CDC, 13.04, 14.01, 12.01 §2.3, stories deroulement-6 à 9. » (19 fichiers).
+
+---
+
+## What Did NOT Work (and why)
+
+- **Premier lancement Firefox de la preuve asciinema** — la page n'a jamais signalé sa fin (délai de 120 s dépassé), sans cause identifiée. Après l'ajout d'un délai de 15 s par étape, le défaut ne s'est plus reproduit sur aucun des passages suivants.
+- **Contrôle « rouge fin » par `innerText`** — échoue à tort : le lecteur place chaque segment coloré dans un `<span>` distinct, que `innerText` sépare par un saut de ligne. Contrôle remplacé par `/rouge\s*fin/`.
+- **Contrôle de la dernière ligne en v2 juste après l'événement `ended`** — échoue : quand le dernier événement tombe exactement à la fin de l'enregistrement, la dernière trame n'est pas encore peinte. Une attente de 300 ms suffit. En v3, l'événement `x` final masque le cas.
+- **Edit sur des lignes du CDC** — échoue si l'on tape une espace normale : le texte ancien du CDC met une espace insécable avant « : », « ; » et dans les cellules après les emojis. Il faut reprendre les octets exacts (`cat -A`) ou ancrer le remplacement ailleurs.
+
+---
+
+## What Has NOT Been Tried Yet
+
+- Tests réels de l'import Nmap XML (story deroulement-7) : fichiers `nmap -oX` réels et hostiles (entités, fichier tronqué).
+- Comportement d'asciinema-player avec un enregistrement volumineux (plusieurs Mio), et seuil d'affichage de la transcription.
+- Vérification de l'OSC 52 sur le presse-papiers réel : la preuve a seulement constaté qu'il ne s'affiche pas (non testable en headless).
+
+---
+
+## Current State of Files
+
+| File | Status | Notes |
+| --- | --- | --- |
+| `docs/10-19 Conception/11 Cahier des charges/11.08 Déroulement du test.md` | PASS: Complete | *Outils* : catalogue, exécution, confidentialité, affichage, import (Nmap et asciinema en V1, scanners en V2) |
+| `docs/10-19 Conception/11 Cahier des charges/11.04 Exports et modèles de rapport.md` | PASS: Complete | Technique sans contenu ; contenu dans les annexes ; migration |
+| `docs/10-19 Conception/11 Cahier des charges/11.09 Vulnérabilités et remédiation.md` | PASS: Complete | Exécutions d'outils liées dans la fiche |
+| `docs/10-19 Conception/11 Cahier des charges/11.11 Documents et chiffrement.md` | PASS: Complete | Aperçus : rejeu asciinema sans affichage des frappes |
+| `docs/10-19 Conception/11 Cahier des charges/11.01 Cahier des charges.md` | PASS: Complete | Sommaire de 11.08 |
+| `docs/10-19 Conception/13 Décisions d'architecture/13.04 Protection de la clé privée contre le XSS.md` | PASS: Complete | Complément asciinema-player : contexte, CSP, politique `default`, rendu, aperçus, preuve, conséquences, évolution |
+| `docs/10-19 Conception/14 Modèle de données/14.01 Schéma des objets métier.md` | PASS: Complete | 3 liens de l'exécution ; outil ↔ vulnérabilité direct ; §2.3 retiré de *À préciser* |
+| `docs/10-19 Conception/12 Analyses et revues/12.01 Rapport d'analyse du CDC.md` | PASS: Complete | §2.3 traité ; synthèse ✅ |
+| `.stories/deroulement-6.md` | PASS: Complete | « Catalogue d'outils et exécutions », 5 points |
+| `.stories/deroulement-7.md`, `-8.md`, `-9.md` | PASS: Complete | Import Nmap XML (5), asciinema (3), scanners V2 (8) |
+| `.stories/epics/deroulement.md`, `vulnerabilites-3.md`, `exports-1/4/5.md` | PASS: Complete | Alignés |
+| `CLAUDE.md`, `README.md` | PASS: Complete | 67 stories (le compteur indiquait 63 alors que le ledger en comptait 64) |
+| `.obsidian/*`, `12.03 Revue Cursor.md`, `21.01 …` | Non commités | Modifiés hors de cette tâche (12.03 et 21.01 : fins de ligne seulement) |
+
+---
+
+## Decisions Made
+
+- **Commande et sortie chiffrées dans le navigateur (13.01), en un contenu unique stocké hors base** — raison : les sorties contiennent des secrets (condensats, mots de passe) ; le serveur ne doit jamais les lire.
+- **Trousseau initial d'une exécution : auteur, chef de projet, testeurs affectés ; client final exclu** — raison : journal collaboratif de l'équipe ; un testeur affecté plus tard passe par le flux de partage de la GED.
+- **Rapport Technique sans commande ni sortie** — raison : il est généré côté serveur ; le contenu ne figure que dans les annexes de preuves, construites dans le navigateur.
+- **Lien direct exécution ↔ vulnérabilité, plus exécution ↔ objets du périmètre et phase ↔ exécution** — raison : un scan révèle plusieurs vulnérabilités ; le rapport cite la commande qui établit le constat.
+- **Import analysé dans le navigateur ; le fichier natif devient le contenu chiffré, non modifiable** — raison : le serveur ne voit jamais le clair ; la preuve fait foi.
+- **Nmap : rapprochement par IP, services proposés, alerte sur machine exclue, ajout au périmètre réservé au chef de projet** — raison : le périmètre est contractuel.
+- **asciinema-player 3.17.0 (et non 3.18.0, sortie depuis moins de deux semaines)**, avec `keystrokeOverlay` désactivé et contenu passé par `{ data }` — raison : ne pas afficher les frappes enregistrées ; aucune URL.
+- **Pas de nouvel ADR** — raison : le chiffrement applique 13.01 tel quel ; le lecteur est un complément de 13.04.
+
+---
+
+## Blockers & Open Questions
+
+- La règle de trousseau initial (équipe du test) n'est fixée que pour les exécutions. Elle reste ouverte pour les **secrets du périmètre** (11.07, engagement-4).
+- §4.3 (durée de vie de la clé en mémoire) et §2.5, §2.6, §2.8, §5.1… de 12.01 restent ouverts.
+
+---
+
+## Exact Next Step
+
+Choisir le prochain point ouvert de 12.01 : §2.6 « Cycle de vie des utilisateurs », §2.5 « Comparaison inter-tests », §5.1 « RGPD » (🟡), ou l'epic `decisions` (`story-lifecycle implement decisions-4`). Si l'utilisateur ne tranche pas, proposer §2.6, qui touche aussi aux trousseaux.
+
+---
+
+## Environment & Setup Notes
+
+- Preuve asciinema : `C:\Users\ILP\AppData\Local\Temp\claude\eb2ee3c973e39ca8\c77f531a-bf47-4373-a2f3-5a4f26149486\scratchpad\poc-asciinema\` (pages `asciinema.html`, `mermaid-check.html`) et `poc-asciinema-server\` (`server.mjs <projet> 4174`, `run-asciinema.mjs <navigateur> <firefox|chrome>`, `summary-asciinema.mjs`, `check-mermaid.mjs`).
+- Chrome headless shell 157 : dans le scratchpad de la session `f0b4c3fd` (`browsers\chrome-headless-shell\win64-157.0.8103.50\`). Firefox : `C:\Program Files\Mozilla Firefox\firefox.exe`.
+- Lot ledger : `scratchpad\ledger\d23-stories.js` (modèle réutilisable : remplacements, critères, notes, fins de ligne conservées).
+- Hook GateGuard : il demande des faits avant le premier Bash et à chaque premier Edit/Write d'un fichier ; une recherche Glob/Grep préalable est exigée.
