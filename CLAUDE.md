@@ -38,5 +38,7 @@ Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 e
 
 ## Conventions
 
-- Commits en français, directement sur `main`.
+- Commits en français.
+- Chaque fonctionnalité (story) est développée dans sa propre branche `feature/<id>` (correctifs : `fix/<id>`), créée depuis `main`, publiée sur GitHub (`git push -u origin feature/<id>`), puis intégrée à `main` par `git merge --no-ff` une fois revue et testée ; la branche est ensuite supprimée. Détail : `21.01`.
+- Restent directement sur `main` : documentation, `.stories/`, notes de session et plans (`.claude/`), commits de version.
 - Formules CVSS en LaTeX dans le CDC (`11.10`) ; les tableaux contiennent des espaces insécables après les emojis.
