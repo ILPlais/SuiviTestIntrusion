@@ -34,6 +34,7 @@ Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 e
 - `.claude/settings.json` déclare la marketplace ECC et active le plugin `ecc@ecc` ; Claude Code propose de l'installer à l'ouverture du projet.
 - `.claude/session-data/` contient une copie des notes de session ECC. Pour `/ecc:resume-session`, les copier d'abord dans `~/.claude/session-data/`.
 - Chaque session avec Claude doit être exportée dans le dossier `.claude/session-data/` et commitée.
+- Chaque plan (mode plan, `/ecc:plan`) concernant ce projet doit être copié de `~/.claude/plans/` vers `.claude/plans/` (nom de fichier inchangé), commité puis poussé sur GitHub (`git push origin main`) en fin de session.
 
 ## Conventions
 
