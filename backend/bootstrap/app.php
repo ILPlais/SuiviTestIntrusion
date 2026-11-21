@@ -5,6 +5,8 @@
  */
 
 use App\Http\Api\ApiErrorRenderer;
+use App\Http\Api\ConcurrencyLimit;
+use App\Http\Api\LimitJsonSize;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,6 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
 		health: '/up',
 	)
 	->withMiddleware(function (Middleware $middleware): void {
+		// Corps JSON de l'API limités en taille ; requêtes simultanées par classe (socle-5).
+		$middleware->api(append: [LimitJsonSize::class]);
+		$middleware->alias(['concurrent' => ConcurrencyLimit::class]);
+
 		// Un appel non authentifié à l'API reçoit une erreur 401, pas une redirection
 		// vers une page de connexion (la SPA gère elle-même l'écran de connexion).
 		$middleware->redirectGuestsTo(fn (Request $request) => $request->is('api/*') ? null : '/');
