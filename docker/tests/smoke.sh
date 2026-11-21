@@ -7,7 +7,7 @@
 # - les services app, queue et scheduler, leurs commandes et le volume des données ;
 # - la SPA et l'API servies sur la même origine, en HTTP sur 127.0.0.1 seulement ;
 # - l'exemple de proxy inverse (nginx) : TLS 1.2 et 1.3, corps de 105 Mio accepté
-#   de bout en bout (proxy, Apache, PHP), proxy reconnu par TRUSTED_PROXIES ;
+#   de bout en bout (proxy, Apache, PHP) ;
 # - la base PostgreSQL optionnelle (profil « database »).
 #
 # Prérequis : Docker avec Compose v2, curl, jq, openssl. Le script refuse de tourner
@@ -54,6 +54,10 @@ ecrire_env() {
 	done
 }
 
+# Vrai si la page contient le conteneur de la SPA. La sortie est lue en entier avant
+# le test : un « curl | grep --quiet » peut échouer sous pipefail (tube fermé tôt).
+contient_spa() { local page; page="$("$@")" && [[ "$page" == *'id="app"'* ]]; }
+
 # Attend que la commande réussisse (au plus 60 essais d'une seconde).
 attendre() {
 	for _ in $(seq 60); do
@@ -90,20 +94,21 @@ etape "Démarrage de la pile (SQLite)"
 "${compose[@]}" up --build --detach --wait --wait-timeout 180 || echouer "démarrage de la pile"
 
 for service in app queue scheduler; do
-	"${compose[@]}" ps --status running --services | grep --quiet --line-regexp "$service" \
+	[[ $'\n'"$("${compose[@]}" ps --status running --services)"$'\n' == *$'\n'"$service"$'\n'* ]] \
 		|| echouer "service $service arrêté"
 done
 
 etape "SPA et API sur la même origine"
 curl --silent --fail "$base/up" >/dev/null || echouer "/up"
-curl --silent --fail "$base/" | grep --quiet 'id="app"' || echouer "la racine doit servir la SPA"
-curl --silent --fail "$base/engagements/12" | grep --quiet 'id="app"' || echouer "lien profond de la SPA"
+contient_spa curl --silent --fail "$base/" || echouer "la racine doit servir la SPA"
+contient_spa curl --silent --fail "$base/engagements/12" || echouer "lien profond de la SPA"
 [[ "$(curl --silent --fail "$base/api/v1/health" | jq --raw-output '.status, .database' | paste --serial --delimiters=,)" == "ok,ok" ]] \
 	|| echouer "santé de l'API"
 [[ "$(curl --silent "$base/api/v1/inexistant" | jq --raw-output '.code')" == "not_found" ]] \
 	|| echouer "enveloppe d'erreur JSON de l'API"
-curl --silent --head "$base/" | grep --quiet --ignore-case '^server: apache.$' || echouer "version d'Apache exposée"
-if curl --silent --head "$base/" | grep --quiet --ignore-case '^x-powered-by'; then
+entetes="$(curl --silent --head "$base/" | tr --delete '\r' | tr '[:upper:]' '[:lower:]')"
+[[ $'\n'"$entetes"$'\n' == *$'\n'"server: apache"$'\n'* ]] || echouer "version d'Apache exposée"
+if [[ "$entetes" == *"x-powered-by"* ]]; then
 	echouer "version de PHP exposée"
 fi
 
@@ -134,7 +139,7 @@ if "${https[@]}" --tlsv1.1 --tls-max 1.1 https://pentest.example.org/up >/dev/nu
 fi
 [[ "$(curl --silent --output /dev/null --write-out '%{http_code} %{redirect_url}' --resolve pentest.example.org:80:127.0.0.1 http://pentest.example.org/up)" == "301 https://pentest.example.org/up" ]] \
 	|| echouer "redirection de HTTP vers HTTPS"
-"${https[@]}" --fail https://pentest.example.org/ | grep --quiet 'id="app"' || echouer "SPA derrière le proxy"
+contient_spa "${https[@]}" --fail https://pentest.example.org/ || echouer "SPA derrière le proxy"
 
 # Un corps de 105 Mio traverse le proxy, Apache et PHP : la route n'accepte pas POST,
 # donc la réponse attendue est 405 (une limite trop basse donnerait 413).

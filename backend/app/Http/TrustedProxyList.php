@@ -6,14 +6,18 @@ namespace App\Http;
  * Lecture de la variable TRUSTED_PROXIES (13.06, Sécurité HTTP).
  *
  * La valeur liste les adresses ou réseaux (CIDR) des proxys inverses autorisés à
- * transmettre les en-têtes X-Forwarded-*, séparés par des virgules. Les jokers « * »
- * et « ** », qui feraient confiance à n'importe quel client, sont écartés : un client
- * pourrait sinon se faire passer pour une connexion HTTPS ou usurper son adresse IP.
+ * transmettre les en-têtes X-Forwarded-*, séparés par des virgules. Les valeurs qui
+ * font confiance à n'importe quel client (jokers « * » et « ** », « REMOTE_ADDR »,
+ * réseaux 0.0.0.0/0 et ::/0) sont écartées : un client pourrait sinon se faire passer
+ * pour une connexion HTTPS ou usurper son adresse IP.
  */
 final class TrustedProxyList
 {
-	/** Valeurs de Laravel qui font confiance à tout appelant ; jamais acceptées. */
-	private const WILDCARDS = ['*', '**'];
+	/**
+	 * Valeurs qui font confiance à tout appelant ; jamais acceptées. Laravel remplace
+	 * « REMOTE_ADDR » par l'adresse du pair, quel qu'il soit.
+	 */
+	private const WILDCARDS = ['*', '**', 'REMOTE_ADDR', '0.0.0.0/0', '0.0.0.0', '::/0', '::'];
 
 	/**
 	 * Transforme la valeur de TRUSTED_PROXIES en liste d'adresses, sans les jokers.

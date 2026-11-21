@@ -4,7 +4,7 @@
 #
 # 1. Vérifie la configuration minimale (APP_KEY).
 # 2. Prépare le volume des données (arborescence de storage/, base SQLite).
-# 3. Met en cache la configuration, les routes et les vues.
+# 3. Met en cache la configuration, les routes et les événements.
 # 4. Pour le service app seulement (commande apache2-foreground) : applique les
 #    migrations, avant que queue et scheduler ne démarrent (depends_on: service_healthy).
 # 5. Lance la commande du service.
@@ -27,7 +27,10 @@ if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
 	[ -e "$base" ] || touch "$base"
 fi
 
-php artisan optimize --no-interaction >/dev/null
+# Pas de « php artisan optimize » : il compile aussi les vues Blade, et l'API n'en a pas.
+php artisan config:cache --no-interaction >/dev/null
+php artisan route:cache --no-interaction >/dev/null
+php artisan event:cache --no-interaction >/dev/null
 
 if [ "${1:-}" = "apache2-foreground" ] && [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
 	php artisan migrate --force --no-interaction

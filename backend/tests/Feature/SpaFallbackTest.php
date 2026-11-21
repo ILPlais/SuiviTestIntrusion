@@ -53,6 +53,14 @@ class SpaFallbackTest extends TestCase
 		$this->assertStringContainsString('no-cache', $this->get('/')->headers->get('Cache-Control'));
 	}
 
+	public function test_serving_the_spa_creates_no_session_nor_cookie(): void
+	{
+		$response = $this->get('/engagements');
+
+		$response->assertOk();
+		$this->assertSame([], $response->headers->getCookies());
+	}
+
 	public function test_unknown_api_routes_keep_the_json_error_envelope(): void
 	{
 		$this->getJson('/api/v1/inexistant')

@@ -33,6 +33,13 @@ class TrustedProxyListTest extends TestCase
 		$this->assertSame(['10.0.0.1'], TrustedProxyList::fromString('*, 10.0.0.1'));
 	}
 
+	public function test_values_equivalent_to_a_wildcard_are_never_trusted(): void
+	{
+		// REMOTE_ADDR fait confiance au pair, quel qu'il soit ; les réseaux /0 couvrent tout.
+		$this->assertSame([], TrustedProxyList::fromString('REMOTE_ADDR, 0.0.0.0/0, ::/0'));
+		$this->assertTrue(TrustedProxyList::containsWildcard('10.0.0.1, ::/0'));
+	}
+
 	public function test_rejected_wildcards_are_reported(): void
 	{
 		$this->assertTrue(TrustedProxyList::containsWildcard('10.0.0.1, *'));

@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
 		// Un joker dans TRUSTED_PROXIES est écarté (13.06) ; l'exploitant en est averti,
 		// car son proxy n'est alors pas reconnu (URL en HTTP, adresse du proxy journalisée).
 		if (config('trustedproxy.wildcard_rejected')) {
-			Log::warning('TRUSTED_PROXIES contient « * », qui est refusé : indiquez l\'adresse du proxy inverse.');
+			Log::warning('TRUSTED_PROXIES contient une valeur qui fait confiance à tout client (« * », REMOTE_ADDR, réseau /0), refusée : indiquez l\'adresse du proxy inverse.');
 		}
 	}
 }
