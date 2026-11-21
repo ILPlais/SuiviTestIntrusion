@@ -28,3 +28,7 @@ Thumbs.db
 
 # Cache de PHP-CS-Fixer (local)
 /.php-cs-fixer.cache
+
+# SPA compilée copiée dans public/ (installation manuelle, 42.02)
+/public/index.html
+/public/assets/

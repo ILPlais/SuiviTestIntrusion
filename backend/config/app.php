@@ -54,6 +54,10 @@ return [
 
 	'url' => env('APP_URL', 'http://localhost'),
 
+	// Point d'entrée de la SPA compilée, copié dans public/ par l'image Docker ou à
+	// l'installation manuelle (socle-2) ; absent en développement (SPA servie par Vite).
+	'spa_index' => env('SPA_INDEX', public_path('index.html')),
+
 	/*
 	|--------------------------------------------------------------------------
 	| Application Timezone

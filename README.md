@@ -35,6 +35,11 @@ cd frontend && npm install && npm run dev
 
 L'interface est alors disponible sur http://localhost:5173 ; détails dans [`backend/README.md`](backend/README.md) et [`frontend/README.md`](frontend/README.md).
 
+## Installation (production)
+
+- Docker Compose (recommandé) : [`42.01 Installation avec Docker Compose`](docs/40-49%20Publication/42%20Installation/42.01%20Installation%20avec%20Docker%20Compose.md) ;
+- installation manuelle (PHP-FPM, nginx) : [`42.02 Installation manuelle`](docs/40-49%20Publication/42%20Installation/42.02%20Installation%20manuelle.md).
+
 ## Contenu du dépôt
 
 Le dépôt est un coffre [Obsidian](https://obsidian.md/).

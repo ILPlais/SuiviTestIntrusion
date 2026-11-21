@@ -174,3 +174,11 @@ jobs:
         run: node --test scripts/licenses/*.test.mjs
       - name: Contrôle et fichier de mentions à jour
         run: node scripts/licenses/licenses.mjs --check-notices
+
+  docker:
+    name: Pile Docker Compose
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Test de fumée (image, Compose, proxy nginx, PostgreSQL)
+        run: docker/tests/smoke.sh
