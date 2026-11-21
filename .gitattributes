@@ -4,3 +4,4 @@
 /scripts/** text eol=lf
 /.editorconfig text eol=lf
 /THIRD-PARTY-NOTICES.md text eol=lf
+/docker/** text eol=lf

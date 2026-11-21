@@ -1,0 +1,65 @@
+# Exemple de proxy inverse nginx devant SuiviTestIntrusion (socle-2, 13.06).
+#
+# Le proxy de l'exploitant termine le TLS et relaie vers le conteneur app, qui ne
+# parle qu'en HTTP sur 127.0.0.1:8080. À adapter : server_name, chemins des
+# certificats, adresse de l'application. Déclarer l'adresse d'où le proxy se connecte
+# dans TRUSTED_PROXIES (passerelle du réseau Docker, ou 127.0.0.1 en installation
+# manuelle sur le même hôte).
+#
+# Exigences de 13.06 : TLS 1.2 au minimum, TLS 1.3 privilégié, suites « intermediate »
+# de Mozilla, redirection de HTTP vers HTTPS, en-têtes X-Forwarded-*, corps de 110 Mio.
+# HSTS est envoyé par l'application elle-même (socle-6).
+
+upstream suivi_test_intrusion {
+	server 127.0.0.1:8080;
+	keepalive 16;
+}
+
+# HTTP : redirection permanente vers HTTPS.
+server {
+	listen 80;
+	listen [::]:80;
+	server_name pentest.example.org;
+
+	return 301 https://$host$request_uri;
+}
+
+server {
+	listen 443 ssl;
+	listen [::]:443 ssl;
+	http2 on;
+	server_name pentest.example.org;
+
+	ssl_certificate /etc/ssl/suivi/fullchain.pem;
+	ssl_certificate_key /etc/ssl/suivi/privkey.pem;
+
+	# Configuration « intermediate » de Mozilla (ssl-config.mozilla.org).
+	ssl_protocols TLSv1.2 TLSv1.3;
+	ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305;
+	ssl_prefer_server_ciphers off;
+	ssl_session_timeout 1d;
+	ssl_session_cache shared:SuiviSSL:10m;
+	ssl_session_tickets off;
+
+	# Envoi d'une preuve chiffrée : 100 Mio de fichier plus le surcoût (13.06).
+	client_max_body_size 110m;
+	# Le corps est transmis au fil de l'eau, sans copie temporaire sur le disque du proxy.
+	proxy_request_buffering off;
+	proxy_read_timeout 300s;
+	proxy_send_timeout 300s;
+
+	server_tokens off;
+
+	location / {
+		proxy_pass http://suivi_test_intrusion;
+		proxy_http_version 1.1;
+		proxy_set_header Connection "";
+
+		# En-têtes lus par Laravel pour le proxy de confiance (TRUSTED_PROXIES).
+		proxy_set_header Host $host;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-Proto $scheme;
+		proxy_set_header X-Forwarded-Host $host;
+		proxy_set_header X-Forwarded-Port $server_port;
+	}
+}

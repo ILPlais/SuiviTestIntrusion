@@ -1,0 +1,90 @@
+# Pile Docker Compose de SuiviTestIntrusion (socle-2, 11.02, 13.06).
+#
+#   app        API Laravel et SPA, HTTP seul sur 127.0.0.1:8080 (proxy inverse externe en V1)
+#   queue      worker de la file d'attente (pilote database)
+#   scheduler  planificateur Laravel (purges)
+#   database   PostgreSQL, optionnelle : profil « database » (sinon SQLite dans le volume)
+#
+# Utilisation depuis la racine du dépôt (procédure complète : 42.01) :
+#   cp docker/.env.example docker/.env   puis renseigner APP_KEY, APP_URL, TRUSTED_PROXIES
+#   docker compose --file docker/compose.yaml up --build --detach --wait
+#   (ajouter --profile database pour la base PostgreSQL intégrée)
+
+name: suivi-test-intrusion
+
+# Réglages communs aux trois services de l'application : même image, même volume.
+x-application: &application
+  image: suivi-test-intrusion:${IMAGE_TAG:-local}
+  build:
+    context: ..
+    dockerfile: docker/Dockerfile
+  env_file: .env
+  volumes:
+    - donnees:/var/www/html/storage
+  networks:
+    - interne
+  restart: unless-stopped
+
+services:
+  app:
+    <<: *application
+    # HTTP seulement, jamais exposé directement : le proxy de l'exploitant s'y connecte.
+    ports:
+      - "${APP_BIND:-127.0.0.1}:${APP_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--silent", "--fail", "http://127.0.0.1:8080/up"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 6
+    depends_on:
+      database:
+        condition: service_healthy
+        required: false
+
+  queue:
+    <<: *application
+    command: ["php", "artisan", "queue:work", "--tries=3", "--backoff=10,60,300"]
+    # Les migrations sont appliquées par app avant le démarrage du worker.
+    depends_on:
+      app:
+        condition: service_healthy
+
+  scheduler:
+    <<: *application
+    command: ["php", "artisan", "schedule:work"]
+    depends_on:
+      app:
+        condition: service_healthy
+
+  database:
+    image: postgres:17
+    profiles: ["database"]
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-suivi}
+      POSTGRES_USER: ${DB_USERNAME:-suivi}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-}
+    volumes:
+      - base:/var/lib/postgresql/data
+    networks:
+      - interne
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready --username=\"$${POSTGRES_USER}\" --dbname=\"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  # Preuves chiffrées, base SQLite, journaux, sessions et cache : à sauvegarder.
+  donnees:
+  # Base PostgreSQL (profil database) : à sauvegarder.
+  base:
+
+networks:
+  # Sous-réseau fixe : le proxy de l'hôte y entre par la passerelle (.1), à déclarer
+  # dans TRUSTED_PROXIES. À changer s'il chevauche un réseau existant.
+  interne:
+    ipam:
+      config:
+        - subnet: ${DOCKER_SUBNET:-172.31.250.0/24}

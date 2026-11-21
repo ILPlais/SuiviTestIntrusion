@@ -38,8 +38,9 @@ return [
 			'database' => env('DB_DATABASE', database_path('database.sqlite')),
 			'prefix' => '',
 			'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-			'busy_timeout' => null,
-			'journal_mode' => null,
+			// Docker : app, queue et scheduler partagent la base (socle-2, docker/.env.example).
+			'busy_timeout' => env('DB_BUSY_TIMEOUT'),
+			'journal_mode' => env('DB_JOURNAL_MODE'),
 			'synchronous' => null,
 			'transaction_mode' => 'DEFERRED',
 		],

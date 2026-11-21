@@ -1,0 +1,32 @@
+# Fichiers exclus du contexte de construction (racine du dépôt) : seuls backend/,
+# frontend/ et docker/ servent à l'image ; aucun secret ni artefact local.
+*
+!backend/
+!frontend/
+!docker/
+
+backend/.env
+backend/.env.*
+!backend/.env.example
+backend/vendor/
+backend/node_modules/
+backend/database/*.sqlite
+backend/bootstrap/cache/*.php
+backend/storage/logs/*
+backend/storage/framework/cache/data/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/storage/app/private/*
+backend/.phpunit.cache/
+backend/.phpunit.result.cache
+backend/.php-cs-fixer.cache
+backend/public/index.html
+backend/public/assets/
+
+frontend/node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+
+docker/.env
+docker/tests/
