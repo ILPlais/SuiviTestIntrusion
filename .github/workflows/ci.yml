@@ -1,0 +1,176 @@
+# Intégration continue (socle-3) : style, analyse statique, tests unitaires
+# et fonctionnels sur les trois SGBD, tests de bout en bout avec axe, licences.
+name: CI
+
+on:
+  push:
+    branches: [main, 'feature/**', 'fix/**']
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PHP_VERSION: '8.3'      # Version minimale du CDC (11.02).
+  NODE_VERSION: '22'
+
+jobs:
+  backend:
+    name: API (${{ matrix.database }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - database: sqlite
+          - database: mysql
+            port: 3306
+          - database: mariadb
+            port: 3307
+          - database: pgsql
+            port: 5432
+    # Les trois serveurs tournent pour chaque variante ; seul celui de la matrice est utilisé.
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: suivi_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+      mariadb:
+        image: mariadb:11.8
+        env:
+          MARIADB_ROOT_PASSWORD: secret
+          MARIADB_DATABASE: suivi_test
+        ports: ['3307:3306']
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: suivi_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd="pg_isready --username=root"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v5
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, intl, pdo_sqlite, pdo_mysql, pdo_pgsql, bcmath, zip
+          coverage: none
+      - name: Dépendances
+        run: composer install --no-interaction --no-progress --prefer-dist
+      - name: Style (PHP-CS-Fixer)
+        if: matrix.database == 'sqlite'
+        run: composer lint
+      - name: Analyse statique (Larastan)
+        if: matrix.database == 'sqlite'
+        run: composer analyse
+      - name: Tests
+        env:
+          DB_CONNECTION: ${{ matrix.database }}
+          DB_HOST: 127.0.0.1
+          DB_PORT: ${{ matrix.port }}
+          DB_DATABASE: ${{ matrix.database == 'sqlite' && ':memory:' || 'suivi_test' }}
+          DB_USERNAME: root
+          DB_PASSWORD: secret
+        run: |
+          cp .env.example .env
+          php artisan key:generate --no-interaction
+          php artisan test
+
+  frontend:
+    name: SPA
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci --no-fund --no-audit
+      - name: Lint (ESLint, règles de 13.04)
+        run: npm run lint
+      - name: Types (vue-tsc)
+        run: npm run typecheck
+      - name: Tests unitaires (Vitest)
+        run: npm test
+      - name: Build
+        run: npm run build
+
+  e2e:
+    name: Bout en bout (Playwright, axe)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: mbstring, intl, pdo_sqlite
+          coverage: none
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: API (SQLite)
+        working-directory: backend
+        run: |
+          composer install --no-interaction --no-progress --prefer-dist
+          cp .env.example .env
+          php artisan key:generate --no-interaction
+          touch database/database.sqlite
+          php artisan migrate --force --no-interaction
+      - name: SPA et navigateur
+        working-directory: frontend
+        run: |
+          npm ci --no-fund --no-audit
+          npx playwright install --with-deps chromium
+      - name: Tests de bout en bout
+        working-directory: frontend
+        env:
+          CI: 'true'
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: rapport-playwright
+          path: frontend/playwright-report/
+          retention-days: 7
+
+  licences:
+    name: Licences des dépendances
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Dépendances de la SPA (pour lire leurs licences)
+        working-directory: frontend
+        run: npm ci --no-fund --no-audit --ignore-scripts
+      - name: Tests du contrôle
+        run: node --test scripts/licenses/*.test.mjs
+      - name: Contrôle et fichier de mentions à jour
+        run: node scripts/licenses/licenses.mjs --check-notices
