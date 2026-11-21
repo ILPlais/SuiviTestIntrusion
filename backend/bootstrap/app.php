@@ -8,6 +8,7 @@ use App\Http\Api\ApiErrorRenderer;
 use App\Http\Api\ConcurrencyLimit;
 use App\Http\Api\LimitJsonSize;
 use App\Http\Middleware\EnsureTwoFactorEnrolled;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -24,6 +25,10 @@ return Application::configure(basePath: dirname(__DIR__))
 		// Corps JSON de l'API limités en taille ; requêtes simultanées par classe (socle-5).
 		// Sessions Sanctum pour la SPA servie sur la même origine (identite-1, 13.06).
 		$middleware->statefulApi();
+		// En-têtes de sécurité sur toutes les réponses (socle-6, 13.04, 13.06).
+		$middleware->append(SecurityHeaders::class);
+		// Les navigateurs envoient les rapports CSP sans cookie ni jeton CSRF.
+		$middleware->preventRequestForgery(except: ['api/v1/csp-reports']);
 		$middleware->api(append: [LimitJsonSize::class]);
 		$middleware->alias(['concurrent' => ConcurrencyLimit::class, 'two-factor' => EnsureTwoFactorEnrolled::class]);
 

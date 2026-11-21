@@ -4,7 +4,8 @@ import vue from '@vitejs/plugin-vue'
 
 // En développement, /api et /sanctum sont relayés vers l'API Laravel (php artisan serve).
 export default defineConfig({
-	plugins: [vue()],
+	// Pas de contenu statique sérialisé en innerHTML : Trusted Types le refuserait (13.04).
+	plugins: [vue({ template: { compilerOptions: { hoistStatic: false } } })],
 	// Aucun fichier intégré en URL data: (WebAssembly d'argon2id compris) : la CSP de 13.04 les refuse.
 	build: { assetsInlineLimit: 0 },
 	server: {

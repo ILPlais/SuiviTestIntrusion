@@ -28,3 +28,6 @@ dist-ssr
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Swagger UI copié au build (scripts/copy-swagger-ui.mjs)
+/public/swagger-ui/

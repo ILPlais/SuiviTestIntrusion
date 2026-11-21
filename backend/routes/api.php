@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\ApiDocumentationController;
 use App\Http\Controllers\Api\V1\ActivationController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\CspReportController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\InstanceController;
 use App\Http\Controllers\Api\V1\TwoFactorController;
@@ -14,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->name('v1.')->middleware('throttle:standard')->group(function () {
 	Route::get('health', HealthController::class)->name('health');
 	Route::get('instance', InstanceController::class)->name('instance');
+	// Rapports de violation CSP (13.04) : publics, limités en débit et en taille.
+	Route::post('csp-reports', CspReportController::class)->name('csp-reports');
 
 	// Authentification des comptes locaux (identite-1, 13.03) : publique, limitée par adresse IP.
 	Route::prefix('auth')->name('auth.')->middleware('throttle:auth')->group(function () {
@@ -38,4 +42,13 @@ Route::prefix('v1')->name('v1.')->middleware('throttle:standard')->group(functio
 	});
 
 	// Les routes métier se placeront dans un groupe auth:sanctum + two-factor.
+});
+
+/*
+| Documentation de l'API (socle-6, 11.03) : fichier OpenAPI 3.1 et Swagger UI,
+| réservés aux administrateurs d'instance (Gate view-api-documentation).
+*/
+Route::middleware(['auth:sanctum', 'throttle:standard'])->group(function () {
+	Route::get('openapi.json', [ApiDocumentationController::class, 'specification'])->name('api.openapi');
+	Route::get('documentation', [ApiDocumentationController::class, 'ui'])->name('api.documentation');
 });

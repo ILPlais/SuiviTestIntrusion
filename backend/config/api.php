@@ -46,4 +46,12 @@ return [
 	| Les fichiers de la GED (multipart) suivent GED_MAX_FILE_SIZE.
 	*/
 	'max_json_size' => (int) env('API_MAX_JSON_SIZE', 2 * 1024 * 1024),
+
+	/*
+	| Documentation (socle-6) : Swagger UI désactivable en production ; le fichier
+	| OpenAPI reste disponible pour les administrateurs.
+	*/
+	'documentation' => [
+		'ui_enabled' => (bool) env('API_DOCUMENTATION_UI', true),
+	],
 ];
