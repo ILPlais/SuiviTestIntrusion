@@ -1,6 +1,6 @@
 # SuiviTestIntrusion
 
-Application Web de suivi de tests d'intrusion. Le projet est en **phase de spécification** : aucun code applicatif n'existe encore. Le dépôt est un coffre Obsidian ; la langue de travail est le **français**.
+Application Web de suivi de tests d'intrusion. Le projet est en **début de développement** : le socle Laravel 13 (`backend/`) et Vue 3 (`frontend/`) est en place (socle-1). Le dépôt est un coffre Obsidian ; la langue de travail est le **français**.
 
 ## Documents
 
@@ -20,15 +20,16 @@ Application Web de suivi de tests d'intrusion. Le projet est en **phase de spéc
 - Back-end : Laravel 11+ / PHP 8.3+, API REST `/api/v1/`, Sanctum.
 - Front-end : SPA Vue 3 + Vite + Pinia + vue-i18n (story `socle-1`).
 - Chiffrement des preuves 100 % côté navigateur ; le serveur ne voit jamais le clair.
+- Outils de développement dans WSL (Ubuntu-26.04 : PHP 8.5, Composer, Node 22) ; depuis Git Bash : `MSYS_NO_PATHCONV=1 wsl.exe -d Ubuntu-26.04 --cd /mnt/c/.../SuiviTestIntrusion/backend --exec bash -lc "php artisan test"`.
 
 ## Planification (ECC)
 
-Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 epics, 74 stories (55 en V1 dont 8 terminées, 19 reportées en V2 : mention « Reportée en V2 » dans la story), sprint 2 en cours ; planification en points dans `22.01`.
+Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 epics, 74 stories (55 en V1 dont 9 terminées, 19 reportées en V2 : mention « Reportée en V2 » dans la story), sprint 2 en cours ; planification en points dans `22.01`.
 
 - Projet personnel mené sur du temps libre : aucune date prévue (ni sprint, ni livraison). Un sprint est un lot d'environ 15 points ; seul le **temps réellement passé** compte, noté dans le tableau de `22.01` à la fin de chaque story.
 
 - Toute écriture dans `.stories/` passe par `ledger.js` du skill (`node <skill-dir>/scripts/ledger.js <commande> --root <racine>`), jamais à la main.
-- L'epic `decisions` (ADR crypto, KDF, LDAP/AD, infra, licence/i18n) passe **avant tout code**. Prochaine étape : `story-lifecycle implement socle-1` (code, branche `feature/socle-1`).
+- L'epic `decisions` (ADR crypto, KDF, LDAP/AD, infra, licence/i18n) passe **avant tout code**. Prochaine étape : `story-lifecycle implement socle-3` (CI et tests).
 - Pas d'issues GitHub : le suivi reste dans les fichiers.
 
 ## Reprise sur un autre poste
