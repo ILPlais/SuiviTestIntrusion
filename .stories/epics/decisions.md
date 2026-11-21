@@ -27,6 +27,6 @@ Lever les points bloquants et les zones floues du cahier des charges avant d'éc
 | decisions-3 | ADR : authentification LDAP/AD et coffre de clés | done |
 | decisions-4 | ADR : infrastructure (file d'attente, e-mail, sécurité HTTP) | done |
 | decisions-5 | ADR : licence, langues V1 et accessibilité | done |
-| decisions-6 | Mise à jour du cahier des charges et Roadmap V1/V2 | review |
+| decisions-6 | Mise à jour du cahier des charges et Roadmap V1/V2 | done |
 | decisions-7 | ADR : protection de la clé privée contre le XSS | done |
 | decisions-8 | ADR : trousseau d'équipe et départ d'un utilisateur | done |

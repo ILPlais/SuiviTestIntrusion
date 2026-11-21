@@ -3,7 +3,7 @@
 **ID:** decisions-6
 **Epic:** decisions
 **Sprint:** 2
-**Status:** review
+**Status:** done
 **Points:** 2
 
 ## Context
@@ -24,6 +24,6 @@ Réalisé : ADR 13.01 à 13.07 cités dans les parties du CDC ; section *Feuille
 
 ## Definition of Done
 
-- [ ] Tests written first cover the acceptance criteria
-- [ ] Code review and verification loop passed
-- [ ] Code merged to main
+- [x] Tests written first cover the acceptance criteria
+- [x] Code review and verification loop passed
+- [x] Code merged to main

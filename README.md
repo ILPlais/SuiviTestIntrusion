@@ -12,8 +12,8 @@ Application Web de **suivi de tests d'intrusion** : elle accompagne une mission 
 - **GED chiffrée de bout en bout** : les preuves sont chiffrées et déchiffrées **dans le navigateur** ; le serveur ne stocke que des fichiers chiffrés et ne voit jamais leur contenu.
 - **Résultats** : tableau de bord du risque global, graphiques, conclusions, mesures et contre-mesures.
 - **Exports** : rapports PDF, OpenDocument et HTML (modèles exécutif, technique, annexes de preuves), export JSON/XML pour la migration entre instances.
-- **Utilisateurs** : comptes locaux, LDAP ou Active Directory, double authentification (e-mail ou TOTP), rôles et ACL, isolation stricte des données par client (multi-tenant).
-- **Exploitation** : notifications, journal d'audit, sauvegardes avec [Portabase](https://portabase.io/), interface multilingue.
+- **Utilisateurs** : comptes locaux, double authentification TOTP, rôles et ACL, isolation stricte des données par client (multi-tenant) ; LDAP / Active Directory en V2.
+- **Exploitation** : notifications dans l'application, journal d'audit, sauvegardes avec [Portabase](https://portabase.io/), interface en français prête pour d'autres langues.
 
 ## Technologies prévues
 
@@ -22,7 +22,7 @@ Application Web de **suivi de tests d'intrusion** : elle accompagne une mission 
 | Serveur          | PHP 8.3+, Laravel 11+, API REST versionnée `/api/v1/`, Laravel Sanctum |
 | Client           | SPA Vue 3 + Vite + Pinia + vue-i18n                                    |
 | Bases de données | SQLite, MySQL / MariaDB ou PostgreSQL, au choix                        |
-| Déploiement      | Docker Compose (recommandé) ou installation manuelle                   |
+| Déploiement      | Docker Compose (recommandé) derrière un proxy TLS, ou installation manuelle |
 
 ## Contenu du dépôt
 
@@ -51,10 +51,9 @@ Hors de `docs/` :
 
 Le backlog est suivi en fichiers Markdown dans `.stories/`, avec le skill `story-lifecycle` du plugin [ECC](https://github.com/affaan-m/ECC) pour Claude Code.
 
-Le **sprint 1** (du 27 octobre au 9 novembre 2026) a deux objectifs :
+Projet personnel mené sur du temps libre : les sprints (lots d'environ 15 points) n'ont pas de dates, et seul le temps réellement passé est relevé. La planification en points et le Gantt sont dans [`22.01 Planification du développement`](docs/20-29%20D%C3%A9veloppement/22%20Planification/22.01%20Planification%20du%20d%C3%A9veloppement.md) ; la feuille de route V1 / V2 dans [`11.01 Cahier des charges`](docs/10-19%20Conception/11%20Cahier%20des%20charges/11.01%20Cahier%20des%20charges.md).
 
-1. trancher les points bloquants du cahier des charges par des décisions d'architecture (ADR) : format de chiffrement, dérivation de clé, LDAP/AD et coffre de clés, infrastructure, licence et langues ;
-2. poser le socle technique Laravel + Vue 3, avec intégration continue et tests.
+Les décisions d'architecture (ADR 13.01 à 13.07) sont tranchées ; la suite du sprint 2 pose le socle technique Laravel + Vue 3, avec intégration continue et tests.
 
 ## Licence
 
