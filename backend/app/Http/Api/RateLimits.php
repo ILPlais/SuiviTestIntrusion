@@ -38,7 +38,7 @@ final class RateLimits
 		}
 
 		RateLimiter::for('auth', function (Request $request) {
-			$ip = (string) $request->ip();
+			$ip = self::networkKey((string) $request->ip());
 
 			return (new Limit('ip:'.$ip, self::perMinute('auth'), self::authDecaySeconds($ip)))
 				->response(function (Request $request, array $headers) use ($ip) {
@@ -87,8 +87,27 @@ final class RateLimits
 	}
 
 	/**
+	 * Adresse servant de clé à la classe auth : l'adresse IPv4 telle quelle, ou le
+	 * préfixe /64 d'une adresse IPv6, car un client dispose souvent d'un /64 entier
+	 * et multiplierait sinon ses compteurs en changeant d'adresse.
+	 */
+	public static function networkKey(string $ip): string
+	{
+		$binary = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false ? inet_pton($ip) : false;
+		if ($binary === false) {
+			return $ip;
+		}
+
+		return inet_ntop(substr($binary, 0, 8).str_repeat("\0", 8)).'/64';
+	}
+
+	/**
 	 * Fenêtre de la classe auth : 60 s, doublée à chaque blocage récent, sans
 	 * dépasser max_lockout_seconds (« attente de plus en plus longue », 11.03).
+	 *
+	 * La fenêtre est fixée au premier essai d'une période : après un blocage, le
+	 * client retrouve ses essais à la fin de l'attente, mais sur une fenêtre deux fois
+	 * plus longue ; le débit possible est divisé par deux à chaque blocage.
 	 */
 	private static function authDecaySeconds(string $ip): int
 	{
@@ -105,8 +124,9 @@ final class RateLimits
 	private static function recordAuthLockout(string $ip, int $retryAfter): void
 	{
 		if (Cache::add('api:auth-locked:'.$ip, true, max(1, $retryAfter))) {
-			$count = (int) Cache::get(self::lockoutCountKey($ip), 0);
-			Cache::put(self::lockoutCountKey($ip), $count + 1, self::AUTH_LOCKOUT_MEMORY_SECONDS);
+			// Incrément atomique : deux blocages simultanés comptent bien pour deux.
+			Cache::add(self::lockoutCountKey($ip), 0, self::AUTH_LOCKOUT_MEMORY_SECONDS);
+			Cache::increment(self::lockoutCountKey($ip));
 		}
 	}
 

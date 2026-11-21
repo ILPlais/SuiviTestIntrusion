@@ -3,9 +3,12 @@
 namespace App\Http\Api;
 
 use Closure;
+use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Nombre de requêtes simultanées par utilisateur (11.03, socle-5) : un téléversement
@@ -13,7 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * Usage : middleware « concurrent:<classe> ». Chaque requête prend un créneau, un
  * verrou du cache ; s'ils sont tous pris, la réponse est 429 « rate_limited ». Le
- * créneau est rendu à la fin de la requête, même en cas d'erreur.
+ * créneau est rendu quand la réponse est entièrement produite, même en cas d'erreur :
+ * au retour du contrôleur, ou après l'envoi pour une réponse en flux (export).
  */
 final class ConcurrencyLimit
 {
@@ -38,15 +42,15 @@ final class ConcurrencyLimit
 			$lock = Cache::lock(self::slotKey($class, $requester, $slot), self::SLOT_SECONDS);
 
 			if ($lock->get()) {
-				try {
-					return $next($request);
-				} finally {
-					$lock->release();
-				}
+				return $this->runHoldingSlot($request, $next, $lock);
 			}
 		}
 
-		RateLimits::reject($request, $class, ['Retry-After' => self::RETRY_AFTER_SECONDS]);
+		RateLimits::reject($request, $class, [
+			'X-RateLimit-Limit' => $maximum,
+			'X-RateLimit-Remaining' => 0,
+			'Retry-After' => self::RETRY_AFTER_SECONDS,
+		]);
 	}
 
 	/**
@@ -55,5 +59,47 @@ final class ConcurrencyLimit
 	public static function slotKey(string $class, string $requester, int $slot): string
 	{
 		return "api:concurrent:{$class}:{$requester}:{$slot}";
+	}
+
+	/**
+	 * Exécute la requête en gardant le créneau tant que la réponse n'est pas produite.
+	 *
+	 * @param Closure(Request): Response $next
+	 */
+	private function runHoldingSlot(Request $request, Closure $next, Lock $lock): Response
+	{
+		try {
+			$response = $next($request);
+		} catch (\Throwable $e) {
+			$lock->release();
+
+			throw $e;
+		}
+
+		// Réponse en flux : le corps est produit après le retour du middleware ; le
+		// créneau est rendu à la fin de la fonction qui l'écrit. Si elle ne s'exécute
+		// jamais (client parti), la durée de vie du verrou sert de filet.
+		if ($response instanceof StreamedResponse && ($callback = $response->getCallback()) !== null) {
+			$response->setCallback(function () use ($callback, $lock) {
+				try {
+					return $callback();
+				} finally {
+					$lock->release();
+				}
+			});
+
+			return $response;
+		}
+
+		// Fichier envoyé par le serveur web après la requête : créneau rendu à la fin.
+		if ($response instanceof BinaryFileResponse) {
+			app()->terminating(fn () => $lock->release());
+
+			return $response;
+		}
+
+		$lock->release();
+
+		return $response;
 	}
 }

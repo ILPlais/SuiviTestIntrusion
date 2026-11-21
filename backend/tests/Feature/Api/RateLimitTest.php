@@ -34,6 +34,10 @@ class RateLimitTest extends TestCase
 			Route::post('export', fn () => ['ok' => true])->middleware('throttle:export');
 			Route::post('connexion', fn () => ['ok' => true])->middleware('throttle:auth');
 			Route::post('televersement', fn () => ['ok' => true])->middleware('concurrent:heavy');
+			// Export en flux : le corps indique si le créneau est encore pris pendant l'envoi.
+			Route::post('export-flux', fn () => response()->stream(function () {
+				echo Cache::lock(ConcurrencyLimit::slotKey('export', 'ip:127.0.0.1', 0), 1)->get() ? 'libre' : 'pris';
+			}))->middleware('concurrent:export');
 		});
 	}
 
@@ -102,6 +106,23 @@ class RateLimitTest extends TestCase
 		$this->getJson('/api/v1/_debit/connecte')->assertOk();
 	}
 
+	public function test_users_with_real_tokens_behind_one_address_have_their_own_counter(): void
+	{
+		// Vrai jeton Bearer, sans Sanctum::actingAs (qui change le garde par défaut) :
+		// le limiteur du groupe v1 s'exécute avant auth:sanctum, posé sur la route.
+		config(['api.rate_limits.standard.per_minute' => 1]);
+		[$alice, $bob] = User::factory()->count(2)->create()->all();
+		$tokenAlice = $alice->createToken('essai')->plainTextToken;
+		$tokenBob = $bob->createToken('essai')->plainTextToken;
+
+		$this->withToken($tokenAlice)->getJson('/api/v1/user')->assertOk();
+		$this->app['auth']->forgetGuards();
+		$this->withToken($tokenAlice)->getJson('/api/v1/user')->assertStatus(429);
+		$this->app['auth']->forgetGuards();
+
+		$this->withToken($tokenBob)->getJson('/api/v1/user')->assertOk();
+	}
+
 	public function test_heavy_write_and_export_classes_have_their_own_ceilings(): void
 	{
 		config(['api.rate_limits.heavy.per_minute' => 1, 'api.rate_limits.export.per_minute' => 1]);
@@ -125,6 +146,16 @@ class RateLimitTest extends TestCase
 		$this->withServerVariables(['REMOTE_ADDR' => '198.51.100.9'])
 			->postJson('/api/v1/_debit/connexion')
 			->assertOk();
+	}
+
+	public function test_auth_class_groups_ipv6_addresses_by_64_bit_prefix(): void
+	{
+		// Un client disposant d'un /64 ne multiplie pas ses compteurs en changeant d'adresse.
+		config(['api.rate_limits.auth.per_minute' => 1]);
+
+		$this->withServerVariables(['REMOTE_ADDR' => '2001:db8:0:1::1'])->postJson('/api/v1/_debit/connexion')->assertOk();
+		$this->withServerVariables(['REMOTE_ADDR' => '2001:db8:0:1::2'])->postJson('/api/v1/_debit/connexion')->assertStatus(429);
+		$this->withServerVariables(['REMOTE_ADDR' => '2001:db8:0:2::1'])->postJson('/api/v1/_debit/connexion')->assertOk();
 	}
 
 	public function test_auth_lockouts_get_longer_each_time(): void
@@ -203,7 +234,9 @@ class RateLimitTest extends TestCase
 		$this->postJson('/api/v1/_debit/televersement')
 			->assertStatus(429)
 			->assertJsonPath('code', 'rate_limited')
-			->assertHeader('Retry-After');
+			->assertHeader('Retry-After')
+			->assertHeader('X-RateLimit-Limit', '1')
+			->assertHeader('X-RateLimit-Remaining', '0');
 
 		$slot->release();
 		$this->postJson('/api/v1/_debit/televersement')->assertOk();
@@ -213,5 +246,20 @@ class RateLimitTest extends TestCase
 	{
 		$this->postJson('/api/v1/_debit/televersement')->assertOk();
 		$this->postJson('/api/v1/_debit/televersement')->assertOk();
+	}
+
+	public function test_a_streamed_response_keeps_its_slot_until_the_request_ends(): void
+	{
+		config(['api.rate_limits.export.concurrent' => 1]);
+		$slotKey = ConcurrencyLimit::slotKey('export', 'ip:127.0.0.1', 0);
+
+		// Le corps d'une réponse en flux est produit après le retour du middleware :
+		// le créneau doit rester pris jusqu'à la fin de la requête (terminate).
+		$response = $this->postJson('/api/v1/_debit/export-flux');
+		$response->assertOk();
+		$this->assertSame('pris', $response->streamedContent());
+
+		// Après la fin de la requête, le créneau est rendu.
+		$this->assertTrue(Cache::lock($slotKey, 1)->get());
 	}
 }

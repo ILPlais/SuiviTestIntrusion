@@ -52,6 +52,30 @@ class JsonSizeLimitTest extends TestCase
 			->assertStatus(413);
 	}
 
+	public function test_the_limit_does_not_depend_on_the_declared_content_type(): void
+	{
+		// Un client ne contourne pas la limite en annonçant un autre type que JSON.
+		config(['api.max_json_size' => 1024]);
+
+		$this->call('POST', '/api/v1/_taille', [], [], [], [
+			'CONTENT_TYPE' => 'text/plain',
+			'HTTP_ACCEPT' => 'application/json',
+		], str_repeat('a', 2000))
+			->assertStatus(413);
+	}
+
+	public function test_an_announced_length_over_the_limit_is_refused_before_reading(): void
+	{
+		config(['api.max_json_size' => 1024]);
+
+		$this->call('POST', '/api/v1/_taille', [], [], [], [
+			'CONTENT_TYPE' => 'application/json',
+			'CONTENT_LENGTH' => '5000000',
+			'HTTP_ACCEPT' => 'application/json',
+		], '{}')
+			->assertStatus(413);
+	}
+
 	public function test_file_uploads_do_not_use_the_json_limit(): void
 	{
 		config(['api.max_json_size' => 1024]);
