@@ -11,7 +11,7 @@ Authentifier les utilisateurs, appliquer les rôles et ACL, isoler strictement l
 ## Scope
 
 - Auth locale, 2FA
-- Sanctum et jetons scopés
+- Sessions Sanctum
 - Rôles, ACL, multi-tenant
 - Audit
 - Cycle de vie utilisateur (invitation, désactivation, suppression)
@@ -21,6 +21,7 @@ Authentifier les utilisateurs, appliquer les rôles et ACL, isoler strictement l
 - LDAP / Active Directory (V2, story identite-2 conservée)
 - OAuth2 / OIDC (V2)
 - SMS (V2)
+- Jetons API personnels scopés (V2, story identite-4)
 
 ## Stories
 

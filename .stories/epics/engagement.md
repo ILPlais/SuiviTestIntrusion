@@ -12,7 +12,6 @@ Saisir le cadre d'un test : acteurs, questionnaire d'engagement, périmètre, ob
 
 - Références
 - Questionnaire
-- Périmètre étendu
 - Périmètre applicatif et ressources
 - Diagramme réseau
 - Objectifs et méthodologies
@@ -20,6 +19,7 @@ Saisir le cadre d'un test : acteurs, questionnaire d'engagement, périmètre, ob
 ## Out of Scope
 
 - Validation formelle de l'engagement : signature électronique, PDF signable, horodatage qualifié (V2, story engagement-8 conservée)
+- Périmètre étendu : sites physiques, radio, ingénierie sociale (V2, story engagement-5)
 
 ## Stories
 

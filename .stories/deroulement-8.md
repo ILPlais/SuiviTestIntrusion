@@ -24,6 +24,8 @@ Dépend de deroulement-6. Règles : 11.08, Outils › Import de sorties natives 
 
 Lecteur validé sous la CSP par la preuve consignée dans [[13.04 Protection de la clé privée contre le XSS]] (complément du 2026-11-11).
 
+Reportée en V2 (décision du 2026-11-21, [[22.01 Planification du développement]]) : en V1, la sortie d'une session interactive se colle dans une exécution ([[11.08 Déroulement du test]], Outils › Import de sorties natives › asciinema (V2)).
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria

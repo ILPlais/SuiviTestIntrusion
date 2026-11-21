@@ -20,6 +20,8 @@ En tant qu'utilisateur avancé, je veux des jetons Bearer révocables pour des s
 
 Dépend de identite-1.
 
+Reportée en V2 (décision du 2026-11-21, [[22.01 Planification du développement]]) : en V1, l'API sert la SPA par session Sanctum ; les jetons personnels pour les scripts suivront ([[11.03 Serveur et API REST]]).
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria

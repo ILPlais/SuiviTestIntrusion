@@ -11,14 +11,16 @@ Suivre l'exécution : phases, tâches, planning, collaboration et traces des out
 ## Scope
 
 - Phases et tâches
-- Planning, jalons, Gantt
+- Planning et jalons
 - Commentaires et historique
 - Catalogue d'outils et exécutions chiffrées (PrismJS)
-- Import Nmap XML et asciinema
+- Import Nmap XML
 
 ## Out of Scope
 
 - Import Nessus, Burp Suite et OWASP ZAP (V2, story deroulement-9 conservée)
+- Import asciinema (V2, story deroulement-8)
+- Vue Gantt (V2, story deroulement-10)
 
 ## Stories
 
@@ -27,10 +29,11 @@ Suivre l'exécution : phases, tâches, planning, collaboration et traces des out
 | --- | --- | --- |
 | deroulement-1 | Phases et modèle de tâche | todo |
 | deroulement-2 | Attribution des tâches et verrou optimiste | todo |
-| deroulement-3 | Planning, jalons et vue Gantt | todo |
+| deroulement-3 | Planning et jalons | todo |
 | deroulement-4 | Commentaires d'équipe et mentions | todo |
 | deroulement-5 | Historique des modifications | todo |
 | deroulement-6 | Catalogue d'outils et exécutions | todo |
 | deroulement-7 | Import Nmap XML | todo |
 | deroulement-8 | Import d'enregistrements asciinema | todo |
 | deroulement-9 | Import Nessus, Burp Suite et OWASP ZAP | todo |
+| deroulement-10 | Vue Gantt des phases et jalons | todo |

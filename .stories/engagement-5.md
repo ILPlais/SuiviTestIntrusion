@@ -19,6 +19,8 @@ En tant que chef de projet, je veux couvrir toutes les cibles du questionnaire (
 
 Dépend de engagement-4. Champs : 11.07, « Sites physiques », « Radio » et « Ingénierie sociale ». Applications et ressources cloud/SaaS : engagement-7.
 
+Reportée en V2 (décision du 2026-11-21, [[22.01 Planification du développement]]) : la V1 couvre le réseau, les applications et les ressources cloud et SaaS ([[11.07 Périmètre]]).
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria

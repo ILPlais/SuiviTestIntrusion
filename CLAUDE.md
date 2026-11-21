@@ -23,10 +23,10 @@ Application Web de suivi de tests d'intrusion. Le projet est en **phase de spéc
 
 ## Planification (ECC)
 
-Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 epics, 69 stories, sprint 1 du 2026-10-27 au 2026-11-09.
+Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 epics, 70 stories (56 en V1 dont 5 terminées, 14 reportées en V2 : mention « Reportée en V2 » dans la story), sprint 2 du 2026-11-23 au 2026-12-06 ; planification prévisionnelle dans `22.01`.
 
 - Toute écriture dans `.stories/` passe par `ledger.js` du skill (`node <skill-dir>/scripts/ledger.js <commande> --root <racine>`), jamais à la main.
-- L'epic `decisions` (ADR crypto, KDF, LDAP/AD, infra, licence/i18n) passe **avant tout code**. Prochaine étape : `story-lifecycle implement decisions-1`.
+- L'epic `decisions` (ADR crypto, KDF, LDAP/AD, infra, licence/i18n) passe **avant tout code**. Prochaine étape : `story-lifecycle implement decisions-4`.
 - Pas d'issues GitHub : le suivi reste dans les fichiers.
 
 ## Reprise sur un autre poste

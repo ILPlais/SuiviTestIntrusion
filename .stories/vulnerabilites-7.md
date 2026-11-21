@@ -21,6 +21,8 @@ En tant que testeur, je veux rattacher mes tâches et mes constats aux technique
 
 Dépend de deroulement-1 et vulnerabilites-3. ATT&CK n'est pas une méthodologie : il reste hors du catalogue de engagement-6. Mise à jour du référentiel sans casser les références des tests existants (identifiants dépréciés conservés).
 
+Reportée en V2 (décision du 2026-11-21, [[22.01 Planification du développement]]) : les références ATT&CK enrichissent le rapport sans conditionner la cotation ([[11.13 Annexes et références]]).
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria

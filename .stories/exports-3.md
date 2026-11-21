@@ -20,6 +20,8 @@ En tant qu'entreprise prestataire, je veux un rapport à ma charte.
 
 Dépend de exports-2.
 
+Reportée en V2 (décision du 2026-11-21, [[22.01 Planification du développement]]) : en V1, seuls les modèles par défaut sont disponibles ([[11.04 Exports et modèles de rapport]], Personnalisation).
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria

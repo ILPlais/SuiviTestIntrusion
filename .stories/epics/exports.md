@@ -11,13 +11,13 @@ Produire les rapports et les exports de migration (CDC 11.04).
 ## Scope
 
 - Modèles Exécutif, Technique, Annexes
-- Personnalisation
 - PDF, OpenDocument, HTML
 - JSON/XML versionné
 
 ## Out of Scope
 
 - Signature électronique de l'engagement (V2, story engagement-8)
+- Personnalisation des modèles (V2, story exports-3)
 
 ## Stories
 

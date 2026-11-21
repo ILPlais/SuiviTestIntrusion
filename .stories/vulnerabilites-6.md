@@ -21,6 +21,8 @@ En tant que chef de projet, je veux un score global sans comparaison abusive (12
 
 Dépend de vulnerabilites-2. Règle : 11.12, Risque global › Test mixte v3.1 / v4.0 ; seuls les niveaux (Aucun → Critique) se comparent entre versions.
 
+Reportée en V2 (décision du 2026-11-21, [[22.01 Planification du développement]]) : la règle ne s'applique qu'avec le moteur v4.0 (vulnerabilites-2) ; resultats-1 n'en dépend plus en V1.
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria

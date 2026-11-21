@@ -13,11 +13,11 @@ Synthétiser le risque d'un test et l'avancement global (CDC 11.12).
 - Risque global
 - Graphiques
 - Conclusions, mesures, contre-mesures
-- Vue multi-tests
 
 ## Out of Scope
 
-- Comparaison inter-tests avancée (V2 possible)
+- Vue multi-tests (V2, story resultats-4)
+- Comparaison entre deux tests (V2, story resultats-5)
 
 ## Stories
 

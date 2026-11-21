@@ -20,6 +20,8 @@ En tant que chef de projet, je veux une vue d'ensemble des missions (12.01 Rappo
 
 Dépend de resultats-1 et deroulement-3.
 
+Reportée en V2 (décision du 2026-11-21, [[22.01 Planification du développement]]) : la vue multi-tests (12.01 §2.11) ne conditionne pas un test mené de bout en bout.
+
 ## Definition of Done
 
 - [ ] Tests written first cover the acceptance criteria

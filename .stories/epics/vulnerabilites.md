@@ -11,14 +11,15 @@ Documenter chaque vulnérabilité, calculer sa gravité CVSS et piloter sa remé
 ## Scope
 
 - Fiche vulnérabilité
-- Moteurs CVSS v3.1 et v4.0
+- Moteur CVSS v3.1 (version et vecteur enregistrés)
 - Impact business
 - Fiche de remédiation et priorités
-- Références MITRE ATT&CK sur tâches et vulnérabilités
 
 ## Out of Scope
 
 - Métriques temporelles et environnementales CVSS
+- Moteur CVSS v4.0 et règle du test mixte (V2, stories vulnerabilites-2 et vulnerabilites-6)
+- Références MITRE ATT&CK (V2, story vulnerabilites-7)
 
 ## Stories
 
