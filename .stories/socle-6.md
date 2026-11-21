@@ -2,7 +2,7 @@
 
 **ID:** socle-6
 **Epic:** socle
-**Sprint:** unassigned
+**Sprint:** 3
 **Status:** todo
 **Points:** 2
 
