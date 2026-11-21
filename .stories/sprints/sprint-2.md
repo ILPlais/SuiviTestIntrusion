@@ -12,6 +12,6 @@
 | decisions-6 | Mise à jour du cahier des charges et Roadmap V1/V2 | 2 | done |
 | socle-1 | Squelette Laravel API + SPA Vue 3 | 3 | done |
 | socle-3 | CI et outillage de tests | 3 | done |
-| socle-4 | Enveloppe d'erreurs et pagination API v1 | 3 | in-progress |
+| socle-4 | Enveloppe d'erreurs et pagination API v1 | 3 | done |
 
 ## Total Points: 14
