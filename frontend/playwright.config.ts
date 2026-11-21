@@ -18,6 +18,9 @@ export default defineConfig({
 		{
 			command: 'php artisan serve --port=8000',
 			cwd: '../backend',
+			// La SPA de Vite (localhost:5173) doit ouvrir une session Sanctum ; les parcours
+			// enchaînent plus de connexions que la limite Auth de production (10 par minute).
+			env: { ...process.env as Record<string, string>, SANCTUM_STATEFUL_DOMAINS: 'localhost:5173', API_RATE_AUTH: '1000' },
 			url: 'http://localhost:8000/up',
 			reuseExistingServer: !process.env.CI,
 			timeout: 120_000,

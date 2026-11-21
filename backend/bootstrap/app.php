@@ -21,6 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
 	)
 	->withMiddleware(function (Middleware $middleware): void {
 		// Corps JSON de l'API limités en taille ; requêtes simultanées par classe (socle-5).
+		// Sessions Sanctum pour la SPA servie sur la même origine (identite-1, 13.06).
+		$middleware->statefulApi();
 		$middleware->api(append: [LimitJsonSize::class]);
 		$middleware->alias(['concurrent' => ConcurrencyLimit::class]);
 
