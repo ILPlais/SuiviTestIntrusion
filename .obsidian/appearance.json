@@ -3,5 +3,7 @@
   "textFontFamily": "CaskaydiaCove Nerd Font",
   "baseFontSize": 11,
   "accentColor": "#a6e3a1",
-  "baseFontSizeAction": true
+  "baseFontSizeAction": true,
+  "showRibbon": true,
+  "interfaceFontFamily": "CaskaydiaCove Nerd Font"
 }
