@@ -20,7 +20,7 @@ Application Web de suivi de tests d'intrusion. Le projet est en **début de dév
 - Back-end : Laravel 11+ / PHP 8.3+, API REST `/api/v1/`, Sanctum.
 - Front-end : SPA Vue 3 + Vite + Pinia + vue-i18n (story `socle-1`).
 - Chiffrement des preuves 100 % côté navigateur ; le serveur ne voit jamais le clair.
-- Outils de développement dans WSL (Ubuntu-26.04 : PHP 8.5, Composer, Node 22) ; depuis Git Bash : `MSYS_NO_PATHCONV=1 wsl.exe -d Ubuntu-26.04 --cd /mnt/c/.../SuiviTestIntrusion/backend --exec bash -lc "php artisan test"`.
+- Outils de développement dans WSL (Ubuntu-26.04 : PHP 8.5, Composer, Node 22) ; depuis Git Bash : `MSYS_NO_PATHCONV=1 wsl.exe -d Ubuntu-26.04 --cd /mnt/c/.../SuiviTestIntrusion/backend --exec bash --login -c "php artisan test"`.
 
 ## Planification (ECC)
 
@@ -42,6 +42,7 @@ Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 e
 ## Conventions
 
 - Commits en français.
-- Chaque fonctionnalité (story) est développée dans sa propre branche `feature/<id>` (correctifs : `fix/<id>`), créée depuis `main`, publiée sur GitHub (`git push -u origin feature/<id>`), puis intégrée à `main` par `git merge --no-ff` une fois revue et testée ; la branche est ensuite supprimée. Détail : `21.01`.
+- Style du code (`21.01`) : indentation par tabulations (`.editorconfig`), code bien commenté en français (en-tête de chaque fichier, classe et fonction exportée, pourquoi des choix non évidents), noms longs des options de commandes (`--message`, `--set-upstream`, `--no-interaction`…), y compris dans les commandes que Claude lance.
+- Chaque fonctionnalité (story) est développée dans sa propre branche `feature/<id>` (correctifs : `fix/<id>`), créée depuis `main`, publiée sur GitHub (`git push --set-upstream origin feature/<id>`), puis intégrée à `main` par `git merge --no-ff` une fois revue et testée ; la branche est ensuite supprimée. Détail : `21.01`.
 - Restent directement sur `main` : documentation, `.stories/`, notes de session et plans (`.claude/`), commits de version.
 - Formules CVSS en LaTeX dans le CDC (`11.10`) ; les tableaux contiennent des espaces insécables après les emojis.
