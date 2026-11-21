@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\V1;
 use App\Auth\AuthenticationValue;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * Activation d'un compte par son lien à usage unique (identite-1).
@@ -39,12 +41,16 @@ class ActivationController extends Controller
 			'auth' => ['required', 'string', AuthenticationValue::rule()],
 		]);
 
-		$user = $this->pendingUser($data['token']);
-		$user->forceFill([
-			'password' => $data['auth'],
+		// Mise à jour conditionnelle en une requête : deux envois simultanés du même
+		// lien ne peuvent pas réussir tous les deux (usage unique).
+		$activated = $this->pendingQuery($data['token'])->update([
+			'password' => Hash::make($data['auth']),
 			'activation_token_hash' => null,
 			'activation_expires_at' => null,
-		])->save();
+			'updated_at' => now(),
+		]);
+
+		abort_if($activated === 0, 404);
 
 		return response()->noContent();
 	}
@@ -54,14 +60,23 @@ class ActivationController extends Controller
 	 */
 	private function pendingUser(string $token): User
 	{
-		$user = User::query()
-			->where('activation_token_hash', hash('sha256', $token))
-			->whereNull('password')
-			->where('activation_expires_at', '>', now())
-			->first();
+		$user = $this->pendingQuery($token)->first();
 
 		abort_if($user === null, 404);
 
 		return $user;
+	}
+
+	/**
+	 * Requête des comptes en attente d'activation pour ce jeton (lien valide).
+	 *
+	 * @return Builder<User>
+	 */
+	private function pendingQuery(string $token): Builder
+	{
+		return User::query()
+			->where('activation_token_hash', hash('sha256', $token))
+			->whereNull('password')
+			->where('activation_expires_at', '>', now());
 	}
 }

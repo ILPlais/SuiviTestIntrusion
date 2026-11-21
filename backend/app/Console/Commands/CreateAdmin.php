@@ -13,7 +13,8 @@ use Illuminate\Support\Str;
  * Usage : php artisan suivi:create-admin <email> [--name=<nom>]
  *
  * Aucun e-mail n'est envoyé en V1 (13.06) : l'exploitant transmet le lien, à
- * usage unique et valable 24 heures, par un autre canal. Le premier compte créé
+ * usage unique et valable 24 heures, par un autre canal. Relancée pour un compte
+ * jamais activé, elle remplace son lien. Le premier compte créé
  * ainsi est le compte « root » de 11.06. Le jeton n'est stocké que par son
  * empreinte SHA-256.
  */
@@ -33,18 +34,20 @@ class CreateAdmin extends Command
 			return self::FAILURE;
 		}
 
-		if (User::query()->where('email', $email)->exists()) {
-			$this->error("Un compte existe déjà pour {$email}.");
+		$token = Str::random(64);
+		$hours = (int) config('suivi.authentication.activation_hours');
+		$existing = User::query()->where('email', $email)->first();
+
+		if ($existing !== null && $existing->getAttributes()['password'] !== null) {
+			$this->error("Un compte actif existe déjà pour {$email}.");
 
 			return self::FAILURE;
 		}
 
-		$token = Str::random(64);
-		$hours = (int) config('suivi.authentication.activation_hours');
-
-		$user = new User();
+		// Compte jamais activé (lien perdu ou échu) : un nouveau lien remplace l'ancien.
+		$user = $existing ?? new User();
 		$user->forceFill([
-			'name' => (string) ($this->option('name') ?: Str::before($email, '@')),
+			'name' => (string) ($this->option('name') ?: ($existing->name ?? Str::before($email, '@'))),
 			'email' => $email,
 			'password' => null,
 			'is_instance_admin' => true,
@@ -52,7 +55,7 @@ class CreateAdmin extends Command
 			'activation_expires_at' => now()->addHours($hours),
 		])->save();
 
-		$this->info("Administrateur créé : {$email}");
+		$this->info($existing === null ? "Administrateur créé : {$email}" : "Nouveau lien d'activation pour {$email} (l'ancien ne vaut plus).");
 		$this->line("Lien d'activation, valable {$hours} heures et utilisable une seule fois :");
 		$this->line(rtrim((string) config('app.url'), '/')."/activation/{$token}");
 

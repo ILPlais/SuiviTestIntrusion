@@ -77,6 +77,22 @@ class LoginTest extends TestCase
 			->assertJsonStructure(['details' => ['auth']]);
 	}
 
+	public function test_a_request_without_spa_session_cannot_log_in(): void
+	{
+		// Sans origine reconnue par Sanctum, aucune session n'est ouverte : la connexion est refusée.
+		$this->flushHeaders();
+
+		$this->postJson('/api/v1/auth/login', ['email' => 'alice@example.org', 'auth' => $this->auth])->assertForbidden();
+	}
+
+	public function test_a_non_canonical_base64_value_is_rejected(): void
+	{
+		// Même décodage, autre chaîne (bits de remplissage non nuls) : refusée, car la chaîne est hachée.
+		$this->postJson('/api/v1/auth/login', ['email' => 'alice@example.org', 'auth' => str_repeat('A', 42).'B='])
+			->assertStatus(422)
+			->assertJsonStructure(['details' => ['auth']]);
+	}
+
 	public function test_logout_closes_the_session(): void
 	{
 		$this->postJson('/api/v1/auth/login', ['email' => 'alice@example.org', 'auth' => $this->auth])->assertOk();

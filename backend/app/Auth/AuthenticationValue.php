@@ -25,7 +25,8 @@ final class AuthenticationValue
 		return function (string $attribute, mixed $value, Closure $fail): void {
 			$decoded = is_string($value) ? base64_decode($value, true) : false;
 
-			if ($decoded === false || strlen($decoded) !== self::BYTES) {
+			// Forme canonique exigée : c'est la chaîne reçue qui est hachée.
+			if ($decoded === false || strlen($decoded) !== self::BYTES || base64_encode($decoded) !== $value) {
 				$fail(__('auth.invalid_value'));
 			}
 		};
@@ -37,7 +38,8 @@ final class AuthenticationValue
 	 */
 	public static function normalizeEmail(string $email): string
 	{
-		$email = mb_strtolower(trim($email));
+		// Mêmes espaces de bordure que String.prototype.trim() du navigateur (espaces Unicode compris).
+		$email = mb_strtolower((string) preg_replace('/^[\s\p{Z}\x{FEFF}]+|[\s\p{Z}\x{FEFF}]+$/u', '', $email));
 		$normalized = class_exists(Normalizer::class) ? Normalizer::normalize($email, Normalizer::FORM_C) : false;
 
 		return is_string($normalized) ? $normalized : $email;

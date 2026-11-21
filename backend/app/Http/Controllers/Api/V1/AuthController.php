@@ -37,6 +37,9 @@ class AuthController extends Controller
 			'auth' => ['required', 'string', AuthenticationValue::rule()],
 		]);
 
+		// Connexion réservée à la SPA (session Sanctum) : une requête sans session n'en ouvre pas.
+		abort_unless($request->hasSession(), 403);
+
 		$user = User::query()->where('email', AuthenticationValue::normalizeEmail($data['email']))->first();
 
 		if ($user === null || ! $this->verify($user, $data['auth'])) {
@@ -89,6 +92,9 @@ class AuthController extends Controller
 		}
 
 		if ($this->lockout->blocks($user)) {
+			// Même coût qu'une vraie vérification : un compte verrouillé ne se repère pas au chronomètre.
+			Hash::check($auth, AuthenticationValue::decoyHash());
+
 			return false;
 		}
 

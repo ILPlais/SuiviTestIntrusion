@@ -4,6 +4,7 @@ namespace App\Auth;
 
 use App\Models\User;
 use Carbon\CarbonInterface;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -47,17 +48,23 @@ final class AccountLockout
 	 */
 	public function recordFailure(User $user): void
 	{
-		$user->failed_login_count++;
-		$user->last_failed_login_at = now();
+		// Relecture sous verrou de ligne : des tentatives simultanées (depuis plusieurs
+		// adresses IP) comptent chacune un échec, sans s'écraser.
+		DB::transaction(function () use ($user): void {
+			$locked = User::query()->lockForUpdate()->findOrFail($user->id);
+			$locked->failed_login_count++;
+			$locked->last_failed_login_at = now();
 
-		if ($user->failed_login_count >= (int) config('suivi.authentication.lockout_failures')) {
-			$user->locked_until = now()->addMinutes((int) config('suivi.authentication.lockout_minutes'));
+			if ($locked->failed_login_count >= (int) config('suivi.authentication.lockout_failures')) {
+				$locked->locked_until = now()->addMinutes((int) config('suivi.authentication.lockout_minutes'));
 
-			// Journal en attendant l'audit (identite-6) et la notification dans l'application (exploitation-1).
-			Log::warning('Compte local verrouillé après des échecs de connexion répétés.', ['utilisateur' => $user->id]);
-		}
+				// Journal en attendant l'audit (identite-6) et la notification dans l'application (exploitation-1).
+				Log::warning('Compte local verrouillé après des échecs de connexion répétés.', ['utilisateur' => $locked->id]);
+			}
 
-		$user->save();
+			$locked->save();
+			$user->setRawAttributes($locked->getAttributes(), true);
+		});
 	}
 
 	/**

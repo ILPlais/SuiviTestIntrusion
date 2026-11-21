@@ -49,11 +49,25 @@ class ActivationTest extends TestCase
 		$this->assertNull($user->getAttributes()['password']);
 	}
 
-	public function test_the_command_refuses_an_existing_address(): void
+	public function test_the_command_refuses_an_active_account(): void
 	{
-		$this->createAdmin();
+		$token = $this->createAdmin();
+		$this->postJson('/api/v1/auth/activate', ['token' => $token, 'auth' => base64_encode(random_bytes(32))])->assertNoContent();
 
 		$this->assertSame(1, Artisan::call('suivi:create-admin', ['email' => 'root@example.org']));
+	}
+
+	public function test_the_command_renews_the_link_of_an_account_never_activated(): void
+	{
+		$old = $this->createAdmin();
+		$this->travel(25)->hours();
+
+		$new = $this->createAdmin();
+
+		$this->assertNotSame($old, $new);
+		$this->getJson("/api/v1/auth/activation/{$old}")->assertNotFound();
+		$this->getJson("/api/v1/auth/activation/{$new}")->assertOk();
+		$this->assertSame(1, User::query()->where('email', 'root@example.org')->count());
 	}
 
 	public function test_the_activation_link_reveals_the_address_needed_to_derive_auth(): void
