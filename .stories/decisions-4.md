@@ -3,7 +3,7 @@
 **ID:** decisions-4
 **Epic:** decisions
 **Sprint:** 2
-**Status:** review
+**Status:** done
 **Points:** 2
 
 ## Context
@@ -23,6 +23,6 @@ Décision : [[13.06 Infrastructure, e-mail et sécurité HTTP]] (file `database`
 
 ## Definition of Done
 
-- [ ] Tests written first cover the acceptance criteria
-- [ ] Code review and verification loop passed
-- [ ] Code merged to main
+- [x] Tests written first cover the acceptance criteria
+- [x] Code review and verification loop passed
+- [x] Code merged to main
