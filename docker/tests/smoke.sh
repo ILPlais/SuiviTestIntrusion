@@ -141,12 +141,14 @@ fi
 	|| echouer "redirection de HTTP vers HTTPS"
 contient_spa "${https[@]}" --fail https://pentest.example.org/ || echouer "SPA derrière le proxy"
 
-# Un corps de 105 Mio traverse le proxy, Apache et PHP : la route n'accepte pas POST,
-# donc la réponse attendue est 405 (une limite trop basse donnerait 413).
+# Un corps de 105 Mio traverse le proxy, Apache et PHP jusqu'au routeur : la route
+# n'accepte pas POST, et l'enveloppe d'erreurs de l'API (socle-4) rend ce 405 en 404
+# « not_found ». Une limite trop basse donnerait 413 (proxy, Apache) ou 422 (PHP, Laravel).
 head --bytes $((105 * 1024 * 1024)) /dev/zero >"$temporaire/corps.bin"
-[[ "$("${https[@]}" --output /dev/null --write-out '%{http_code}' --header 'Accept: application/json' \
+reponse="$("${https[@]}" --write-out ' %{http_code}' --header 'Accept: application/json' \
 	--header 'Content-Type: application/octet-stream' --data-binary "@$temporaire/corps.bin" \
-	https://pentest.example.org/api/v1/health)" == "405" ]] || echouer "corps de 105 Mio refusé en chemin"
+	https://pentest.example.org/api/v1/health)"
+[[ "$reponse" == *'"code":"not_found"'*' 404' ]] || echouer "corps de 105 Mio refusé en chemin : $reponse"
 
 # ---------------------------------------------------------------------------
 etape "Base PostgreSQL optionnelle (profil database)"
