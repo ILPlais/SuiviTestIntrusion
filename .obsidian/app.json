@@ -5,7 +5,8 @@
     "node_modules/",
     "vendor/",
     "backend/storage/",
-    "frontend/dist/"
+    "frontend/dist/",
+    "__dotfile_preview__"
   ],
   "showUnsupportedFiles": true,
   "pdfExportSettings": {

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 /*
 | API REST versionnée : toutes les routes sont sous /api/v1/ (11.03).
 */
-Route::prefix('v1')->name('v1.')->group(function () {
+Route::prefix('v1')->name('v1.')->middleware('throttle:standard')->group(function () {
 	Route::get('health', HealthController::class)->name('health');
 
 	Route::get('user', fn (Request $request) => $request->user())

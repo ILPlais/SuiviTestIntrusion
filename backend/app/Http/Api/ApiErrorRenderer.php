@@ -33,6 +33,9 @@ final class ApiErrorRenderer
 		503 => 'internal_error',
 	];
 
+	/** En-têtes d'une réponse 429 transmis au client (11.03). */
+	private const RATE_LIMIT_HEADERS = ['Retry-After', 'X-RateLimit-Limit', 'X-RateLimit-Remaining', 'X-RateLimit-Reset'];
+
 	/** Statuts hors table ramenés à un statut de la table. */
 	private const ALIASES = [
 		400 => 422, // Requête mal formée : refusée comme une donnée invalide.
@@ -53,10 +56,14 @@ final class ApiErrorRenderer
 		$code = self::CODES[$status];
 		$details = $e instanceof ValidationException ? $e->errors() : [];
 
-		// Seul Retry-After est utile au client ; les autres en-têtes de l'exception sont écartés.
+		// Seuls Retry-After et les en-têtes X-RateLimit-* sont utiles au client (11.03) ;
+		// les autres en-têtes de l'exception sont écartés.
 		$headers = [];
-		if ($status === 429 && $e instanceof HttpExceptionInterface && isset($e->getHeaders()['Retry-After'])) {
-			$headers['Retry-After'] = (string) $e->getHeaders()['Retry-After'];
+		if ($status === 429 && $e instanceof HttpExceptionInterface) {
+			$headers = array_map(
+				fn ($value) => (string) $value,
+				array_intersect_key($e->getHeaders(), array_flip(self::RATE_LIMIT_HEADERS)),
+			);
 		}
 
 		return new JsonResponse([
