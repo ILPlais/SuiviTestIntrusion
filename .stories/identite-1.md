@@ -3,7 +3,7 @@
 **ID:** identite-1
 **Epic:** identite
 **Sprint:** 3
-**Status:** in-progress
+**Status:** done
 **Points:** 3
 
 ## Context
@@ -12,9 +12,9 @@ En tant qu'utilisateur, je veux me connecter à la SPA de façon sécurisée.
 
 ## Acceptance Criteria
 
-- [ ] Connexion / déconnexion par session Sanctum
-- [ ] Politique de mot de passe et verrouillage selon l'ADR
-- [ ] Rate limiting de la classe Auth appliqué
+- [x] Connexion / déconnexion par session Sanctum
+- [x] Politique de mot de passe et verrouillage selon l'ADR
+- [x] Rate limiting de la classe Auth appliqué
 
 ## Technical Notes
 
@@ -26,6 +26,6 @@ Le « module crypto unique » de 13.03 est le Worker crypto de [[13.04 Protectio
 
 ## Definition of Done
 
-- [ ] Tests written first cover the acceptance criteria
-- [ ] Code review and verification loop passed
-- [ ] Code merged to main
+- [x] Tests written first cover the acceptance criteria
+- [x] Code review and verification loop passed
+- [x] Code merged to main
