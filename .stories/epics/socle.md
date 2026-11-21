@@ -29,5 +29,5 @@ Disposer d'un squelette Laravel + SPA Vue 3 déployable, testé en CI, qui appli
 | socle-3 | CI et outillage de tests | done |
 | socle-4 | Enveloppe d'erreurs et pagination API v1 | done |
 | socle-5 | Rate limiting par classe et limite de taille | done |
-| socle-6 | OpenAPI 3.1, Swagger UI et en-têtes de sécurité | todo |
+| socle-6 | OpenAPI 3.1, Swagger UI et en-têtes de sécurité | in-progress |
 | socle-7 | Service web HTTPS intégré à Docker Compose | todo |
