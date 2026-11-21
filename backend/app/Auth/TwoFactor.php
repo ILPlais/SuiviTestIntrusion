@@ -14,8 +14,8 @@ use PragmaRX\Google2FA\Google2FA;
  * - Un code accepté fixe le dernier pas de temps utilisé : il ne sert jamais
  *   deux fois, même dans sa fenêtre de validité (±1 pas, soit environ 90 s).
  * - Les codes de secours (10, à usage unique) ne sont gardés que par leur
- *   empreinte SHA-256 : ils sont aléatoires et assez longs pour se passer d'un
- *   hachage lent.
+ *   empreinte HMAC-SHA-256, clé de l'application : une copie de la base seule ne
+ *   permet pas de les retrouver par force brute.
  * - Le pas de temps vient de l'horloge de Laravel, que les tests peuvent déplacer.
  */
 final class TwoFactor
@@ -120,11 +120,12 @@ final class TwoFactor
 	}
 
 	/**
-	 * Empreinte d'un code de secours, insensible à la casse, aux tirets et aux espaces.
+	 * Empreinte d'un code de secours (HMAC, clé de l'application), insensible à la
+	 * casse, aux tirets et aux espaces.
 	 */
 	private static function hashRecoveryCode(string $code): string
 	{
-		return hash('sha256', Str::upper((string) preg_replace('/[\s-]+/', '', $code)));
+		return hash_hmac('sha256', Str::upper((string) preg_replace('/[\s-]+/', '', $code)), (string) config('app.key'));
 	}
 
 	/**

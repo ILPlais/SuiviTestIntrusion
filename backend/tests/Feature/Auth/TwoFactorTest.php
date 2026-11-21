@@ -153,6 +153,31 @@ class TwoFactorTest extends TestCase
 		$this->assertSame(1, $this->user->fresh()->failed_login_count);
 	}
 
+	public function test_logging_in_again_does_not_reset_code_failures(): void
+	{
+		$this->login();
+		$this->enroll();
+		$this->freshSession();
+
+		$this->postJson('/api/v1/auth/login', ['email' => 'alice@example.org', 'auth' => $this->auth]);
+		$this->postJson('/api/v1/auth/two-factor', ['code' => '000000'])->assertStatus(422);
+		$this->postJson('/api/v1/auth/two-factor', ['code' => '000001'])->assertStatus(422);
+
+		// Le premier facteur, que détiendrait l'attaquant, ne remet pas le compteur à zéro.
+		$this->postJson('/api/v1/auth/login', ['email' => 'alice@example.org', 'auth' => $this->auth])->assertOk();
+		$this->assertSame(2, $this->user->fresh()->failed_login_count);
+	}
+
+	public function test_a_wrong_code_on_a_management_route_counts_as_a_failure(): void
+	{
+		$this->login();
+		$this->enroll();
+
+		$this->postJson('/api/v1/user/two-factor/recovery-codes', ['code' => '000000'])->assertStatus(422);
+
+		$this->assertSame(1, $this->user->fresh()->failed_login_count);
+	}
+
 	public function test_a_code_cannot_be_used_twice(): void
 	{
 		$this->login();

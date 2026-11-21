@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -56,6 +57,7 @@ class AuthController extends Controller
 		// Second facteur actif : le premier facteur est mémorisé dans la session (renouvelée
 		// contre la fixation), sans ouvrir de session authentifiée (identite-3).
 		if ($user->hasTwoFactor()) {
+			Auth::guard('web')->logout();
 			$request->session()->regenerate();
 			$request->session()->put(self::PENDING_KEY, ['user_id' => $user->id, 'expires_at' => now()->getTimestamp() + self::PENDING_SECONDS]);
 
@@ -92,8 +94,13 @@ class AuthController extends Controller
 
 		if (! $valid) {
 			$this->lockout->recordFailure($user);
+			Log::warning('Code de double authentification refusé à la connexion.', ['utilisateur' => $user->id]);
 
 			throw ValidationException::withMessages(['code' => [__('auth.two_factor_invalid')]]);
+		}
+
+		if (! isset($data['code'])) {
+			Log::notice('Connexion avec un code de secours.', ['utilisateur' => $user->id]);
 		}
 
 		$request->session()->forget(self::PENDING_KEY);
@@ -165,7 +172,11 @@ class AuthController extends Controller
 			return false;
 		}
 
-		$this->lockout->reset($user);
+		// Avec un second facteur, seule sa réussite remet le compteur à zéro : sinon,
+		// se reconnecter avec le mot de passe effacerait les échecs de code (force brute).
+		if (! $user->hasTwoFactor()) {
+			$this->lockout->reset($user);
+		}
 
 		return true;
 	}

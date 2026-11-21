@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Auth\AccountLockout;
 use App\Auth\TwoFactor;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -20,7 +22,7 @@ use Illuminate\Validation\ValidationException;
  */
 class TwoFactorController extends Controller
 {
-	public function __construct(private readonly TwoFactor $twoFactor)
+	public function __construct(private readonly TwoFactor $twoFactor, private readonly AccountLockout $lockout)
 	{
 	}
 
@@ -54,6 +56,7 @@ class TwoFactorController extends Controller
 
 		$this->requireValidCode($user, $code);
 		$user->forceFill(['two_factor_confirmed_at' => now()])->save();
+		Log::notice('Double authentification activée.', ['utilisateur' => $user->id]);
 
 		return new JsonResponse(['recovery_codes' => $this->twoFactor->regenerateRecoveryCodes($user)]);
 	}
@@ -88,6 +91,7 @@ class TwoFactorController extends Controller
 			'two_factor_confirmed_at' => null,
 			'two_factor_recovery_codes' => null,
 		])->save();
+		Log::notice('Double authentification désactivée.', ['utilisateur' => $user->id]);
 
 		return response()->noContent();
 	}
@@ -112,11 +116,18 @@ class TwoFactorController extends Controller
 	}
 
 	/**
-	 * Lève une erreur de validation si le code TOTP est faux ou déjà utilisé.
+	 * Lève une erreur de validation si le code TOTP est faux ou déjà utilisé. Un code
+	 * faux compte dans le verrouillage du compte : une session volée ne permet pas de
+	 * deviner un code pour désactiver ou renouveler.
 	 */
 	private function requireValidCode(User $user, string $code): void
 	{
-		if (! $this->twoFactor->verifyCode($user, $code)) {
+		if ($this->lockout->blocks($user) || ! $this->twoFactor->verifyCode($user, $code)) {
+			if (! $this->lockout->blocks($user)) {
+				$this->lockout->recordFailure($user);
+			}
+			Log::warning('Code de double authentification refusé.', ['utilisateur' => $user->id]);
+
 			throw ValidationException::withMessages(['code' => [__('auth.two_factor_invalid')]]);
 		}
 	}
