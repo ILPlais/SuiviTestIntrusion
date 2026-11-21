@@ -77,6 +77,11 @@ class SpaFallbackTest extends TestCase
 		$this->get('/')->assertNotFound();
 	}
 
+	public function test_the_sanctum_csrf_cookie_route_is_not_taken_by_the_spa(): void
+	{
+		$this->get('/sanctum/csrf-cookie')->assertNoContent()->assertCookie('XSRF-TOKEN');
+	}
+
 	public function test_the_container_health_check_stays_available(): void
 	{
 		$this->get('/up')->assertOk();
