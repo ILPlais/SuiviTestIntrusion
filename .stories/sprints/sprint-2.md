@@ -8,7 +8,7 @@
 | ID | Title | Points | Status |
 | --- | --- | --- | --- |
 | decisions-4 | ADR : infrastructure (file d'attente, e-mail, sécurité HTTP) | 2 | done |
-| decisions-5 | ADR : licence, langues V1 et accessibilité | 1 | todo |
+| decisions-5 | ADR : licence, langues V1 et accessibilité | 1 | review |
 | decisions-6 | Mise à jour du cahier des charges et Roadmap V1/V2 | 2 | todo |
 | socle-1 | Squelette Laravel API + SPA Vue 3 | 3 | todo |
 | socle-3 | CI et outillage de tests | 3 | todo |

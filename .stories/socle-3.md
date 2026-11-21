@@ -15,6 +15,8 @@ En tant que développeur, je veux une CI qui bloque les régressions.
 - [ ] Pest/PHPUnit, Vitest et Playwright exécutés en CI
 - [ ] Lint PHP et JS, analyse statique
 - [ ] Matrice de tests sur les trois SGBD
+- [ ] Contrôle des licences des dépendances PHP et JS (liste autorisée de [[13.07 Licence, langues et accessibilité]]) et fichier de mentions généré
+- [ ] Contrôles d'accessibilité automatiques (axe) disponibles dans les tests Playwright
 - [ ] Règles ESLint de 13.04 bloquantes : `vue/no-v-html`, `no-eval`, `no-implied-eval`, `no-new-func`, écritures HTML hors du module de rendu
 
 ## Technical Notes

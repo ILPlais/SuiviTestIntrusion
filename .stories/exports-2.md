@@ -18,7 +18,7 @@ En tant que client, je veux recevoir le rapport dans le format attendu.
 
 ## Technical Notes
 
-Dépend de exports-1.
+Dépend de exports-1. Moteur PDF sans licence GPL ni AGPL liée au code ([[13.07 Licence, langues et accessibilité]]).
 
 ## Definition of Done
 

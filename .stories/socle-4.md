@@ -13,7 +13,7 @@ En tant que client de l'API, je veux des réponses uniformes afin de traiter err
 ## Acceptance Criteria
 
 - [ ] Format `{code, message, details}` pour toutes les erreurs, avec la table HTTP du CDC
-- [ ] Messages traduits selon le profil ou `Accept-Language`, jamais de trace technique
+- [ ] Messages issus des fichiers de langue Laravel (français en V1), jamais de trace technique
 - [ ] Pagination curseur (défaut) et page, `limit` ≤ 200, réponse `data` + `meta`
 - [ ] Tri et filtres limités à une liste blanche
 

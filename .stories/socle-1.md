@@ -13,7 +13,8 @@ En tant que développeur, je veux un dépôt applicatif initialisé afin de livr
 ## Acceptance Criteria
 
 - [ ] Projet Laravel 11+ sur PHP 8.3+ exposant `/api/v1/health`
-- [ ] SPA Vue 3 + Vite + Pinia + vue-i18n appelant l'API
+- [ ] SPA Vue 3 + Vite + Pinia + vue-i18n appelant l'API ; aucune chaîne en dur (français en V1)
+- [ ] Dates échangées en UTC (ISO 8601), affichées avec `Intl` dans le fuseau du navigateur ([[13.07 Licence, langues et accessibilité]])
 - [ ] SQLite, MySQL/MariaDB et PostgreSQL configurables via `.env`
 
 ## Definition of Done
