@@ -1,10 +1,10 @@
-# Story: Double authentification e-mail et TOTP
+# Story: Double authentification TOTP
 
 **ID:** identite-3
 **Epic:** identite
 **Sprint:** unassigned
 **Status:** todo
-**Points:** 3
+**Points:** 2
 
 ## Context
 
@@ -12,13 +12,13 @@ En tant qu'utilisateur, je veux protéger mon compte par un second facteur.
 
 ## Acceptance Criteria
 
-- [ ] OTP par e-mail et TOTP compatible Google Authenticator
+- [ ] TOTP compatible Google Authenticator
 - [ ] Codes de secours
 - [ ] Activation obligatoire possible par politique d'instance
 
 ## Technical Notes
 
-Dépend de identite-1.
+Dépend de identite-1. Aucun e-mail en V1 ([[13.06 Infrastructure, e-mail et sécurité HTTP]]) : le code par e-mail relève de exploitation-6 (V2).
 
 ## Definition of Done
 

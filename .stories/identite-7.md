@@ -14,7 +14,8 @@ En tant qu'administrateur, je veux inviter, désactiver, réactiver et supprimer
 
 - [ ] Invitation par un administrateur (tout rôle) ou par un chef de projet (clients finaux de ses tenants) ; aucune inscription libre
 - [ ] Lien à usage unique valable 72 h (paramétrable), condensat seul stocké, renvoi qui invalide le lien précédent, annulation
-- [ ] Compte existant rattaché au tenant sans nouvel enrôlement ; invitation refusée pour un compte désactivé ; lien affiché à l'invitant si l'e-mail est désactivé
+- [ ] Compte existant rattaché au tenant sans nouvel enrôlement ; invitation refusée pour un compte désactivé ; lien toujours affiché à l'invitant (aucun e-mail en V1)
+- [ ] Mot de passe oublié : lien de réinitialisation à usage unique, valable 24 h, émis par un administrateur et affiché chez lui ; verrouillage signalé dans l'application ([[13.06 Infrastructure, e-mail et sécurité HTTP]])
 - [ ] Compte root créé à l'installation par une commande `artisan` qui émet un lien d'enrôlement
 - [ ] Désactivation réversible : connexion refusée, sessions et jetons API révoqués, invitations émises annulées, tâches sans autre assigné signalées au chef de projet
 - [ ] Suppression seulement après désactivation ; dernier administrateur actif protégé ; données d'authentification et copies de clé effacées ; compte pseudonymisé

@@ -13,7 +13,7 @@ En tant qu'administrateur, je veux la documentation de l'API et une SPA protég�
 ## Acceptance Criteria
 
 - [ ] `/api/openapi.json` généré et `/api/documentation` réservé aux administrateurs, désactivable, avec sa propre CSP à nonce
-- [ ] CSP de 13.04 sur toutes les réponses de la SPA (Trusted Types, rapports vers `/api/v1/csp-reports`) et en-têtes de l'API ; HSTS, CORS restreint, cookies `Secure`/`HttpOnly`/`SameSite`
+- [ ] CSP de 13.04 sur toutes les réponses de la SPA (Trusted Types, rapports vers `/api/v1/csp-reports`) et en-têtes de l'API ; HSTS envoyé par l'application, CORS désactivé (liste d'origines configurable), cookie de session `__Host-` `Secure`/`HttpOnly`/`SameSite=Strict` ([[13.06 Infrastructure, e-mail et sécurité HTTP]])
 - [ ] Tests E2E sous Firefox et Chromium : aucune violation CSP inattendue, charges XSS affichées comme texte, rapports de violation reçus en HTTPS
 
 ## Technical Notes

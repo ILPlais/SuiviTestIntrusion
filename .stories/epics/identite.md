@@ -10,7 +10,7 @@ Authentifier les utilisateurs, appliquer les rôles et ACL, isoler strictement l
 
 ## Scope
 
-- Auth locale, 2FA
+- Auth locale, 2FA par TOTP
 - Sessions Sanctum
 - Rôles, ACL, multi-tenant
 - Audit
@@ -30,7 +30,7 @@ Authentifier les utilisateurs, appliquer les rôles et ACL, isoler strictement l
 | --- | --- | --- |
 | identite-1 | Authentification locale et sessions Sanctum | todo |
 | identite-2 | Authentification LDAP et Active Directory | todo |
-| identite-3 | Double authentification e-mail et TOTP | todo |
+| identite-3 | Double authentification TOTP | todo |
 | identite-4 | Jetons API personnels scopés | todo |
 | identite-5 | Rôles, ACL et isolation multi-tenant | todo |
 | identite-6 | Journal d'audit | todo |

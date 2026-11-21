@@ -25,7 +25,7 @@ Lever les points bloquants et les zones floues du cahier des charges avant d'éc
 | decisions-1 | ADR : format de chiffrement des preuves | done |
 | decisions-2 | ADR : dérivation de clé (KDF) et protection de la clé privée | done |
 | decisions-3 | ADR : authentification LDAP/AD et coffre de clés | done |
-| decisions-4 | ADR : infrastructure (file d'attente, e-mail, sécurité HTTP) | todo |
+| decisions-4 | ADR : infrastructure (file d'attente, e-mail, sécurité HTTP) | review |
 | decisions-5 | ADR : licence, langues V1 et accessibilité | todo |
 | decisions-6 | Mise à jour du cahier des charges et Roadmap V1/V2 | todo |
 | decisions-7 | ADR : protection de la clé privée contre le XSS | done |

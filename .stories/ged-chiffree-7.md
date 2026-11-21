@@ -15,7 +15,7 @@ En tant qu'exploitant, je veux bloquer les fichiers dangereux (12.01 Rapport d'a
 - [ ] Liste MIME paramétrable vérifiée sur les magic bytes avant chiffrement
 - [ ] Exécutables refusés
 - [ ] Scan ClamAV (activé par défaut selon l'ADR), rejet audité
-- [ ] Taille maximale paramétrable
+- [ ] Taille maximale paramétrable, 100 Mio par défaut, contrôlée avant chiffrement puis sur la taille chiffrée ([[13.06 Infrastructure, e-mail et sécurité HTTP]])
 
 ## Technical Notes
 

@@ -17,6 +17,7 @@ Disposer d'un squelette Laravel + SPA Vue 3 déployable, testé en CI, qui appli
 ## Out of Scope
 
 - Fonctionnalités métier
+- Service web HTTPS intégré (V2, story socle-7) : proxy inverse externe en V1
 
 ## Stories
 
@@ -29,3 +30,4 @@ Disposer d'un squelette Laravel + SPA Vue 3 déployable, testé en CI, qui appli
 | socle-4 | Enveloppe d'erreurs et pagination API v1 | todo |
 | socle-5 | Rate limiting par classe et limite de taille | todo |
 | socle-6 | OpenAPI 3.1, Swagger UI et en-têtes de sécurité | todo |
+| socle-7 | Service web HTTPS intégré à Docker Compose | todo |
