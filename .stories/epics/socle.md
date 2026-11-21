@@ -25,7 +25,7 @@ Disposer d'un squelette Laravel + SPA Vue 3 déployable, testé en CI, qui appli
 | ID | Title | Status |
 | --- | --- | --- |
 | socle-1 | Squelette Laravel API + SPA Vue 3 | done |
-| socle-2 | Docker Compose et installation manuelle | todo |
+| socle-2 | Docker Compose et installation manuelle | in-progress |
 | socle-3 | CI et outillage de tests | done |
 | socle-4 | Enveloppe d'erreurs et pagination API v1 | done |
 | socle-5 | Rate limiting par classe et limite de taille | todo |
