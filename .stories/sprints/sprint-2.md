@@ -1,7 +1,5 @@
 # Sprint 2
 
-**Start:** 2026-11-23
-**End:** 2026-12-06
 **Goal:** Trancher les derniers ADR (infrastructure, licence et langues, Roadmap V1/V2) et livrer le socle Laravel + Vue 3 testé en CI.
 
 ## Stories

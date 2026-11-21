@@ -10,7 +10,7 @@ Application Web de suivi de tests d'intrusion. Le projet est en **phase de spéc
 - `12.01 Rapport d'analyse du CDC` — lacunes du CDC (sections §1 à §6 citées par les stories) ; `12.02`–`12.05` — revues antérieures (Claude, Cursor, NotebookLM).
 - `13.xx` — ADR (index `13.00`, modèle `01.01`).
 - `14.01 Schéma des objets métier` — liaisons entre objets métier (schéma simplifié), base des modèles Eloquent et des migrations ; liens à détailler avant la première migration métier.
-- `21.01` organisation du code ; `22.01` planification (Gantt prévisionnel, à régénérer en fin de sprint) ; `31.01` stratégie de tests, `32.xx` campagnes ; `41.01` versionnage et livraison (`CHANGELOG.md` à la racine).
+- `21.01` organisation du code ; `22.01` planification (Gantt en points, temps passé, à régénérer en fin de sprint) ; `31.01` stratégie de tests, `32.xx` campagnes ; `41.01` versionnage et livraison (`CHANGELOG.md` à la racine).
 - `51.01` traitement des retours ; `52.xx` bugs, `53.xx` améliorations ; une fiche acceptée devient une story dans `.stories/`.
 - `01 Modèles` — modèles Obsidian (dossier configuré dans `.obsidian/templates.json`).
 - Hors classement : `.stories/`, `CHANGELOG.md`, et le code prévu dans `backend/` (Laravel) et `frontend/` (Vue), créés par `socle-1`.
@@ -23,7 +23,9 @@ Application Web de suivi de tests d'intrusion. Le projet est en **phase de spéc
 
 ## Planification (ECC)
 
-Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 epics, 70 stories (56 en V1 dont 5 terminées, 14 reportées en V2 : mention « Reportée en V2 » dans la story), sprint 2 du 2026-11-23 au 2026-12-06 ; planification prévisionnelle dans `22.01`.
+Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 epics, 70 stories (56 en V1 dont 5 terminées, 14 reportées en V2 : mention « Reportée en V2 » dans la story), sprint 2 en cours ; planification en points dans `22.01`.
+
+- Projet personnel mené sur du temps libre : aucune date prévue (ni sprint, ni livraison). Un sprint est un lot d'environ 15 points ; seul le **temps réellement passé** compte, noté dans le tableau de `22.01` à la fin de chaque story.
 
 - Toute écriture dans `.stories/` passe par `ledger.js` du skill (`node <skill-dir>/scripts/ledger.js <commande> --root <racine>`), jamais à la main.
 - L'epic `decisions` (ADR crypto, KDF, LDAP/AD, infra, licence/i18n) passe **avant tout code**. Prochaine étape : `story-lifecycle implement decisions-4`.
