@@ -1,0 +1,14 @@
+{
+  "app": {
+    "title": "Suivi des tests d'intrusion"
+  },
+  "health": {
+    "heading": "État de l'instance",
+    "checking": "Vérification de l'API…",
+    "ok": "L'API répond et la base de données est accessible.",
+    "degraded": "L'API répond, mais la base de données est inaccessible.",
+    "unreachable": "L'API ne répond pas.",
+    "serverTime": "Heure du serveur : {time}",
+    "retry": "Vérifier à nouveau"
+  }
+}

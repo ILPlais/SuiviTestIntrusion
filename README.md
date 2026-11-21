@@ -2,7 +2,7 @@
 
 Application Web de **suivi de tests d'intrusion** : elle accompagne une mission de pentest de bout en bout, du questionnaire d'engagement avec le client jusqu'au rapport final, en conservant les preuves de façon chiffrée.
 
-> **État du projet :** phase de spécification. Le cahier des charges est rédigé et le backlog est planifié ; aucun code applicatif n'existe encore.
+> **État du projet :** début du développement. Le cahier des charges et les décisions d'architecture sont rédigés ; le socle Laravel + Vue 3 est en place.
 
 ## Fonctionnalités prévues
 
@@ -23,6 +23,17 @@ Application Web de **suivi de tests d'intrusion** : elle accompagne une mission 
 | Client           | SPA Vue 3 + Vite + Pinia + vue-i18n                                    |
 | Bases de données | SQLite, MySQL / MariaDB ou PostgreSQL, au choix                        |
 | Déploiement      | Docker Compose (recommandé) derrière un proxy TLS, ou installation manuelle |
+
+## Démarrage (développement)
+
+Prérequis : PHP 8.3+ avec Composer, Node.js 20+ (sous Windows, un sous-système Linux WSL convient).
+
+```bash
+cd backend && composer install && cp .env.example .env && php artisan key:generate && php artisan migrate && php artisan serve
+cd frontend && npm install && npm run dev
+```
+
+L'interface est alors disponible sur http://localhost:5173 ; détails dans [`backend/README.md`](backend/README.md) et [`frontend/README.md`](frontend/README.md).
 
 ## Contenu du dépôt
 
