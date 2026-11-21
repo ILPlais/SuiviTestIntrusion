@@ -156,7 +156,10 @@ etape "Base PostgreSQL optionnelle (profil database)"
 ecrire_env DB_CONNECTION=pgsql DB_HOST=database DB_PORT=5432 DB_DATABASE=suivi DB_USERNAME=suivi "DB_PASSWORD=$(openssl rand -hex 16)"
 "${compose[@]}" --profile database up --build --detach --wait --wait-timeout 180 || echouer "démarrage avec PostgreSQL"
 [[ "$(curl --silent --fail "$base/api/v1/health" | jq --raw-output '.database')" == "ok" ]] || echouer "santé de l'API avec PostgreSQL"
-"${compose[@]}" exec --no-TTY app php artisan db:show --no-interaction | grep --quiet --ignore-case 'pgsql\|postgres' \
-	|| echouer "l'application doit utiliser PostgreSQL"
+# Les migrations appliquées par app doivent se trouver dans PostgreSQL, pas dans SQLite.
+migrations="$("${compose[@]}" --profile database exec --no-TTY database \
+	psql --username=suivi --dbname=suivi --tuples-only --no-align --command='SELECT count(*) FROM migrations')" \
+	|| echouer "table des migrations absente de PostgreSQL"
+[[ "$migrations" -gt 0 ]] || echouer "l'application doit utiliser PostgreSQL"
 
 echo "Test de fumée réussi."
