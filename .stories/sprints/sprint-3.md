@@ -10,7 +10,7 @@
 | identite-1 | Authentification locale et sessions Sanctum | 3 | todo |
 | identite-3 | Double authentification TOTP | 2 | todo |
 | socle-2 | Docker Compose et installation manuelle | 3 | done |
-| socle-5 | Rate limiting par classe et limite de taille | 2 | in-progress |
+| socle-5 | Rate limiting par classe et limite de taille | 2 | done |
 | socle-6 | OpenAPI 3.1, Swagger UI et en-têtes de sécurité | 2 | todo |
 
 ## Total Points: 12
