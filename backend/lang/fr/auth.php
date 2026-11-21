@@ -9,4 +9,5 @@
 return [
 	'failed' => 'Connexion refusée : identifiants incorrects, ou trop de tentatives récentes. Réessayez dans quelques minutes.',
 	'invalid_value' => 'La valeur d\'authentification est invalide.',
+	'two_factor_invalid' => 'Code incorrect, expiré ou déjà utilisé.',
 ];

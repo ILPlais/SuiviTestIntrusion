@@ -19,6 +19,8 @@ return [
 		'lockout_minutes' => (int) env('AUTH_LOCKOUT_MINUTES', 15),
 		// Durée de validité d'un lien d'activation (heures).
 		'activation_hours' => (int) env('AUTH_ACTIVATION_HOURS', 24),
+		// Double authentification imposée à tous les comptes (identite-3, politique d'instance).
+		'two_factor_required' => (bool) env('AUTH_TWO_FACTOR_REQUIRED', false),
 	],
 
 ];

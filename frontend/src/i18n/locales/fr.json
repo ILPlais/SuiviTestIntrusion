@@ -28,7 +28,15 @@
 		"activate": "Activer le compte",
 		"invalidLink": "Ce lien d'activation est inconnu, déjà utilisé ou expiré. Demandez-en un nouveau à un administrateur.",
 		"outOfMemory": "Ce navigateur manque de mémoire pour vérifier le mot de passe. Fermez d'autres onglets, puis réessayez.",
-		"unexpected": "Une erreur inattendue est survenue. Réessayez."
+		"unexpected": "Une erreur inattendue est survenue. Réessayez.",
+		"security": "Sécurité",
+		"twoFactorHeading": "Double authentification",
+		"twoFactorPrompt": "Saisissez le code à 6 chiffres affiché par votre application d'authentification.",
+		"twoFactorCode": "Code d'authentification",
+		"useRecoveryCode": "Utiliser un code de secours",
+		"useTotpCode": "Utiliser l'application d'authentification",
+		"recoveryCode": "Code de secours",
+		"verify": "Valider"
 	},
 	"password": {
 		"rule": "Au moins {min} caractères. Une phrase de plusieurs mots est un bon choix ; aucun type de caractère n'est imposé.",
@@ -47,5 +55,23 @@
 			"common": "Ce mot de passe est trop courant.",
 			"context": "Évitez le nom du service et les éléments de votre adresse e-mail."
 		}
+	},
+	"security": {
+		"heading": "Sécurité du compte",
+		"required": "La politique de cette instance impose la double authentification : configurez-la pour continuer.",
+		"enabled": "La double authentification est activée.",
+		"disabled": "La double authentification n'est pas activée.",
+		"enable": "Activer la double authentification",
+		"scan": "Scannez ce QR code avec votre application d'authentification (Google Authenticator, Aegis, FreeOTP…), ou saisissez la clé ci-dessous.",
+		"qrLabel": "QR code de configuration de l'application d'authentification",
+		"secretLabel": "Clé de configuration :",
+		"confirmCode": "Code affiché par l'application",
+		"confirm": "Confirmer",
+		"recoveryHeading": "Codes de secours",
+		"recoveryIntro": "Conservez ces codes en lieu sûr : chacun permet une connexion si vous perdez votre téléphone. Ils ne seront plus affichés.",
+		"regenerate": "Renouveler les codes de secours",
+		"disable": "Désactiver la double authentification",
+		"codeForAction": "Code actuel de l'application",
+		"done": "J'ai conservé mes codes"
 	}
 }

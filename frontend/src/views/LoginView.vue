@@ -1,7 +1,7 @@
 <!--
-	Écran de connexion (identite-1) : adresse et mot de passe. Le mot de passe est
-	transmis au Worker crypto, qui en dérive `auth` ; il n'est jamais envoyé.
-	Le calcul prend environ une seconde : le bouton l'annonce pendant ce temps.
+	Écran de connexion (identite-1, identite-3) : adresse et mot de passe, puis, si
+	la double authentification est active, code TOTP ou code de secours. Le mot de
+	passe est transmis au Worker crypto, qui en dérive `auth` ; il n'est jamais envoyé.
 -->
 <script setup lang="ts">
 import { ref } from 'vue'
@@ -18,30 +18,62 @@ const router = useRouter()
 
 const email = ref('')
 const password = ref('')
+const step = ref<'credentials' | 'second-factor'>('credentials')
+const useRecovery = ref(false)
+const code = ref('')
 const busy = ref(false)
 const error = ref<string | null>(null)
 const activated = route.query.activated === '1'
 
-/** Connecte l'utilisateur, puis revient à la page demandée (ou à l'accueil). */
-async function submit(): Promise<void> {
+/** Message lisible pour une erreur de connexion. */
+function describe(caught: unknown): string {
+	if (caught instanceof ApiError) {
+		return caught.firstMessage()
+	}
+	if (caught instanceof CryptoError && caught.reason === 'out_of_memory') {
+		return t('auth.outOfMemory')
+	}
+
+	return t('auth.unexpected')
+}
+
+/** Revient à la page demandée (chemin interne seulement), ou à l'accueil. */
+async function goOn(): Promise<void> {
+	const redirect = route.query.redirect
+	const target = typeof redirect === 'string' && redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/'
+	await router.push(target)
+}
+
+/** Premier temps : adresse et mot de passe. */
+async function submitCredentials(): Promise<void> {
 	busy.value = true
 	error.value = null
 	try {
-		await auth.login(email.value, password.value)
+		const needsSecondFactor = await auth.login(email.value, password.value)
 		password.value = ''
-		// Seul un chemin interne est suivi : pas de redirection ouverte vers un autre site.
-		const redirect = route.query.redirect
-		const target = typeof redirect === 'string' && redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/'
-		await router.push(target)
-	} catch (caught) {
-		if (caught instanceof ApiError) {
-			error.value = caught.firstMessage()
-		} else if (caught instanceof CryptoError && caught.reason === 'out_of_memory') {
-			error.value = t('auth.outOfMemory')
+		if (needsSecondFactor) {
+			step.value = 'second-factor'
 		} else {
-			error.value = t('auth.unexpected')
+			await goOn()
 		}
+	} catch (caught) {
+		error.value = describe(caught)
 	} finally {
+		busy.value = false
+	}
+}
+
+/** Second temps : code TOTP ou code de secours. */
+async function submitCode(): Promise<void> {
+	busy.value = true
+	error.value = null
+	try {
+		await auth.verifyTwoFactor(useRecovery.value ? { recovery_code: code.value } : { code: code.value })
+		await goOn()
+	} catch (caught) {
+		error.value = describe(caught)
+	} finally {
+		code.value = ''
 		busy.value = false
 	}
 }
@@ -50,15 +82,18 @@ async function submit(): Promise<void> {
 <template>
 	<section aria-labelledby="login-heading">
 		<h2 id="login-heading">
-			{{ t('auth.loginHeading') }}
+			{{ step === 'credentials' ? t('auth.loginHeading') : t('auth.twoFactorHeading') }}
 		</h2>
 		<p
-			v-if="activated"
+			v-if="activated && step === 'credentials'"
 			role="status"
 		>
 			{{ t('auth.activated') }}
 		</p>
-		<form @submit.prevent="submit">
+		<form
+			v-if="step === 'credentials'"
+			@submit.prevent="submitCredentials"
+		>
 			<p>
 				<label for="login-email">{{ t('auth.email') }}</label>
 				<input
@@ -90,6 +125,42 @@ async function submit(): Promise<void> {
 				:disabled="busy"
 			>
 				{{ busy ? t('auth.checking') : t('auth.login') }}
+			</button>
+		</form>
+		<form
+			v-else
+			@submit.prevent="submitCode"
+		>
+			<p v-if="!useRecovery">
+				{{ t('auth.twoFactorPrompt') }}
+			</p>
+			<p>
+				<label for="login-code">{{ useRecovery ? t('auth.recoveryCode') : t('auth.twoFactorCode') }}</label>
+				<input
+					id="login-code"
+					v-model="code"
+					:inputmode="useRecovery ? 'text' : 'numeric'"
+					autocomplete="one-time-code"
+					required
+				>
+			</p>
+			<p
+				v-if="error"
+				role="alert"
+			>
+				{{ error }}
+			</p>
+			<button
+				type="submit"
+				:disabled="busy"
+			>
+				{{ t('auth.verify') }}
+			</button>
+			<button
+				type="button"
+				@click="useRecovery = !useRecovery"
+			>
+				{{ useRecovery ? t('auth.useTotpCode') : t('auth.useRecoveryCode') }}
 			</button>
 		</form>
 	</section>

@@ -28,6 +28,9 @@ async function logout(): Promise<void> {
 			:aria-label="t('auth.accountMenu')"
 		>
 			<span>{{ auth.user.name }}</span>
+			<RouterLink :to="{ name: 'security' }">
+				{{ t('auth.security') }}
+			</RouterLink>
 			<button
 				type="button"
 				@click="logout"
