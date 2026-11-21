@@ -3,7 +3,7 @@
 **ID:** decisions-5
 **Epic:** decisions
 **Sprint:** 2
-**Status:** review
+**Status:** done
 **Points:** 1
 
 ## Context
@@ -22,6 +22,6 @@ Décision : [[13.07 Licence, langues et accessibilité]] (MIT conservée, franç
 
 ## Definition of Done
 
-- [ ] Tests written first cover the acceptance criteria
-- [ ] Code review and verification loop passed
-- [ ] Code merged to main
+- [x] Tests written first cover the acceptance criteria
+- [x] Code review and verification loop passed
+- [x] Code merged to main
