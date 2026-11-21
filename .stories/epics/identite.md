@@ -30,7 +30,7 @@ Authentifier les utilisateurs, appliquer les rôles et ACL, isoler strictement l
 | --- | --- | --- |
 | identite-1 | Authentification locale et sessions Sanctum | done |
 | identite-2 | Authentification LDAP et Active Directory | todo |
-| identite-3 | Double authentification TOTP | in-progress |
+| identite-3 | Double authentification TOTP | done |
 | identite-4 | Jetons API personnels scopés | todo |
 | identite-5 | Rôles, ACL et isolation multi-tenant | todo |
 | identite-6 | Journal d'audit | todo |

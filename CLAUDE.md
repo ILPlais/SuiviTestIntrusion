@@ -24,12 +24,12 @@ Application Web de suivi de tests d'intrusion. Le projet est en **début de dév
 
 ## Planification (ECC)
 
-Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 epics, 74 stories (55 en V1 dont 14 terminées, 19 reportées en V2 : mention « Reportée en V2 » dans la story), sprint 2 terminé, sprint 3 en cours (12 points : socle-2, socle-5 et identite-1 terminées, identite-3, socle-6) ; planification en points dans `22.01`.
+Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 epics, 74 stories (55 en V1 dont 15 terminées, 19 reportées en V2 : mention « Reportée en V2 » dans la story), sprint 2 terminé, sprint 3 en cours (12 points : socle-2, socle-5, identite-1 et identite-3 terminées, socle-6) ; planification en points dans `22.01`.
 
 - Projet personnel mené sur du temps libre : aucune date prévue (ni sprint, ni livraison). Un sprint est un lot d'environ 15 points ; seul le **temps réellement passé** compte, noté dans le tableau de `22.01` à la fin de chaque story.
 
 - Toute écriture dans `.stories/` passe par `ledger.js` du skill (`node <skill-dir>/scripts/ledger.js <commande> --root <racine>`), jamais à la main.
-- L'epic `decisions` (ADR crypto, KDF, LDAP/AD, infra, licence/i18n) passe **avant tout code**. Prochaine étape : `story-lifecycle implement identite-3` (puis socle-6), selon le plan `.claude/plans/version-testable-chemin-de-bout-en-bout.md`.
+- L'epic `decisions` (ADR crypto, KDF, LDAP/AD, infra, licence/i18n) passe **avant tout code**. Prochaine étape : `story-lifecycle implement socle-6` (puis identite-5), selon le plan `.claude/plans/version-testable-chemin-de-bout-en-bout.md`.
 - Pas d'issues GitHub : le suivi reste dans les fichiers.
 
 ## Reprise sur un autre poste
