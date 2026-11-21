@@ -7,6 +7,7 @@
 use App\Http\Api\ApiErrorRenderer;
 use App\Http\Api\ConcurrencyLimit;
 use App\Http\Api\LimitJsonSize;
+use App\Http\Middleware\EnsureTwoFactorEnrolled;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -24,7 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
 		// Sessions Sanctum pour la SPA servie sur la même origine (identite-1, 13.06).
 		$middleware->statefulApi();
 		$middleware->api(append: [LimitJsonSize::class]);
-		$middleware->alias(['concurrent' => ConcurrencyLimit::class]);
+		$middleware->alias(['concurrent' => ConcurrencyLimit::class, 'two-factor' => EnsureTwoFactorEnrolled::class]);
 
 		// Un appel non authentifié à l'API reçoit une erreur 401, pas une redirection
 		// vers une page de connexion (la SPA gère elle-même l'écran de connexion).

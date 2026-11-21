@@ -15,6 +15,7 @@ export function createAppRouter(history: RouterHistory = createWebHistory()): Ro
 		history,
 		routes: [
 			{ path: '/', name: 'home', component: () => import('./views/HomeView.vue'), meta: { requiresAuth: true } },
+			{ path: '/securite', name: 'security', component: () => import('./views/SecurityView.vue'), meta: { requiresAuth: true } },
 			{ path: '/connexion', name: 'login', component: () => import('./views/LoginView.vue') },
 			{ path: '/activation/:token', name: 'activation', component: () => import('./views/ActivationView.vue'), props: true },
 			{ path: '/:chemin(.*)*', redirect: { name: 'home' } },
@@ -29,7 +30,12 @@ export function createAppRouter(history: RouterHistory = createWebHistory()): Ro
 		const auth = useAuthStore()
 		const user = auth.user === undefined ? await auth.fetchUser() : auth.user
 
-		return user ? true : { name: 'login', query: { redirect: to.fullPath } }
+		if (!user) {
+			return { name: 'login', query: { redirect: to.fullPath } }
+		}
+
+		// Politique d'instance : sans second facteur, seul l'écran Sécurité est accessible (identite-3).
+		return user.two_factor_setup_required && to.name !== 'security' ? { name: 'security' } : true
 	})
 
 	return router

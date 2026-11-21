@@ -56,8 +56,22 @@ export async function getJson<T>(path: string): Promise<T> {
  * POST (JSON) avec jeton CSRF ; renvoie le corps JSON (null pour 204), ou lève une ApiError.
  */
 export async function postJson<T = null>(path: string, body: unknown = {}): Promise<T> {
+	return send<T>('POST', path, body)
+}
+
+/**
+ * DELETE (JSON) avec jeton CSRF ; renvoie le corps JSON (null pour 204), ou lève une ApiError.
+ */
+export async function deleteJson<T = null>(path: string, body: unknown = {}): Promise<T> {
+	return send<T>('DELETE', path, body)
+}
+
+/**
+ * Requête qui modifie quelque chose : corps JSON et jeton CSRF de Sanctum.
+ */
+async function send<T>(method: 'POST' | 'DELETE', path: string, body: unknown): Promise<T> {
 	const response = await fetch(`${API_BASE}${path}`, {
-		method: 'POST',
+		method,
 		credentials: 'same-origin',
 		headers: {
 			'Accept': 'application/json',

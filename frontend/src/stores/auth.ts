@@ -16,6 +16,10 @@ export interface CurrentUser {
 	name: string
 	email: string
 	is_instance_admin: boolean
+	/** Double authentification confirmée (identite-3). */
+	two_factor_enabled: boolean
+	/** La politique d'instance impose un second facteur que le compte n'a pas encore. */
+	two_factor_setup_required: boolean
 }
 
 /** Identifiant public de l'instance, lu une fois (sel de `auth`). */
@@ -43,10 +47,24 @@ export const useAuthStore = defineStore('auth', () => {
 		return user.value
 	}
 
-	/** Connexion : dérive `auth`, puis ouvre la session. Lève une ApiError ou une CryptoError. */
-	async function login(email: string, password: string): Promise<void> {
+	/**
+	 * Connexion, premier temps : dérive `auth` et l'envoie. Renvoie vrai si un second
+	 * facteur est demandé ; sinon la session est ouverte. Lève une ApiError ou une CryptoError.
+	 */
+	async function login(email: string, password: string): Promise<boolean> {
 		const auth = await computeAuth(password, await getInstanceId(), email)
-		user.value = await postJson<CurrentUser>('/auth/login', { email, auth })
+		const response = await postJson<CurrentUser | { two_factor_required: true }>('/auth/login', { email, auth })
+		if ('two_factor_required' in response) {
+			return true
+		}
+		user.value = response
+
+		return false
+	}
+
+	/** Connexion, second temps : code TOTP ou code de secours (identite-3). */
+	async function verifyTwoFactor(answer: { code: string } | { recovery_code: string }): Promise<void> {
+		user.value = await postJson<CurrentUser>('/auth/two-factor', answer)
 	}
 
 	/** Activation : enregistre `auth` pour le compte du lien. */
@@ -64,5 +82,5 @@ export const useAuthStore = defineStore('auth', () => {
 		}
 	}
 
-	return { user, fetchUser, login, activate, logout }
+	return { user, fetchUser, login, verifyTwoFactor, activate, logout }
 })
