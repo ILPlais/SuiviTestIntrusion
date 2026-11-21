@@ -1,0 +1,5 @@
+{
+	"$comment": "Licences autorisées pour les dépendances livrées (13.07). LGPL : exception nommée par paquet.",
+	"allowed": ["MIT", "BSD-2-Clause", "BSD-3-Clause", "ISC", "0BSD", "Apache-2.0", "MPL-2.0"],
+	"exceptions": {}
+}

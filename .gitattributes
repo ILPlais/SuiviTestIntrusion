@@ -1,2 +1,6 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Code et fichiers générés hors de backend/ et frontend/ : fins de ligne LF,
+# y compris sous Windows (21.01). La documentation garde le réglage local.
+/.github/** text eol=lf
+/scripts/** text eol=lf
+/.editorconfig text eol=lf
+/THIRD-PARTY-NOTICES.md text eol=lf

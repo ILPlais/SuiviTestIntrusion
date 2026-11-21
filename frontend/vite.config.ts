@@ -4,14 +4,14 @@ import vue from '@vitejs/plugin-vue'
 
 // En développement, /api est relayé vers l'API Laravel (php artisan serve).
 export default defineConfig({
-  plugins: [vue()],
-  server: {
-    proxy: {
-      '/api': 'http://localhost:8000',
-    },
-  },
-  test: {
-    environment: 'jsdom',
-    include: ['tests/**/*.test.ts'],
-  },
+	plugins: [vue()],
+	server: {
+		proxy: {
+			'/api': 'http://localhost:8000',
+		},
+	},
+	test: {
+		environment: 'jsdom',
+		include: ['tests/unit/**/*.test.ts'],
+	},
 })

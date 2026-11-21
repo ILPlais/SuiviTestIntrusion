@@ -16,27 +16,27 @@ use Throwable;
  */
 class HealthController extends Controller
 {
-    public function __invoke(): JsonResponse
-    {
-        $database = $this->databaseIsReachable();
+	public function __invoke(): JsonResponse
+	{
+		$database = $this->databaseIsReachable();
 
-        return response()->json([
-            'status' => $database ? 'ok' : 'degraded',
-            'database' => $database ? 'ok' : 'error',
-            'time' => Carbon::now('UTC')->format('Y-m-d\TH:i:s\Z'),
-        ], $database ? 200 : 503);
-    }
+		return response()->json([
+			'status' => $database ? 'ok' : 'degraded',
+			'database' => $database ? 'ok' : 'error',
+			'time' => Carbon::now('UTC')->format('Y-m-d\TH:i:s\Z'),
+		], $database ? 200 : 503);
+	}
 
-    private function databaseIsReachable(): bool
-    {
-        try {
-            DB::connection()->select('select 1');
+	private function databaseIsReachable(): bool
+	{
+		try {
+			DB::connection()->select('select 1');
 
-            return true;
-        } catch (Throwable $e) {
-            Log::error('Contrôle de santé : base de données injoignable.', ['exception' => $e]);
+			return true;
+		} catch (Throwable $e) {
+			Log::error('Contrôle de santé : base de données injoignable.', ['exception' => $e]);
 
-            return false;
-        }
-    }
+			return false;
+		}
+	}
 }
