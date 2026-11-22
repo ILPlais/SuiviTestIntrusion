@@ -2,12 +2,15 @@
  * Politique de mots de passe (13.03) : longueur en caractères Unicode, liste de
  * refus, termes du service et de l'adresse, robustesse.
  */
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
 import { checkPassword, MAX_LENGTH, MIN_LENGTH } from '../../src/crypto/passwordPolicy'
 
 const EMAIL = 'marie.durand@exemple-audit.fr'
 
 describe('politique de mots de passe', () => {
+	// Le dictionnaire de zxcvbn (50 000 mots) est chargé une fois ; lent sur une machine chargée.
+	beforeAll(() => checkPassword('', ''), 60_000)
+
 	it('fixe les longueurs de l\'ADR', () => {
 		expect(MIN_LENGTH).toBe(15)
 		expect(MAX_LENGTH).toBe(128)

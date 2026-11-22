@@ -144,17 +144,29 @@ jobs:
         working-directory: frontend
         run: |
           npm ci --no-fund --no-audit
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium firefox
       - name: Tests de bout en bout
         working-directory: frontend
         env:
           CI: 'true'
         run: npm run test:e2e
+      - name: Build de production servi par Laravel (CSP, Trusted Types)
+        working-directory: frontend
+        run: |
+          npm run build
+          cp --recursive dist/. ../backend/public/
+      - name: Tests de bout en bout du build de production (Chromium, Firefox)
+        working-directory: frontend
+        env:
+          CI: 'true'
+        run: npm run test:e2e:production
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: rapport-playwright
-          path: frontend/playwright-report/
+          path: |
+            frontend/playwright-report/
+            frontend/playwright-report-production/
           retention-days: 7
 
   licences:

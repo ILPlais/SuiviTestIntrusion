@@ -7,6 +7,7 @@ Dépendances livrées avec SuiviTestIntrusion et leurs licences. Fichier génér
 | --- | --- | --- | --- |
 | composer | brick/math | 1.0.0 | MIT |
 | composer | carbonphp/carbon-doctrine-types | 3.2.1 | MIT |
+| composer | dedoc/scramble | v0.13.55 | MIT |
 | composer | dflydev/dot-access-data | v3.0.3 | MIT |
 | composer | doctrine/inflector | 2.1.1 | MIT |
 | composer | doctrine/lexer | 3.0.3 | MIT |
@@ -31,6 +32,7 @@ Dépendances livrées avec SuiviTestIntrusion et leurs licences. Fichier génér
 | composer | league/uri | 7.10.0 | MIT |
 | composer | league/uri-interfaces | 7.10.0 | MIT |
 | composer | monolog/monolog | 3.13.0 | MIT |
+| composer | myclabs/deep-copy | 1.14.0 | MIT |
 | composer | nesbot/carbon | 3.15.1 | MIT |
 | composer | nette/schema | v1.4.0 | BSD-3-Clause ou GPL-2.0-only ou GPL-3.0-only |
 | composer | nette/utils | v4.1.6 | BSD-3-Clause ou GPL-2.0-only ou GPL-3.0-only |
@@ -38,6 +40,7 @@ Dépendances livrées avec SuiviTestIntrusion et leurs licences. Fichier génér
 | composer | nunomaduro/termwind | v2.4.1 | MIT |
 | composer | paragonie/constant_time_encoding | v3.1.5 | MIT |
 | composer | phpoption/phpoption | 1.10.0 | Apache-2.0 |
+| composer | phpstan/phpdoc-parser | 2.4.1 | MIT |
 | composer | pragmarx/google2fa | v9.1.0 | MIT |
 | composer | psr/clock | 1.0.0 | MIT |
 | composer | psr/container | 2.0.2 | MIT |
@@ -50,6 +53,7 @@ Dépendances livrées avec SuiviTestIntrusion et leurs licences. Fichier génér
 | composer | psy/psysh | v0.12.24 | MIT |
 | composer | ramsey/collection | 2.1.1 | MIT |
 | composer | ramsey/uuid | 4.10.0 | MIT |
+| composer | spatie/laravel-package-tools | 1.93.3 | MIT |
 | composer | symfony/clock | v7.4.21 | MIT |
 | composer | symfony/console | v7.4.23 | MIT |
 | composer | symfony/css-selector | v7.4.22 | MIT |
@@ -105,7 +109,9 @@ Dépendances livrées avec SuiviTestIntrusion et leurs licences. Fichier génér
 | npm | @jridgewell/trace-mapping | 0.3.31 | MIT |
 | npm | @oxc-project/types | 0.156.0 | MIT |
 | npm | @rolldown/pluginutils | 1.1.1 | MIT |
+| npm | @scarf/scarf | 1.4.0 | Apache-2.0 |
 | npm | @types/estree | 1.0.10 | MIT |
+| npm | @types/trusted-types | 2.0.7 | MIT |
 | npm | @vue-macros/common | 3.1.4 | MIT |
 | npm | @vue/compiler-core | 3.5.46 | MIT |
 | npm | @vue/compiler-dom | 3.5.46 | MIT |
@@ -142,6 +148,7 @@ Dépendances livrées avec SuiviTestIntrusion et leurs licences. Fichier génér
 | npm | decamelize | 1.2.0 | MIT |
 | npm | detect-libc | 2.1.2 | Apache-2.0 |
 | npm | dijkstrajs | 1.0.3 | MIT |
+| npm | dompurify | 3.4.18 | MPL-2.0 ou Apache-2.0 |
 | npm | emoji-regex | 8.0.0 | MIT |
 | npm | entities | 7.0.1 | BSD-2-Clause |
 | npm | estree-walker | 3.0.3 | MIT |
@@ -189,6 +196,7 @@ Dépendances livrées avec SuiviTestIntrusion et leurs licences. Fichier génér
 | npm | source-map-js | 1.2.4 | BSD-3-Clause |
 | npm | string-width | 4.2.3 | MIT |
 | npm | strip-ansi | 6.0.1 | MIT |
+| npm | swagger-ui-dist | 5.35.1 | Apache-2.0 |
 | npm | tinyglobby | 0.2.17 | MIT |
 | npm | typescript | 6.0.3 | Apache-2.0 |
 | npm | ufo | 1.6.4 | MIT |

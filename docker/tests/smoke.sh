@@ -112,6 +112,13 @@ if [[ "$entetes" == *"x-powered-by"* ]]; then
 	echouer "version de PHP exposée"
 fi
 
+etape "CSP identique côté Laravel et côté Apache"
+csp_laravel="$(curl --silent --head "$base/" | tr --delete '\r' | grep --ignore-case '^content-security-policy:' | cut --delimiter=' ' --fields=2-)"
+page_accueil="$(curl --silent "$base/")"
+asset="$(grep --only-matching '/assets/[^"]*\.js' <<<"$page_accueil" | sed --quiet '1p')"
+csp_apache="$(curl --silent --head "$base$asset" | tr --delete '\r' | grep --ignore-case '^content-security-policy:' | cut --delimiter=' ' --fields=2-)"
+[[ -n "$csp_laravel" && "$csp_laravel" == "$csp_apache" ]] || echouer "CSP différente entre Laravel et Apache : « $csp_laravel » / « $csp_apache »"
+
 etape "Réglages de PHP et du conteneur"
 [[ "$("${compose[@]}" exec --no-TTY app php --run 'echo ini_get("upload_max_filesize"), "/", ini_get("post_max_size");')" == "110M/110M" ]] \
 	|| echouer "limites de taille de PHP"
@@ -140,6 +147,11 @@ fi
 [[ "$(curl --silent --output /dev/null --write-out '%{http_code} %{redirect_url}' --resolve pentest.example.org:80:127.0.0.1 http://pentest.example.org/up)" == "301 https://pentest.example.org/up" ]] \
 	|| echouer "redirection de HTTP vers HTTPS"
 contient_spa "${https[@]}" --fail https://pentest.example.org/ || echouer "SPA derrière le proxy"
+
+# Rapports de violation CSP reçus en HTTPS, à travers le proxy (socle-6).
+[[ "$("${https[@]}" --output /dev/null --write-out '%{http_code}' --header 'Content-Type: application/csp-report' \
+	--data-binary '{"csp-report":{"violated-directive":"script-src-elem","blocked-uri":"inline"}}' https://pentest.example.org/api/v1/csp-reports)" == "204" ]] \
+	|| echouer "rapport CSP refusé en HTTPS"
 
 # Un corps de 105 Mio traverse le proxy, Apache et PHP jusqu'au routeur : la route
 # n'accepte pas POST, et l'enveloppe d'erreurs de l'API (socle-4) rend ce 405 en 404
