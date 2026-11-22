@@ -89,20 +89,40 @@
 		margin-block-start: 1lh;
 	}
 
+	/* En-tête : titre et throbber sur une ligne, navigation dessous. */
 	header {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5lh;
+		padding: 0.5lh 1ch;
+	}
+
+	header .masthead {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		justify-content: space-between;
-		gap: 1lh 2ch;
-		padding: 0.5lh 1ch;
+		gap: 0 2ch;
 	}
 
 	/* Emplacement du throbber global, réservé pour éviter tout décalage. */
 	header .activity {
-		flex: 1;
 		min-width: 22ch;
+		min-height: 1lh;
 		color: var(--foreground1);
+	}
+
+	/*
+	 * Liens : ni WebTUI ni le thème ne les colorent, et le bleu par défaut du
+	 * navigateur est illisible sur Mocha. Soulignés partout ; couleur du texte en
+	 * Latte (le bleu n'y atteint que 4,34:1), bleu Catppuccin en Mocha.
+	 */
+	a {
+		color: var(--foreground0);
+		text-decoration: underline;
+	}
+
+	[data-webtui-theme='catppuccin-mocha'] a {
+		color: var(--blue);
 	}
 
 	/* Navigation : liens et boutons espacés, de taille suffisante au doigt. */

@@ -47,15 +47,17 @@ async function logout(): Promise<void> {
 
 <template>
 	<header box-="round">
-		<h1>{{ t('app.title') }}</h1>
-		<!-- Emplacement réservé : l'apparition du throbber ne décale pas l'en-tête. -->
-		<span class="activity">
-			<LoadingThrobber
-				v-if="working"
-				:label="t('common.working')"
-				visible-label
-			/>
-		</span>
+		<div class="masthead">
+			<h1>{{ t('app.title') }}</h1>
+			<!-- Emplacement réservé : l'apparition du throbber ne décale pas l'en-tête. -->
+			<span class="activity">
+				<LoadingThrobber
+					v-if="working"
+					:label="t('common.working')"
+					visible-label
+				/>
+			</span>
+		</div>
 		<nav
 			v-if="auth.user"
 			:aria-label="t('auth.accountMenu')"
