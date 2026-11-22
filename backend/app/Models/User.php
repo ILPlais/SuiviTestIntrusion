@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\TenantRole;
+use App\Tenancy\TenantScope;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -40,6 +44,45 @@ class User extends Authenticatable
 	/** @use HasFactory<UserFactory> */
 	use HasFactory;
 	use Notifiable;
+
+	/**
+	 * Organisations de rattachement, avec le rôle dans chacune (identite-5). C'est
+	 * un fait de rattachement : il se lit sans le filtre de l'utilisateur courant.
+	 *
+	 * @return BelongsToMany<Tenant, $this>
+	 */
+	public function tenants(): BelongsToMany
+	{
+		return $this->belongsToMany(Tenant::class)->withoutGlobalScope(TenantScope::class)->withPivot('role')->withTimestamps();
+	}
+
+	/**
+	 * Rôle du compte dans chacune de ses organisations.
+	 *
+	 * @return array<string, TenantRole> Identifiant d'organisation => rôle.
+	 */
+	public function tenantRoles(): array
+	{
+		$roles = [];
+		foreach ($this->tenants()->get() as $tenant) {
+			/** @var Pivot $pivot */
+			$pivot = $tenant->getRelation('pivot');
+			$roles[$tenant->id] = TenantRole::from((string) $pivot->getAttribute('role'));
+		}
+
+		return $roles;
+	}
+
+	/**
+	 * Rôle du compte dans une organisation, ou null s'il n'y est pas rattaché.
+	 *
+	 * @param Tenant|string $tenant Organisation, ou son identifiant.
+	 * @return TenantRole|null
+	 */
+	public function roleIn(Tenant|string $tenant): ?TenantRole
+	{
+		return $this->tenantRoles()[$tenant instanceof Tenant ? $tenant->id : $tenant] ?? null;
+	}
 
 	/**
 	 * Vrai si la double authentification est confirmée (identite-3).
