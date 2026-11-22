@@ -41,7 +41,7 @@ test('un administrateur crée un test, change son statut et lit l\'historique', 
 	await page.getByRole('button', { name: fr.organisations.create }).click()
 	await expect(page.getByRole('heading', { name: organisation })).toBeVisible()
 
-	await page.getByRole('link', { name: fr.nav.tests }).click()
+	await page.getByRole('link', { name: fr.nav.tests, exact: true }).click()
 	await page.getByLabel(fr.tests.organisation).selectOption({ label: organisation })
 	await page.getByLabel(fr.tests.reference).fill(reference)
 	await page.getByLabel(fr.tests.title).fill('Test externe du site vitrine')
@@ -73,7 +73,7 @@ test('un administrateur crée un test, change son statut et lit l\'historique', 
 	await expect(history.filter({ hasText: 'créé au statut « Planifié » (Admin Tests)' })).toBeVisible()
 	await expectNoAccessibilityViolations(page)
 
-	await page.getByRole('link', { name: fr.nav.tests }).click()
+	await page.getByRole('link', { name: fr.nav.tests, exact: true }).click()
 	await expect(page.getByRole('cell', { name: organisation })).toBeVisible()
 	await expect(page.getByRole('link', { name: reference })).toBeVisible()
 	await expectNoAccessibilityViolations(page)
