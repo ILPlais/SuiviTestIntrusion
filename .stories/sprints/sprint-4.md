@@ -10,6 +10,6 @@
 | engagement-1 | Références entreprise, testeurs et clients | 2 | todo |
 | engagement-2 | Création d'un test et statuts | 3 | todo |
 | engagement-4 | Périmètre réseau | 3 | todo |
-| identite-5 | Rôles, ACL et isolation multi-tenant | 5 | todo |
+| identite-5 | Rôles, ACL et isolation multi-tenant | 5 | in-progress |
 
 ## Total Points: 13
