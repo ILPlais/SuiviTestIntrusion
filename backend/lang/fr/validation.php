@@ -12,6 +12,7 @@ return [
 	'boolean' => 'Le champ :attribute doit être vrai ou faux.',
 	'date' => 'Le champ :attribute n\'est pas une date valide.',
 	'email' => 'Le champ :attribute doit être une adresse e-mail valide.',
+	'enum' => 'La valeur du champ :attribute n\'est pas autorisée.',
 	'in' => 'La valeur du champ :attribute n\'est pas autorisée.',
 	'integer' => 'Le champ :attribute doit être un nombre entier.',
 	'max' => [
@@ -29,10 +30,29 @@ return [
 	'numeric' => 'Le champ :attribute doit être un nombre.',
 	'required' => 'Le champ :attribute est obligatoire.',
 	'string' => 'Le champ :attribute doit être une chaîne de caractères.',
+	'unique' => 'La valeur du champ :attribute est déjà utilisée.',
 	'uuid' => 'Le champ :attribute doit être un identifiant UUID valide.',
 
-	// Messages propres aux paramètres des listes (ApiListQuery).
+	// Messages propres aux paramètres des listes (ApiListQuery) et aux tests
+	// d'intrusion (engagement-2).
 	'custom' => [
+		'tenant_id' => [
+			// Même message pour une organisation inconnue et une organisation
+			// étrangère : aucune énumération des autres clients (11.06).
+			'unknown' => 'L\'organisation choisie est introuvable.',
+		],
+		'reference' => [
+			'unique' => 'Cette référence est déjà employée par un autre test de l\'organisation.',
+		],
+		'planned_end' => [
+			'before_start' => 'La fin prévue ne peut pas précéder le début prévu.',
+		],
+		'planned' => [
+			'range' => 'La date doit être comprise entre les années 2000 et 2099.',
+		],
+		'status' => [
+			'unchanged' => 'Le test a déjà ce statut.',
+		],
 		'sort' => [
 			'in' => 'Le tri n\'est pas autorisé sur ce champ.',
 		],
@@ -44,5 +64,15 @@ return [
 		],
 	],
 
-	'attributes' => [],
+	// Noms des champs dans les messages.
+	'attributes' => [
+		'tenant_id' => 'organisation',
+		'reference' => 'référence',
+		'title' => 'titre',
+		'exposure' => 'exposition',
+		'status' => 'statut',
+		'planned_start' => 'début prévu',
+		'planned_end' => 'fin prévue',
+		'comment' => 'commentaire',
+	],
 ];

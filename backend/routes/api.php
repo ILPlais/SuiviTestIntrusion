@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\CompanyProfileController;
 use App\Http\Controllers\Api\V1\CspReportController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\InstanceController;
+use App\Http\Controllers\Api\V1\PenetrationTestController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\TenantController;
 use App\Http\Controllers\Api\V1\TwoFactorController;
@@ -48,6 +49,10 @@ Route::prefix('v1')->name('v1.')->middleware('throttle:standard')->group(functio
 	// par organisation porté par les modèles (identite-5).
 	Route::middleware(['auth:sanctum', 'two-factor'])->group(function () {
 		Route::apiResource('tenants', TenantController::class);
+		// Tests d'intrusion (engagement-2) ; le statut change par sa route dédiée,
+		// qui trace chaque transition.
+		Route::apiResource('tests', PenetrationTestController::class);
+		Route::post('tests/{test}/status', [PenetrationTestController::class, 'changeStatus'])->name('tests.status');
 		Route::get('company-profile', [CompanyProfileController::class, 'show'])->name('company-profile.show');
 		Route::put('company-profile', [CompanyProfileController::class, 'update'])->name('company-profile.update');
 		Route::patch('user/profile', [ProfileController::class, 'update'])->name('user.profile');

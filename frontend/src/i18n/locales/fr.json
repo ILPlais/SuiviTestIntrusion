@@ -11,6 +11,7 @@
 		"none": "non renseigné"
 	},
 	"nav": {
+		"tests": "Tests",
 		"organisations": "Organisations",
 		"company": "Entreprise"
 	},
@@ -37,6 +38,60 @@
 		"delete": "Supprimer l'organisation",
 		"confirmDelete": "Supprimer définitivement l'organisation « {name} » et tout ce qui lui appartient ?",
 		"notFound": "Cette organisation est introuvable."
+	},
+	"tests": {
+		"heading": "Tests d'intrusion",
+		"empty": "Aucun test.",
+		"listCaption": "Tests de vos organisations, les plus récents d'abord",
+		"reference": "Référence",
+		"title": "Titre",
+		"organisation": "Organisation",
+		"type": "Type",
+		"exposure": "Exposition",
+		"status": "Statut",
+		"plannedStart": "Début prévu",
+		"plannedEnd": "Fin prévue",
+		"createdBy": "Créé par",
+		"create": "Créer un test",
+		"delete": "Supprimer le test",
+		"confirmDelete": "Supprimer définitivement le test « {reference} », ses phases et son historique ?",
+		"notFound": "Ce test est introuvable.",
+		"changeStatus": "Changer le statut",
+		"newStatus": "Nouveau statut",
+		"chooseStatus": "Choisir un statut",
+		"comment": "Commentaire (facultatif)",
+		"applyStatus": "Appliquer",
+		"statusChanged": "Statut modifié.",
+		"phases": "Phases",
+		"history": "Historique des statuts",
+		"historyEntry": "{date} — {change} ({author})",
+		"historyComment": "{line} : « {comment} »",
+		"historyCreated": "créé au statut « {to} »",
+		"historyChange": "de « {from} » à « {to} »",
+		"unknownAuthor": "auteur inconnu",
+		"types": {
+			"red_team": "Red Team",
+			"black_box": "boîte noire",
+			"grey_box": "boîte grise",
+			"white_box": "boîte blanche"
+		},
+		"exposures": {
+			"internal": "interne",
+			"external": "externe"
+		},
+		"statuses": {
+			"planned": "Planifié",
+			"in_progress": "En cours",
+			"done": "Terminé",
+			"validated": "Validé"
+		},
+		"phaseNames": {
+			"reconnaissance": "Reconnaissance",
+			"enumeration": "Énumération",
+			"exploitation": "Exploitation",
+			"post_exploitation": "Post-exploitation",
+			"cleanup": "Nettoyage"
+		}
 	},
 	"company": {
 		"heading": "Entreprise prestataire",
