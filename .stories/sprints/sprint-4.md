@@ -9,7 +9,7 @@
 | ID               | Title                                      | Points | Status |
 | ---------------- | ------------------------------------------ | ------ | ------ |
 | [[engagement-1]] | Références entreprise, testeurs et clients | 2      | done   |
-| [[engagement-2]] | Création d'un test et statuts              | 3      | review |
+| [[engagement-2]] | Création d'un test et statuts              | 3      | done   |
 | [[engagement-4]] | Périmètre réseau                           | 3      | todo   |
 | [[identite-5]]   | Rôles, ACL et isolation multi-tenant       | 5      | done   |
 

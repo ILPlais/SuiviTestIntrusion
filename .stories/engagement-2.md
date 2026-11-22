@@ -3,7 +3,7 @@
 **ID:** engagement-2
 **Epic:** engagement
 **Sprint:** 4
-**Status:** review
+**Status:** done
 **Points:** 3
 
 ## Context
@@ -25,4 +25,4 @@ Décisions du 2026-11-22 : transitions **libres** entre les quatre statuts, chac
 
 - [x] Tests written first cover the acceptance criteria
 - [x] Code review and verification loop passed
-- [ ] Code merged to main
+- [x] Code merged to main
