@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Log;
  */
 final class LogRateLimitExceeded
 {
+	/**
+	 * Écrit le dépassement dans le journal, sans corps de requête.
+	 *
+	 * @param RateLimitExceeded $event Dépassement à journaliser.
+	 * @return void
+	 */
 	public function handle(RateLimitExceeded $event): void
 	{
 		Log::warning('Limite de débit de l\'API atteinte.', [

@@ -25,6 +25,11 @@ export interface CurrentUser {
 /** Identifiant public de l'instance, lu une fois (sel de `auth`). */
 let instanceId: string | null = null
 
+/**
+ * Identifiant public de l'instance, demandé à l'API au premier besoin.
+ *
+ * @returns L'identifiant de l'instance.
+ */
 async function getInstanceId(): Promise<string> {
 	instanceId ??= (await getJson<{ instance_id: string }>('/instance')).instance_id
 
@@ -36,7 +41,11 @@ export const useAuthStore = defineStore('auth', () => {
 	/** Compte connecté ; `undefined` tant que la session n'a pas été vérifiée. */
 	const user = ref<CurrentUser | null | undefined>(undefined)
 
-	/** Vérifie la session auprès de l'API ; ne lève pas d'exception. */
+	/**
+	 * Vérifie la session auprès de l'API ; ne lève pas d'exception.
+	 *
+	 * @returns Le compte connecté, ou null sans session.
+	 */
 	async function fetchUser(): Promise<CurrentUser | null> {
 		try {
 			user.value = await getJson<CurrentUser>('/user')
@@ -50,6 +59,10 @@ export const useAuthStore = defineStore('auth', () => {
 	/**
 	 * Connexion, premier temps : dérive `auth` et l'envoie. Renvoie vrai si un second
 	 * facteur est demandé ; sinon la session est ouverte. Lève une ApiError ou une CryptoError.
+	 *
+	 * @param email Adresse saisie.
+	 * @param password Mot de passe saisi.
+	 * @returns Vrai si un second facteur est demandé.
 	 */
 	async function login(email: string, password: string): Promise<boolean> {
 		const auth = await computeAuth(password, await getInstanceId(), email)
@@ -62,12 +75,22 @@ export const useAuthStore = defineStore('auth', () => {
 		return false
 	}
 
-	/** Connexion, second temps : code TOTP ou code de secours (identite-3). */
+	/**
+	 * Connexion, second temps : code TOTP ou code de secours (identite-3).
+	 *
+	 * @param answer Code TOTP ou code de secours saisi.
+	 */
 	async function verifyTwoFactor(answer: { code: string } | { recovery_code: string }): Promise<void> {
 		user.value = await postJson<CurrentUser>('/auth/two-factor', answer)
 	}
 
-	/** Activation : enregistre `auth` pour le compte du lien. */
+	/**
+	 * Activation : enregistre `auth` pour le compte du lien.
+	 *
+	 * @param token Jeton du lien d'activation.
+	 * @param email Adresse du compte.
+	 * @param password Mot de passe choisi.
+	 */
 	async function activate(token: string, email: string, password: string): Promise<void> {
 		const auth = await computeAuth(password, await getInstanceId(), email)
 		await postJson('/auth/activate', { token, auth })

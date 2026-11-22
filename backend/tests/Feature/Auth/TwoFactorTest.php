@@ -18,12 +18,32 @@ class TwoFactorTest extends TestCase
 {
 	use RefreshDatabase;
 
+	/**
+	 * Valeur d'authentification valide du compte de test.
+	 *
+	 * @var string
+	 */
 	private string $auth;
 
+	/**
+	 * Compte de test, activé.
+	 *
+	 * @var User
+	 */
 	private User $user;
 
+	/**
+	 * Générateur TOTP utilisé pour calculer les codes attendus.
+	 *
+	 * @var Google2FA
+	 */
 	private Google2FA $totp;
 
+	/**
+	 * Crée un compte activé, prépare la session SPA et déclare une route métier soumise à la politique de double authentification.
+	 *
+	 * @return void
+	 */
 	protected function setUp(): void
 	{
 		parent::setUp();
@@ -41,6 +61,8 @@ class TwoFactorTest extends TestCase
 
 	/**
 	 * Connexion complète sans double authentification (premier facteur seul).
+	 *
+	 * @return void
 	 */
 	private function login(): void
 	{
@@ -64,6 +86,9 @@ class TwoFactorTest extends TestCase
 
 	/**
 	 * Code TOTP courant, selon l'horloge de Laravel (que travel() déplace), comme le service.
+	 *
+	 * @param string $secret Secret TOTP en base32.
+	 * @return string
 	 */
 	private function otp(string $secret): string
 	{
@@ -73,6 +98,8 @@ class TwoFactorTest extends TestCase
 	/**
 	 * Termine la session et oublie les gardes, comme un nouveau navigateur ; avance
 	 * l'horloge d'un pas TOTP, car un code déjà accepté ne sert pas deux fois.
+	 *
+	 * @return void
 	 */
 	private function freshSession(): void
 	{
@@ -82,6 +109,11 @@ class TwoFactorTest extends TestCase
 		$this->flushSession();
 	}
 
+	/**
+	 * L'enrôlement renvoie un secret compatible Google Authenticator.
+	 *
+	 * @return void
+	 */
 	public function test_enrollment_returns_a_google_authenticator_secret(): void
 	{
 		$this->login();
@@ -93,6 +125,11 @@ class TwoFactorTest extends TestCase
 		$this->assertStringContainsString('alice%40example.org', $response->json('otpauth_url'));
 	}
 
+	/**
+	 * La confirmation par un code valide renvoie dix codes de secours, une seule fois.
+	 *
+	 * @return void
+	 */
 	public function test_confirmation_with_a_valid_code_returns_ten_recovery_codes_once(): void
 	{
 		$this->login();
@@ -104,6 +141,11 @@ class TwoFactorTest extends TestCase
 		$this->getJson('/api/v1/user')->assertJsonPath('two_factor_enabled', true);
 	}
 
+	/**
+	 * La confirmation par un code faux est refusée.
+	 *
+	 * @return void
+	 */
 	public function test_confirmation_with_a_wrong_code_is_refused(): void
 	{
 		$this->login();
@@ -113,6 +155,11 @@ class TwoFactorTest extends TestCase
 		$this->assertNull($this->user->fresh()->two_factor_confirmed_at);
 	}
 
+	/**
+	 * Au repos, le secret est chiffré et les codes de secours sont hachés.
+	 *
+	 * @return void
+	 */
 	public function test_the_secret_is_encrypted_and_recovery_codes_are_hashed_at_rest(): void
 	{
 		$this->login();
@@ -123,6 +170,11 @@ class TwoFactorTest extends TestCase
 		$this->assertStringNotContainsString($codes[0], (string) $row['two_factor_recovery_codes']);
 	}
 
+	/**
+	 * Avec un second facteur, la connexion exige le code.
+	 *
+	 * @return void
+	 */
 	public function test_login_with_two_factor_requires_the_code(): void
 	{
 		$this->login();
@@ -140,6 +192,11 @@ class TwoFactorTest extends TestCase
 		$this->assertAuthenticatedAs($this->user, 'web');
 	}
 
+	/**
+	 * Un code faux est refusé et compté comme un échec.
+	 *
+	 * @return void
+	 */
 	public function test_a_wrong_code_is_refused_and_counted_as_a_failure(): void
 	{
 		$this->login();
@@ -153,6 +210,11 @@ class TwoFactorTest extends TestCase
 		$this->assertSame(1, $this->user->fresh()->failed_login_count);
 	}
 
+	/**
+	 * Se reconnecter ne remet pas à zéro les échecs de code.
+	 *
+	 * @return void
+	 */
 	public function test_logging_in_again_does_not_reset_code_failures(): void
 	{
 		$this->login();
@@ -168,6 +230,11 @@ class TwoFactorTest extends TestCase
 		$this->assertSame(2, $this->user->fresh()->failed_login_count);
 	}
 
+	/**
+	 * Un code faux sur une route de gestion compte comme un échec.
+	 *
+	 * @return void
+	 */
 	public function test_a_wrong_code_on_a_management_route_counts_as_a_failure(): void
 	{
 		$this->login();
@@ -178,6 +245,11 @@ class TwoFactorTest extends TestCase
 		$this->assertSame(1, $this->user->fresh()->failed_login_count);
 	}
 
+	/**
+	 * Un code ne sert pas deux fois.
+	 *
+	 * @return void
+	 */
 	public function test_a_code_cannot_be_used_twice(): void
 	{
 		$this->login();
@@ -193,6 +265,11 @@ class TwoFactorTest extends TestCase
 		$this->postJson('/api/v1/auth/two-factor', ['code' => $code])->assertStatus(422);
 	}
 
+	/**
+	 * La seconde étape exige une première étape réussie.
+	 *
+	 * @return void
+	 */
 	public function test_the_second_step_requires_a_successful_first_step(): void
 	{
 		$this->login();
@@ -203,6 +280,11 @@ class TwoFactorTest extends TestCase
 		$this->assertGuest('web');
 	}
 
+	/**
+	 * La connexion en attente expire après cinq minutes.
+	 *
+	 * @return void
+	 */
 	public function test_the_pending_login_expires_after_five_minutes(): void
 	{
 		$this->login();
@@ -215,6 +297,11 @@ class TwoFactorTest extends TestCase
 		$this->postJson('/api/v1/auth/two-factor', ['code' => $this->otp($secret)])->assertStatus(422);
 	}
 
+	/**
+	 * Un code de secours ne sert qu'une fois.
+	 *
+	 * @return void
+	 */
 	public function test_a_recovery_code_works_once(): void
 	{
 		$this->login();
@@ -229,6 +316,11 @@ class TwoFactorTest extends TestCase
 		$this->postJson('/api/v1/auth/two-factor', ['recovery_code' => $codes[0]])->assertStatus(422);
 	}
 
+	/**
+	 * Les codes de secours se régénèrent avec un code valide.
+	 *
+	 * @return void
+	 */
 	public function test_recovery_codes_can_be_regenerated_with_a_valid_code(): void
 	{
 		$this->login();
@@ -243,6 +335,11 @@ class TwoFactorTest extends TestCase
 		$this->assertEmpty(array_intersect($old, $new));
 	}
 
+	/**
+	 * La désactivation exige un code valide.
+	 *
+	 * @return void
+	 */
 	public function test_disabling_requires_a_valid_code(): void
 	{
 		$this->login();
@@ -255,6 +352,11 @@ class TwoFactorTest extends TestCase
 		$this->assertNull($this->user->fresh()->two_factor_confirmed_at);
 	}
 
+	/**
+	 * La politique d'instance bloque les routes métier jusqu'à l'enrôlement.
+	 *
+	 * @return void
+	 */
 	public function test_the_instance_policy_blocks_business_routes_until_enrollment(): void
 	{
 		config(['suivi.authentication.two_factor_required' => true]);
@@ -269,6 +371,11 @@ class TwoFactorTest extends TestCase
 		$this->getJson('/api/v1/_essai/metier')->assertOk();
 	}
 
+	/**
+	 * La politique d'instance interdit la désactivation.
+	 *
+	 * @return void
+	 */
 	public function test_the_instance_policy_forbids_disabling(): void
 	{
 		config(['suivi.authentication.two_factor_required' => true]);
@@ -279,6 +386,11 @@ class TwoFactorTest extends TestCase
 		$this->deleteJson('/api/v1/user/two-factor', ['code' => $this->otp($secret)])->assertForbidden();
 	}
 
+	/**
+	 * La politique est désactivée par défaut.
+	 *
+	 * @return void
+	 */
 	public function test_the_policy_is_off_by_default(): void
 	{
 		$this->assertFalse(config('suivi.authentication.two_factor_required'));

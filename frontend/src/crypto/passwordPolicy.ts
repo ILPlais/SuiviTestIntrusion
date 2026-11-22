@@ -34,6 +34,8 @@ let checkerPromise: Promise<{ checker: Checker, common: Set<string> }> | null = 
 
 /**
  * Charge zxcvbn-ts et son dictionnaire commun dans un morceau séparé du build.
+ *
+ * @returns L'estimateur et la liste des mots de passe courants.
  */
 function loadChecker(): Promise<{ checker: Checker, common: Set<string> }> {
 	checkerPromise ??= Promise.all([import('@zxcvbn-ts/core'), import('@zxcvbn-ts/language-common')]).then(([core, language]) => ({
@@ -46,6 +48,9 @@ function loadChecker(): Promise<{ checker: Checker, common: Set<string> }> {
 
 /**
  * Termes liés à l'adresse de l'utilisateur : partie locale et éléments du domaine.
+ *
+ * @param email Adresse du compte.
+ * @returns Les termes à refuser, en minuscules.
  */
 function contextTerms(email: string): string[] {
 	const [local = '', domain = ''] = email.trim().toLowerCase().split('@')
@@ -62,6 +67,7 @@ function contextTerms(email: string): string[] {
  *
  * @param password Mot de passe saisi.
  * @param email Adresse du compte (ses éléments sont refusés dans le mot de passe).
+ * @returns Les motifs de refus et la robustesse estimée.
  */
 export async function checkPassword(password: string, email: string): Promise<PolicyResult> {
 	const normalized = password.normalize('NFC')

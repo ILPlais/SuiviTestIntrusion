@@ -17,6 +17,11 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class () extends Migration {
+	/**
+	 * Ajoute les colonnes du second facteur.
+	 *
+	 * @return void
+	 */
 	public function up(): void
 	{
 		Schema::table('users', function (Blueprint $table) {
@@ -27,6 +32,11 @@ return new class () extends Migration {
 		});
 	}
 
+	/**
+	 * Retire les colonnes du second facteur.
+	 *
+	 * @return void
+	 */
 	public function down(): void
 	{
 		Schema::table('users', function (Blueprint $table) {

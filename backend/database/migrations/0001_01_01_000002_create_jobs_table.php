@@ -6,7 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class () extends Migration {
 	/**
-	 * Run the migrations.
+	 * Applique la migration.
+	 *
+	 * @return void
 	 */
 	public function up(): void
 	{
@@ -47,7 +49,9 @@ return new class () extends Migration {
 	}
 
 	/**
-	 * Reverse the migrations.
+	 * Annule la migration.
+	 *
+	 * @return void
 	 */
 	public function down(): void
 	{

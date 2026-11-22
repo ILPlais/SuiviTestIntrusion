@@ -35,7 +35,12 @@ final class ApiListQuery
 	/**
 	 * Paramètres déjà validés par make().
 	 *
-	 * @param 'page'|'cursor'        $mode    Mode de pagination retenu.
+	 * @param int $limit Nombre d'éléments par tranche.
+	 * @param 'page'|'cursor' $mode Mode de pagination retenu.
+	 * @param ?string $cursor Curseur opaque reçu, null pour la première tranche.
+	 * @param int $page Numéro de page (mode page).
+	 * @param string $sort Colonne de tri.
+	 * @param string $order Sens du tri (asc ou desc).
 	 * @param array<string, string> $filters Filtres autorisés : colonne => valeur (égalité stricte).
 	 */
 	private function __construct(
@@ -52,9 +57,11 @@ final class ApiListQuery
 	/**
 	 * Valide les paramètres de la requête et prépare la liste.
 	 *
-	 * @param list<string> $sortable    Colonnes autorisées pour le tri.
-	 * @param list<string> $filterable  Colonnes autorisées pour les filtres.
-	 * @param string       $defaultSort Tri par défaut, en ordre décroissant (le plus récent d'abord).
+	 * @param Request $request Requête de liste reçue.
+	 * @param list<string> $sortable Colonnes autorisées pour le tri.
+	 * @param list<string> $filterable Colonnes autorisées pour les filtres.
+	 * @param string $defaultSort Tri par défaut, en ordre décroissant (le plus récent d'abord).
+	 * @return self
 	 *
 	 * @throws \Illuminate\Validation\ValidationException Si un paramètre est invalide ou non autorisé.
 	 */
@@ -97,6 +104,7 @@ final class ApiListQuery
 	 *
 	 * @param Builder<TModel>         $query     Requête de base, déjà limitée au tenant et aux droits.
 	 * @param callable(TModel): mixed $transform Transforme chaque modèle pour la réponse.
+	 * @return JsonResponse
 	 */
 	public function respond(Builder $query, callable $transform): JsonResponse
 	{
@@ -131,8 +139,7 @@ final class ApiListQuery
 	 * Le total n'est pas calculé en mode curseur : compter toutes les lignes à
 	 * chaque requête serait coûteux sur une grosse base (11.03).
 	 *
-	 * @param CursorPaginator<int, Model>|LengthAwarePaginator<int, Model> $paginator
-	 *
+	 * @param CursorPaginator<int, Model>|LengthAwarePaginator<int, Model> $paginator Tranche de résultats.
 	 * @return array<string, int|string|null>
 	 */
 	private function meta(CursorPaginator|LengthAwarePaginator $paginator): array

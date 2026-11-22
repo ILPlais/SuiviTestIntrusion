@@ -8,17 +8,21 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
+ * Fabrique de comptes utilisateur pour les tests.
+ *
  * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
 	/**
-	 * The current password being used by the factory.
+	 * Empreinte du mot de passe commune aux comptes fabriqués (calculée une fois).
+	 *
+	 * @var ?string
 	 */
 	protected static ?string $password;
 
 	/**
-	 * Define the model's default state.
+	 * État par défaut d'un compte fabriqué.
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -34,7 +38,9 @@ class UserFactory extends Factory
 	}
 
 	/**
-	 * Indicate that the model's email address should be unverified.
+	 * Variante : adresse e-mail non vérifiée.
+	 *
+	 * @return static
 	 */
 	public function unverified(): static
 	{

@@ -19,6 +19,11 @@ class ActivationTest extends TestCase
 {
 	use RefreshDatabase;
 
+	/**
+	 * Fait venir les requêtes de la SPA, pour que Sanctum ouvre une session.
+	 *
+	 * @return void
+	 */
 	protected function setUp(): void
 	{
 		parent::setUp();
@@ -28,6 +33,9 @@ class ActivationTest extends TestCase
 
 	/**
 	 * Crée un administrateur par la commande et renvoie le jeton de son lien.
+	 *
+	 * @param string $email Adresse du compte à créer.
+	 * @return string
 	 */
 	private function createAdmin(string $email = 'root@example.org'): string
 	{
@@ -40,6 +48,11 @@ class ActivationTest extends TestCase
 		return $matches[1];
 	}
 
+	/**
+	 * La commande crée un administrateur d'instance sans mot de passe.
+	 *
+	 * @return void
+	 */
 	public function test_the_command_creates_an_instance_administrator_without_password(): void
 	{
 		$this->createAdmin('Root@Example.org');
@@ -49,6 +62,11 @@ class ActivationTest extends TestCase
 		$this->assertNull($user->getAttributes()['password']);
 	}
 
+	/**
+	 * La commande refuse un compte déjà actif.
+	 *
+	 * @return void
+	 */
 	public function test_the_command_refuses_an_active_account(): void
 	{
 		$token = $this->createAdmin();
@@ -57,6 +75,11 @@ class ActivationTest extends TestCase
 		$this->assertSame(1, Artisan::call('suivi:create-admin', ['email' => 'root@example.org']));
 	}
 
+	/**
+	 * La commande renouvelle le lien d'un compte jamais activé.
+	 *
+	 * @return void
+	 */
 	public function test_the_command_renews_the_link_of_an_account_never_activated(): void
 	{
 		$old = $this->createAdmin();
@@ -70,6 +93,11 @@ class ActivationTest extends TestCase
 		$this->assertSame(1, User::query()->where('email', 'root@example.org')->count());
 	}
 
+	/**
+	 * Le lien d'activation révèle l'adresse nécessaire pour dériver la valeur d'authentification.
+	 *
+	 * @return void
+	 */
 	public function test_the_activation_link_reveals_the_address_needed_to_derive_auth(): void
 	{
 		$token = $this->createAdmin();
@@ -79,6 +107,11 @@ class ActivationTest extends TestCase
 			->assertExactJson(['email' => 'root@example.org', 'name' => 'Root']);
 	}
 
+	/**
+	 * L'activation enregistre la valeur d'authentification, puis la connexion fonctionne.
+	 *
+	 * @return void
+	 */
 	public function test_activation_sets_the_authentication_value_then_login_works(): void
 	{
 		$token = $this->createAdmin();
@@ -89,6 +122,11 @@ class ActivationTest extends TestCase
 		$this->postJson('/api/v1/auth/login', ['email' => 'root@example.org', 'auth' => $auth])->assertOk();
 	}
 
+	/**
+	 * Un lien d'activation ne sert qu'une fois.
+	 *
+	 * @return void
+	 */
 	public function test_an_activation_link_works_only_once(): void
 	{
 		$token = $this->createAdmin();
@@ -98,6 +136,11 @@ class ActivationTest extends TestCase
 		$this->postJson('/api/v1/auth/activate', ['token' => $token, 'auth' => base64_encode(random_bytes(32))])->assertNotFound();
 	}
 
+	/**
+	 * Un lien d'activation expire après 24 heures.
+	 *
+	 * @return void
+	 */
 	public function test_an_activation_link_expires_after_24_hours(): void
 	{
 		$token = $this->createAdmin();
@@ -107,11 +150,21 @@ class ActivationTest extends TestCase
 		$this->getJson("/api/v1/auth/activation/{$token}")->assertNotFound();
 	}
 
+	/**
+	 * Un jeton inconnu ne révèle rien.
+	 *
+	 * @return void
+	 */
 	public function test_an_unknown_token_reveals_nothing(): void
 	{
 		$this->getJson('/api/v1/auth/activation/'.str_repeat('a', 64))->assertNotFound()->assertJsonPath('code', 'not_found');
 	}
 
+	/**
+	 * Le jeton n'est jamais stocké en clair.
+	 *
+	 * @return void
+	 */
 	public function test_the_token_is_never_stored_in_clear(): void
 	{
 		$token = $this->createAdmin();
@@ -120,6 +173,11 @@ class ActivationTest extends TestCase
 		$this->assertDatabaseHas('users', ['activation_token_hash' => hash('sha256', $token)]);
 	}
 
+	/**
+	 * L'activation utilise la classe de limitation auth.
+	 *
+	 * @return void
+	 */
 	public function test_activation_uses_the_auth_rate_limit_class(): void
 	{
 		config(['api.rate_limits.auth.per_minute' => 1]);
@@ -128,6 +186,11 @@ class ActivationTest extends TestCase
 		$this->getJson('/api/v1/auth/activation/'.str_repeat('a', 64))->assertStatus(429);
 	}
 
+	/**
+	 * L'identifiant de l'instance est public et stable.
+	 *
+	 * @return void
+	 */
 	public function test_the_instance_identifier_is_public_and_stable(): void
 	{
 		$first = $this->getJson('/api/v1/instance')->assertOk()->json('instance_id');

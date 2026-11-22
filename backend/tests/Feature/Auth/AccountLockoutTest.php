@@ -15,10 +15,25 @@ class AccountLockoutTest extends TestCase
 {
 	use RefreshDatabase;
 
+	/**
+	 * Valeur d'authentification valide du compte de test.
+	 *
+	 * @var string
+	 */
 	private string $auth;
 
+	/**
+	 * Compte de test, activé.
+	 *
+	 * @var User
+	 */
 	private User $user;
 
+	/**
+	 * Crée un compte activé, prépare la session SPA et lève la limite par adresse (testée ailleurs).
+	 *
+	 * @return void
+	 */
 	protected function setUp(): void
 	{
 		parent::setUp();
@@ -33,6 +48,9 @@ class AccountLockoutTest extends TestCase
 
 	/**
 	 * Tente une connexion avec la bonne ou une mauvaise valeur d'authentification.
+	 *
+	 * @param bool $correct Vrai pour la bonne valeur.
+	 * @return int
 	 */
 	private function attempt(bool $correct): int
 	{
@@ -44,6 +62,9 @@ class AccountLockoutTest extends TestCase
 
 	/**
 	 * Enchaîne des échecs en laissant passer le délai de ralentissement entre chacun.
+	 *
+	 * @param int $times Nombre d'échecs à provoquer.
+	 * @return void
 	 */
 	private function failTimes(int $times): void
 	{
@@ -53,6 +74,11 @@ class AccountLockoutTest extends TestCase
 		}
 	}
 
+	/**
+	 * Les échecs sont comptés, puis remis à zéro par une connexion réussie.
+	 *
+	 * @return void
+	 */
 	public function test_failures_are_counted_and_reset_by_a_successful_login(): void
 	{
 		$this->failTimes(3);
@@ -62,6 +88,11 @@ class AccountLockoutTest extends TestCase
 		$this->assertSame(0, $this->user->fresh()->failed_login_count);
 	}
 
+	/**
+	 * Une tentative immédiate après cinq échecs est refusée.
+	 *
+	 * @return void
+	 */
 	public function test_an_immediate_attempt_after_five_failures_is_refused(): void
 	{
 		for ($i = 0; $i < 5; $i++) {
@@ -76,6 +107,11 @@ class AccountLockoutTest extends TestCase
 		$this->assertSame(200, $this->attempt(true));
 	}
 
+	/**
+	 * Dix échecs verrouillent le compte pendant quinze minutes.
+	 *
+	 * @return void
+	 */
 	public function test_ten_failures_lock_the_account_for_fifteen_minutes(): void
 	{
 		$this->failTimes(10);
@@ -88,6 +124,11 @@ class AccountLockoutTest extends TestCase
 		$this->assertNull($this->user->fresh()->locked_until);
 	}
 
+	/**
+	 * Les réglages du verrouillage suivent la décision 13.03.
+	 *
+	 * @return void
+	 */
 	public function test_lockout_settings_follow_the_decision(): void
 	{
 		$this->assertSame(10, config('suivi.authentication.lockout_failures'));

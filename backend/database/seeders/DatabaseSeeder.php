@@ -6,12 +6,15 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+/** Remplit la base de données de développement. */
 class DatabaseSeeder extends Seeder
 {
 	use WithoutModelEvents;
 
 	/**
-	 * Seed the application's database.
+	 * Remplit la base de données de développement.
+	 *
+	 * @return void
 	 */
 	public function run(): void
 	{

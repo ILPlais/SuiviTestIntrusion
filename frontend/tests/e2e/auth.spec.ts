@@ -12,7 +12,11 @@ import { expectNoAccessibilityViolations } from './accessibility'
 
 const PASSWORD = 'girafe orange sous la pluie de mars'
 
-/** Crée un administrateur par la commande Artisan et renvoie son adresse et le jeton du lien. */
+/**
+ * Crée un administrateur par la commande Artisan et renvoie son adresse et le jeton du lien.
+ *
+ * @returns L'adresse du compte et le jeton de son lien d'activation.
+ */
 function createAdmin(): { email: string, token: string } {
 	const email = `e2e-${randomUUID()}@example.org`
 	const output = execFileSync('php', ['artisan', 'suivi:create-admin', email, '--name=Testeur E2E'], { cwd: '../backend', encoding: 'utf8' })
@@ -24,7 +28,13 @@ function createAdmin(): { email: string, token: string } {
 	return { email, token }
 }
 
-/** Active le compte du lien avec le mot de passe donné. */
+/**
+ * Active le compte du lien avec le mot de passe donné.
+ *
+ * @param page Page Playwright.
+ * @param token Jeton du lien d'activation.
+ * @param password Mot de passe choisi.
+ */
 async function activate(page: Page, token: string, password: string): Promise<void> {
 	await page.goto(`/activation/${token}`)
 	await page.getByLabel(fr.auth.newPassword).fill(password)

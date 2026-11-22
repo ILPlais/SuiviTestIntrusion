@@ -49,6 +49,7 @@ final class ApiErrorRenderer
 	 * @param Throwable $e Exception déjà préparée par Laravel (ModelNotFoundException
 	 *                     devenue NotFoundHttpException, AuthorizationException
 	 *                     devenue AccessDeniedHttpException, etc.).
+	 * @return JsonResponse
 	 */
 	public static function render(Throwable $e): JsonResponse
 	{
@@ -76,6 +77,9 @@ final class ApiErrorRenderer
 
 	/**
 	 * Détermine le statut HTTP de la table de 11.03 pour une exception.
+	 *
+	 * @param Throwable $e Exception à traduire.
+	 * @return int
 	 */
 	private static function status(Throwable $e): int
 	{

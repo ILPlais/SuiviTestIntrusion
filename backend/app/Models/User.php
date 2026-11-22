@@ -43,6 +43,8 @@ class User extends Authenticatable
 
 	/**
 	 * Vrai si la double authentification est confirmée (identite-3).
+	 *
+	 * @return bool
 	 */
 	public function hasTwoFactor(): bool
 	{
@@ -69,6 +71,8 @@ class User extends Authenticatable
 	}
 
 	/**
+	 * Conversions des attributs (secret TOTP chiffré, dates, valeur d'authentification hachée).
+	 *
 	 * @return array<string, string>
 	 */
 	protected function casts(): array

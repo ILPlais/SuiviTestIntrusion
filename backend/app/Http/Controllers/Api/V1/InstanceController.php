@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\DB;
  */
 class InstanceController extends Controller
 {
+	/**
+	 * Renvoie les informations publiques de l'instance (identifiant utilisé pour dériver la valeur d'authentification).
+	 *
+	 * @return JsonResponse
+	 */
 	public function __invoke(): JsonResponse
 	{
 		return new JsonResponse(['instance_id' => DB::table('instance_settings')->value('instance_id')]);

@@ -17,6 +17,8 @@ class SpaController extends Controller
 	/**
 	 * Renvoie index.html, ou une erreur 404 si la SPA n'a pas été compilée
 	 * (en développement, elle est servie par Vite).
+	 *
+	 * @return BinaryFileResponse
 	 */
 	public function __invoke(): BinaryFileResponse
 	{

@@ -28,6 +28,8 @@ final class RateLimits
 
 	/**
 	 * Déclare les limiteurs nommés ; appelé au démarrage (AppServiceProvider).
+	 *
+	 * @return void
 	 */
 	public static function register(): void
 	{
@@ -51,6 +53,9 @@ final class RateLimits
 
 	/**
 	 * Identifie le demandeur : l'utilisateur connecté, sinon son adresse IP.
+	 *
+	 * @param Request $request Requête entrante.
+	 * @return string
 	 */
 	public static function requesterKey(Request $request): string
 	{
@@ -63,7 +68,10 @@ final class RateLimits
 	 * Signale le dépassement (événement d'audit) et lève l'erreur 429 de l'API,
 	 * avec les en-têtes X-RateLimit-* et Retry-After calculés par Laravel.
 	 *
-	 * @param array<string, mixed> $headers
+	 * @param Request $request Requête entrante.
+	 * @param string $class Classe de limitation.
+	 * @param array<string, mixed> $headers En-têtes de la réponse 429.
+	 * @return never
 	 */
 	public static function reject(Request $request, string $class, array $headers): never
 	{
@@ -80,6 +88,9 @@ final class RateLimits
 
 	/**
 	 * Plafond par minute d'une classe, lu dans config/api.php.
+	 *
+	 * @param string $class Classe de limitation.
+	 * @return int
 	 */
 	private static function perMinute(string $class): int
 	{
@@ -90,6 +101,9 @@ final class RateLimits
 	 * Adresse servant de clé à la classe auth : l'adresse IPv4 telle quelle, ou le
 	 * préfixe /64 d'une adresse IPv6, car un client dispose souvent d'un /64 entier
 	 * et multiplierait sinon ses compteurs en changeant d'adresse.
+	 *
+	 * @param string $ip Adresse du client.
+	 * @return string
 	 */
 	public static function networkKey(string $ip): string
 	{
@@ -108,6 +122,9 @@ final class RateLimits
 	 * La fenêtre est fixée au premier essai d'une période : après un blocage, le
 	 * client retrouve ses essais à la fin de l'attente, mais sur une fenêtre deux fois
 	 * plus longue ; le débit possible est divisé par deux à chaque blocage.
+	 *
+	 * @param string $ip Adresse du client.
+	 * @return int
 	 */
 	private static function authDecaySeconds(string $ip): int
 	{
@@ -120,6 +137,10 @@ final class RateLimits
 	/**
 	 * Compte un blocage de la classe auth, une seule fois par période de blocage :
 	 * les requêtes refusées pendant l'attente ne l'allongent pas davantage.
+	 *
+	 * @param string $ip Adresse du client.
+	 * @param int $retryAfter Délai d'attente annoncé, en secondes.
+	 * @return void
 	 */
 	private static function recordAuthLockout(string $ip, int $retryAfter): void
 	{
@@ -132,6 +153,9 @@ final class RateLimits
 
 	/**
 	 * Clé du nombre de blocages récents d'une adresse IP pour la classe auth.
+	 *
+	 * @param string $ip Adresse du client.
+	 * @return string
 	 */
 	private static function lockoutCountKey(string $ip): string
 	{

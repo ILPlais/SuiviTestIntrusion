@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 return new class () extends Migration {
+	/**
+	 * Crée la table des réglages de l'instance.
+	 *
+	 * @return void
+	 */
 	public function up(): void
 	{
 		Schema::create('instance_settings', function (Blueprint $table) {
@@ -30,6 +35,11 @@ return new class () extends Migration {
 		]);
 	}
 
+	/**
+	 * Supprime la table des réglages de l'instance.
+	 *
+	 * @return void
+	 */
 	public function down(): void
 	{
 		Schema::dropIfExists('instance_settings');

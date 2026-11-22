@@ -13,9 +13,18 @@ use Tests\TestCase;
  */
 class SecurityHeadersTest extends TestCase
 {
-	/** Fichier index.html temporaire tenant lieu de SPA compilée. */
+	/**
+	 * Fichier index.html temporaire tenant lieu de SPA compilée.
+	 *
+	 * @var string
+	 */
 	private string $index;
 
+	/**
+	 * Crée une SPA compilée factice pour les tests.
+	 *
+	 * @return void
+	 */
 	protected function setUp(): void
 	{
 		parent::setUp();
@@ -25,6 +34,11 @@ class SecurityHeadersTest extends TestCase
 		config(['app.spa_index' => $this->index]);
 	}
 
+	/**
+	 * Supprime la SPA compilée factice.
+	 *
+	 * @return void
+	 */
 	protected function tearDown(): void
 	{
 		@unlink($this->index);
@@ -32,6 +46,11 @@ class SecurityHeadersTest extends TestCase
 		parent::tearDown();
 	}
 
+	/**
+	 * Les réponses de l'API ne peuvent jamais être interprétées comme une page ou un script.
+	 *
+	 * @return void
+	 */
 	public function test_api_responses_can_never_be_interpreted_as_a_page_or_script(): void
 	{
 		$this->getJson('/api/v1/health')
@@ -40,6 +59,11 @@ class SecurityHeadersTest extends TestCase
 			->assertHeader('Referrer-Policy', 'no-referrer');
 	}
 
+	/**
+	 * La SPA reçoit la politique stricte de la décision 13.04.
+	 *
+	 * @return void
+	 */
 	public function test_the_spa_receives_the_strict_policy_of_the_decision(): void
 	{
 		$policy = (string) $this->get('/engagements')->headers->get('Content-Security-Policy');
@@ -65,6 +89,11 @@ class SecurityHeadersTest extends TestCase
 		$this->assertStringNotContainsString("'unsafe-eval'", $policy);
 	}
 
+	/**
+	 * La SPA déclare son point de réception des rapports de violation.
+	 *
+	 * @return void
+	 */
 	public function test_the_spa_declares_its_reporting_endpoint(): void
 	{
 		$this->get('/')
@@ -73,12 +102,22 @@ class SecurityHeadersTest extends TestCase
 			->assertHeader('Referrer-Policy', 'no-referrer');
 	}
 
+	/**
+	 * HSTS n'est envoyé par l'application qu'en HTTPS.
+	 *
+	 * @return void
+	 */
 	public function test_hsts_is_sent_by_the_application_over_https_only(): void
 	{
 		$this->get('https://localhost/api/v1/health')->assertHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 		$this->get('http://localhost/api/v1/health')->assertHeaderMissing('Strict-Transport-Security');
 	}
 
+	/**
+	 * CORS est fermé par défaut.
+	 *
+	 * @return void
+	 */
 	public function test_cors_is_closed_by_default(): void
 	{
 		$this->withHeader('Origin', 'https://autre-site.example')
@@ -86,6 +125,11 @@ class SecurityHeadersTest extends TestCase
 			->assertHeaderMissing('Access-Control-Allow-Origin');
 	}
 
+	/**
+	 * Les origines CORS sont configurables.
+	 *
+	 * @return void
+	 */
 	public function test_cors_origins_are_configurable(): void
 	{
 		config(['cors.allowed_origins' => ['https://client.example']]);
@@ -95,12 +139,22 @@ class SecurityHeadersTest extends TestCase
 			->assertHeader('Access-Control-Allow-Origin', 'https://client.example');
 	}
 
+	/**
+	 * Les cookies de session sont stricts et inaccessibles au JavaScript.
+	 *
+	 * @return void
+	 */
 	public function test_session_cookies_are_strict_and_http_only(): void
 	{
 		$this->assertSame('strict', config('session.same_site'));
 		$this->assertTrue(config('session.http_only'));
 	}
 
+	/**
+	 * Les rapports de violation sont reçus et journalisés.
+	 *
+	 * @return void
+	 */
 	public function test_violation_reports_are_received_and_logged(): void
 	{
 		$log = Log::spy();
@@ -116,6 +170,11 @@ class SecurityHeadersTest extends TestCase
 		$log->shouldHaveReceived('warning')->twice();
 	}
 
+	/**
+	 * Le refus attendu de la politique vue n'est pas journalisé.
+	 *
+	 * @return void
+	 */
 	public function test_the_expected_refusal_of_the_vue_policy_is_not_logged(): void
 	{
 		$log = Log::spy();
@@ -127,6 +186,11 @@ class SecurityHeadersTest extends TestCase
 		$log->shouldNotHaveReceived('warning');
 	}
 
+	/**
+	 * Les rapports ne journalisent jamais les jetons de lien ni les chaînes de requête.
+	 *
+	 * @return void
+	 */
 	public function test_reports_never_log_link_tokens_nor_query_strings(): void
 	{
 		$log = Log::spy();
@@ -140,6 +204,11 @@ class SecurityHeadersTest extends TestCase
 			&& ! str_contains((string) json_encode($context), 'secret'))->once();
 	}
 
+	/**
+	 * Les réponses d'erreur des middlewares précoces portent les en-têtes.
+	 *
+	 * @return void
+	 */
 	public function test_error_responses_of_early_middlewares_carry_the_headers(): void
 	{
 		// 413 produit par la limite de taille, avant le routage.
@@ -149,12 +218,22 @@ class SecurityHeadersTest extends TestCase
 			->assertHeader('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'; sandbox");
 	}
 
+	/**
+	 * Les rapports sont limités en taille.
+	 *
+	 * @return void
+	 */
 	public function test_reports_are_limited_in_size(): void
 	{
 		$this->call('POST', '/api/v1/csp-reports', [], [], [], ['CONTENT_TYPE' => 'application/csp-report'], str_repeat('a', 70 * 1024))
 			->assertStatus(413);
 	}
 
+	/**
+	 * Les rapports n'exigent ni session ni jeton CSRF.
+	 *
+	 * @return void
+	 */
 	public function test_reports_need_no_session_nor_csrf_token(): void
 	{
 		// Les navigateurs envoient les rapports sans cookie ; l'origine de l'instance les accompagne.

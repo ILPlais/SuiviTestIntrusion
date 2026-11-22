@@ -12,7 +12,12 @@ import { expectNoAccessibilityViolations } from './accessibility'
 
 const PASSWORD = 'girafe orange sous la pluie de mars'
 
-/** Décode une clé Base32 (RFC 4648, sans remplissage). */
+/**
+ * Décode une clé Base32 (RFC 4648, sans remplissage).
+ *
+ * @param secret Clé en Base32.
+ * @returns Les octets de la clé.
+ */
 function base32Decode(secret: string): Buffer {
 	const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
 	let bits = ''
@@ -24,7 +29,12 @@ function base32Decode(secret: string): Buffer {
 	return Buffer.from(bytes.map((byte) => parseInt(byte, 2)))
 }
 
-/** Code TOTP courant pour une clé Base32. */
+/**
+ * Code TOTP courant pour une clé Base32.
+ *
+ * @param secret Clé en Base32.
+ * @returns Le code à six chiffres.
+ */
 function totp(secret: string): string {
 	const counter = Buffer.alloc(8)
 	counter.writeBigUInt64BE(BigInt(Math.floor(Date.now() / 1000 / 30)))
@@ -35,7 +45,12 @@ function totp(secret: string): string {
 	return value.toString().padStart(6, '0')
 }
 
-/** Crée un administrateur, active son compte et le connecte ; renvoie son adresse. */
+/**
+ * Crée un administrateur, active son compte et le connecte ; renvoie son adresse.
+ *
+ * @param page Page Playwright.
+ * @returns L'adresse du compte connecté.
+ */
 async function signedInAdmin(page: Page): Promise<string> {
 	const email = `e2e-2fa-${randomUUID()}@example.org`
 	const output = execFileSync('php', ['artisan', 'suivi:create-admin', email, '--name=Testeuse 2FA'], { cwd: '../backend', encoding: 'utf8' })

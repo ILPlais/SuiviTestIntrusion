@@ -31,12 +31,21 @@ class AuthController extends Controller
 	/** Durée de validité du premier facteur en attente du code, en secondes. */
 	private const PENDING_SECONDS = 300;
 
+	/**
+	 * Reçoit le service de verrouillage des comptes et le service TOTP.
+	 *
+	 * @param AccountLockout $lockout Verrouillage des comptes.
+	 * @param TwoFactor $twoFactor Service TOTP.
+	 */
 	public function __construct(private readonly AccountLockout $lockout, private readonly TwoFactor $twoFactor)
 	{
 	}
 
 	/**
 	 * Ouvre une session si la valeur d'authentification est correcte.
+	 *
+	 * @param Request $request Requête de connexion.
+	 * @return JsonResponse
 	 */
 	public function login(Request $request): JsonResponse
 	{
@@ -70,6 +79,9 @@ class AuthController extends Controller
 	/**
 	 * Second temps de la connexion : code TOTP ou code de secours (identite-3).
 	 * Un code faux compte comme un échec de connexion (verrouillage de 13.03).
+	 *
+	 * @param Request $request Requête portant le code TOTP ou de secours.
+	 * @return JsonResponse
 	 */
 	public function twoFactorChallenge(Request $request): JsonResponse
 	{
@@ -111,6 +123,9 @@ class AuthController extends Controller
 
 	/**
 	 * Ferme la session et renouvelle le jeton CSRF.
+	 *
+	 * @param Request $request Requête de déconnexion.
+	 * @return Response
 	 */
 	public function logout(Request $request): Response
 	{
@@ -123,6 +138,10 @@ class AuthController extends Controller
 
 	/**
 	 * Ouvre la session authentifiée et renouvelle son identifiant (fixation de session).
+	 *
+	 * @param Request $request Requête courante.
+	 * @param User $user Compte authentifié.
+	 * @return JsonResponse
 	 */
 	private function openSession(Request $request, User $user): JsonResponse
 	{
@@ -134,6 +153,9 @@ class AuthController extends Controller
 
 	/**
 	 * Compte connecté.
+	 *
+	 * @param Request $request Requête courante.
+	 * @return JsonResponse
 	 */
 	public function me(Request $request): JsonResponse
 	{
@@ -148,6 +170,10 @@ class AuthController extends Controller
 	 *
 	 * Sans compte actif, un hachage leurre est tout de même vérifié, pour qu'une
 	 * adresse inconnue ne réponde pas plus vite qu'une adresse existante.
+	 *
+	 * @param ?User $user Compte trouvé, null si l'adresse est inconnue.
+	 * @param string $auth Valeur d'authentification reçue.
+	 * @return bool
 	 */
 	private function verify(?User $user, string $auth): bool
 	{

@@ -67,6 +67,12 @@ export function installTrustedTypesPolicies(): void {
 	}
 
 	const origin = globalThis.location.origin
+	/**
+	 * Laisse passer l'URL du Worker crypto, refuse toute autre URL de script.
+	 *
+	 * @param input URL demandée.
+	 * @returns L'URL acceptée, ou null pour la refuser.
+	 */
 	const workerUrl = (input: string) => (isCryptoWorkerUrl(input, origin) ? input : null)
 
 	renderPolicy = factory.createPolicy('sti-render', { createHTML: sanitizeHtml })

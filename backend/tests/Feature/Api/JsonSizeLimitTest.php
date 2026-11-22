@@ -13,6 +13,11 @@ use Tests\TestCase;
  */
 class JsonSizeLimitTest extends TestCase
 {
+	/**
+	 * Déclare une route de test qui accepte un corps JSON.
+	 *
+	 * @return void
+	 */
 	protected function setUp(): void
 	{
 		parent::setUp();
@@ -20,11 +25,21 @@ class JsonSizeLimitTest extends TestCase
 		Route::middleware('api')->post('api/v1/_taille', fn () => ['ok' => true]);
 	}
 
+	/**
+	 * La limite par défaut est de 2 Mo.
+	 *
+	 * @return void
+	 */
 	public function test_the_default_limit_is_two_megabytes(): void
 	{
 		$this->assertSame(2 * 1024 * 1024, config('api.max_json_size'));
 	}
 
+	/**
+	 * Un corps JSON sous la limite est accepté.
+	 *
+	 * @return void
+	 */
 	public function test_a_json_body_under_the_limit_is_accepted(): void
 	{
 		config(['api.max_json_size' => 1024]);
@@ -32,6 +47,11 @@ class JsonSizeLimitTest extends TestCase
 		$this->postJson('/api/v1/_taille', ['texte' => str_repeat('a', 500)])->assertOk();
 	}
 
+	/**
+	 * Un corps JSON au-delà de la limite est refusé en 413.
+	 *
+	 * @return void
+	 */
 	public function test_a_json_body_over_the_limit_is_refused_with_413(): void
 	{
 		config(['api.max_json_size' => 1024]);
@@ -41,6 +61,11 @@ class JsonSizeLimitTest extends TestCase
 			->assertJsonPath('code', 'payload_too_large');
 	}
 
+	/**
+	 * La limite s'applique même sans en-tête Content-Length.
+	 *
+	 * @return void
+	 */
 	public function test_the_limit_applies_even_without_a_content_length_header(): void
 	{
 		config(['api.max_json_size' => 1024]);
@@ -52,6 +77,11 @@ class JsonSizeLimitTest extends TestCase
 			->assertStatus(413);
 	}
 
+	/**
+	 * La limite ne dépend pas du Content-Type déclaré.
+	 *
+	 * @return void
+	 */
 	public function test_the_limit_does_not_depend_on_the_declared_content_type(): void
 	{
 		// Un client ne contourne pas la limite en annonçant un autre type que JSON.
@@ -64,6 +94,11 @@ class JsonSizeLimitTest extends TestCase
 			->assertStatus(413);
 	}
 
+	/**
+	 * Une longueur annoncée au-delà de la limite est refusée avant toute lecture.
+	 *
+	 * @return void
+	 */
 	public function test_an_announced_length_over_the_limit_is_refused_before_reading(): void
 	{
 		config(['api.max_json_size' => 1024]);
@@ -76,6 +111,11 @@ class JsonSizeLimitTest extends TestCase
 			->assertStatus(413);
 	}
 
+	/**
+	 * Les envois de fichiers n'utilisent pas la limite JSON.
+	 *
+	 * @return void
+	 */
 	public function test_file_uploads_do_not_use_the_json_limit(): void
 	{
 		config(['api.max_json_size' => 1024]);

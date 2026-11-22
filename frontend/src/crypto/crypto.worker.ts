@@ -22,6 +22,9 @@ interface AuthRequest {
 /**
  * Instancie un binaire WebAssembly servi par l'origine (CSP `'self'`,
  * `'wasm-unsafe-eval'`), sans URL `data:`.
+ *
+ * @param url URL du binaire, sur la même origine.
+ * @returns Le module instancié et son instance.
  */
 function instantiate(url: string) {
 	return (imports: WebAssembly.Imports) => WebAssembly.instantiateStreaming(fetch(url), imports)

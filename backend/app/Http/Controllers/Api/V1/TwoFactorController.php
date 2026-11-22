@@ -22,12 +22,21 @@ use Illuminate\Validation\ValidationException;
  */
 class TwoFactorController extends Controller
 {
+	/**
+	 * Reçoit le service TOTP et le service de verrouillage des comptes.
+	 *
+	 * @param TwoFactor $twoFactor Service TOTP.
+	 * @param AccountLockout $lockout Verrouillage des comptes.
+	 */
 	public function __construct(private readonly TwoFactor $twoFactor, private readonly AccountLockout $lockout)
 	{
 	}
 
 	/**
 	 * Démarre (ou recommence) l'enrôlement : nouveau secret et URL du QR code.
+	 *
+	 * @param Request $request Requête courante.
+	 * @return JsonResponse
 	 */
 	public function store(Request $request): JsonResponse
 	{
@@ -47,6 +56,9 @@ class TwoFactorController extends Controller
 
 	/**
 	 * Confirme l'enrôlement par un premier code et renvoie les codes de secours.
+	 *
+	 * @param Request $request Requête portant le code de confirmation.
+	 * @return JsonResponse
 	 */
 	public function confirm(Request $request): JsonResponse
 	{
@@ -63,6 +75,9 @@ class TwoFactorController extends Controller
 
 	/**
 	 * Remplace les codes de secours (les anciens ne valent plus).
+	 *
+	 * @param Request $request Requête portant un code valide.
+	 * @return JsonResponse
 	 */
 	public function regenerateRecoveryCodes(Request $request): JsonResponse
 	{
@@ -77,6 +92,9 @@ class TwoFactorController extends Controller
 
 	/**
 	 * Désactive la double authentification, sauf si la politique d'instance l'impose.
+	 *
+	 * @param Request $request Requête portant un code valide.
+	 * @return Response
 	 */
 	public function destroy(Request $request): Response
 	{
@@ -98,6 +116,9 @@ class TwoFactorController extends Controller
 
 	/**
 	 * Utilisateur connecté.
+	 *
+	 * @param Request $request Requête courante.
+	 * @return User
 	 */
 	private function user(Request $request): User
 	{
@@ -109,6 +130,9 @@ class TwoFactorController extends Controller
 
 	/**
 	 * Code TOTP saisi (6 chiffres, espaces tolérés ; la forme est vérifiée ensuite).
+	 *
+	 * @param Request $request Requête courante.
+	 * @return string
 	 */
 	private function validatedCode(Request $request): string
 	{
@@ -119,6 +143,10 @@ class TwoFactorController extends Controller
 	 * Lève une erreur de validation si le code TOTP est faux ou déjà utilisé. Un code
 	 * faux compte dans le verrouillage du compte : une session volée ne permet pas de
 	 * deviner un code pour désactiver ou renouveler.
+	 *
+	 * @param User $user Compte authentifié.
+	 * @param string $code Code TOTP saisi.
+	 * @return void
 	 */
 	private function requireValidCode(User $user, string $code): void
 	{

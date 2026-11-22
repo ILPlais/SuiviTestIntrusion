@@ -17,6 +17,11 @@ class TrustedProxiesTest extends TestCase
 	/** Adresse du proxy inverse déclarée dans les tests. */
 	private const PROXY = '10.20.30.40';
 
+	/**
+	 * Déclare une route de test qui renvoie l'adresse, le schéma et l'URL vus par l'application.
+	 *
+	 * @return void
+	 */
 	protected function setUp(): void
 	{
 		parent::setUp();
@@ -33,6 +38,7 @@ class TrustedProxiesTest extends TestCase
 	/**
 	 * Envoie une requête relayée : adresse du pair et en-têtes X-Forwarded-*.
 	 *
+	 * @param string $peer Adresse du pair TCP (REMOTE_ADDR).
 	 * @return array<string, mixed>
 	 */
 	private function relayedRequest(string $peer): array
@@ -49,6 +55,11 @@ class TrustedProxiesTest extends TestCase
 			->json();
 	}
 
+	/**
+	 * Le proxy déclaré est approuvé pour les en-têtes transmis.
+	 *
+	 * @return void
+	 */
 	public function test_the_declared_proxy_is_trusted_for_forwarded_headers(): void
 	{
 		config(['trustedproxy.proxies' => [self::PROXY]]);
@@ -60,6 +71,11 @@ class TrustedProxiesTest extends TestCase
 		$this->assertSame('https://pentest.example.org/chemin', $result['url']);
 	}
 
+	/**
+	 * Les en-têtes transmis depuis une autre adresse sont ignorés.
+	 *
+	 * @return void
+	 */
 	public function test_forwarded_headers_from_another_address_are_ignored(): void
 	{
 		config(['trustedproxy.proxies' => [self::PROXY]]);
@@ -70,6 +86,11 @@ class TrustedProxiesTest extends TestCase
 		$this->assertSame('10.20.30.99', $result['ip']);
 	}
 
+	/**
+	 * Aucun proxy n'est approuvé par défaut.
+	 *
+	 * @return void
+	 */
 	public function test_no_proxy_is_trusted_by_default(): void
 	{
 		config(['trustedproxy.proxies' => []]);
@@ -80,6 +101,11 @@ class TrustedProxiesTest extends TestCase
 		$this->assertSame(self::PROXY, $result['ip']);
 	}
 
+	/**
+	 * Un joker refusé est signalé dans le journal.
+	 *
+	 * @return void
+	 */
 	public function test_a_rejected_wildcard_is_reported_in_the_log(): void
 	{
 		config(['trustedproxy.wildcard_rejected' => true]);
@@ -90,6 +116,11 @@ class TrustedProxiesTest extends TestCase
 		$log->shouldHaveReceived('warning')->once();
 	}
 
+	/**
+	 * L'environnement d'exemple documente les proxys approuvés.
+	 *
+	 * @return void
+	 */
 	public function test_the_example_environment_documents_trusted_proxies(): void
 	{
 		$this->assertStringContainsString('TRUSTED_PROXIES=', file_get_contents(base_path('.env.example')));

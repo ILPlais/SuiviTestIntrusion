@@ -24,6 +24,9 @@ final class AccountLockout
 	/**
 	 * Vrai si le compte ne peut pas tenter de connexion maintenant (verrouillé, ou
 	 * délai de ralentissement non écoulé). Une telle tentative n'est pas comptée.
+	 *
+	 * @param User $user Compte qui tente de se connecter.
+	 * @return bool
 	 */
 	public function blocks(User $user): bool
 	{
@@ -45,6 +48,9 @@ final class AccountLockout
 
 	/**
 	 * Compte un échec et verrouille le compte au seuil.
+	 *
+	 * @param User $user Compte dont la tentative a échoué.
+	 * @return void
 	 */
 	public function recordFailure(User $user): void
 	{
@@ -69,6 +75,9 @@ final class AccountLockout
 
 	/**
 	 * Remet le compteur à zéro (connexion réussie, verrouillage échu).
+	 *
+	 * @param User $user Compte qui vient de réussir.
+	 * @return void
 	 */
 	public function reset(User $user): void
 	{
@@ -86,6 +95,9 @@ final class AccountLockout
 	/**
 	 * Date à partir de laquelle une nouvelle tentative est permise pendant le
 	 * ralentissement, ou null si aucun délai ne s'applique.
+	 *
+	 * @param User $user Compte examiné.
+	 * @return ?CarbonInterface
 	 */
 	private function nextAttemptAt(User $user): ?CarbonInterface
 	{

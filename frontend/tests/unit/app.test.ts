@@ -16,7 +16,13 @@ import { createAppRouter } from '../../src/router'
 
 type Messages = { [key: string]: string | Messages }
 
-/** Remplace chaque message par sa clé : tout texte affiché hors de ces marqueurs est écrit en dur. */
+/**
+ * Remplace chaque message par sa clé : tout texte affiché hors de ces marqueurs est écrit en dur.
+ *
+ * @param messages Messages d'origine.
+ * @param prefix Préfixe de clé (récursion).
+ * @returns Les messages remplacés par leurs clés.
+ */
 function pseudo(messages: Messages, prefix = ''): Messages {
 	return Object.fromEntries(Object.entries(messages).map(([key, value]) => {
 		const path = prefix ? `${prefix}.${key}` : key
@@ -24,14 +30,24 @@ function pseudo(messages: Messages, prefix = ''): Messages {
 	}))
 }
 
-/** Simule l'API : santé donnée, aucune session ouverte. */
+/**
+ * Simule l'API : santé donnée, aucune session ouverte.
+ *
+ * @param status Statut renvoyé par /health.
+ * @param health Corps renvoyé par /health.
+ */
 function stubApi(status: number, health: unknown) {
 	vi.stubGlobal('fetch', vi.fn(async (url: string) => url.includes('/health')
 		? new Response(JSON.stringify(health), { status })
 		: new Response(JSON.stringify({ code: 'unauthenticated', message: '', details: {} }), { status: 401 })))
 }
 
-/** Monte l'application sur la route `/`, avec le jeu de messages donné. */
+/**
+ * Monte l'application sur la route `/`, avec le jeu de messages donné.
+ *
+ * @param messages Plugin vue-i18n à utiliser.
+ * @returns Le composant monté.
+ */
 async function mountApp(messages: Plugin) {
 	const pinia = createPinia()
 	setActivePinia(pinia)

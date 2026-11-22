@@ -22,6 +22,11 @@ class RateLimitTest extends TestCase
 {
 	use RefreshDatabase;
 
+	/**
+	 * Déclare une route de test par classe de limitation et de concurrence.
+	 *
+	 * @return void
+	 */
 	protected function setUp(): void
 	{
 		parent::setUp();
@@ -41,6 +46,11 @@ class RateLimitTest extends TestCase
 		});
 	}
 
+	/**
+	 * Les plafonds par défaut suivent la spécification.
+	 *
+	 * @return void
+	 */
 	public function test_default_ceilings_follow_the_specification(): void
 	{
 		$this->assertSame(60, config('api.rate_limits.standard.per_minute'));
@@ -51,6 +61,11 @@ class RateLimitTest extends TestCase
 		$this->assertSame(10, config('api.rate_limits.auth.per_minute'));
 	}
 
+	/**
+	 * Les plafonds sont documentés dans l'environnement d'exemple.
+	 *
+	 * @return void
+	 */
 	public function test_ceilings_are_documented_in_the_example_environment(): void
 	{
 		$example = file_get_contents(base_path('.env.example'));
@@ -60,6 +75,11 @@ class RateLimitTest extends TestCase
 		}
 	}
 
+	/**
+	 * Les réponses réussies annoncent le plafond.
+	 *
+	 * @return void
+	 */
 	public function test_successful_responses_announce_the_ceiling(): void
 	{
 		config(['api.rate_limits.standard.per_minute' => 3]);
@@ -70,6 +90,11 @@ class RateLimitTest extends TestCase
 			->assertHeader('X-RateLimit-Remaining', '2');
 	}
 
+	/**
+	 * Le dépassement du plafond renvoie 429 avec les en-têtes attendus.
+	 *
+	 * @return void
+	 */
 	public function test_exceeding_the_ceiling_returns_429_with_headers(): void
 	{
 		config(['api.rate_limits.standard.per_minute' => 2]);
@@ -85,6 +110,11 @@ class RateLimitTest extends TestCase
 			->assertHeader('Retry-After', '60');
 	}
 
+	/**
+	 * L'API versionnée utilise la classe standard.
+	 *
+	 * @return void
+	 */
 	public function test_the_versioned_api_uses_the_standard_class(): void
 	{
 		config(['api.rate_limits.standard.per_minute' => 1]);
@@ -93,6 +123,11 @@ class RateLimitTest extends TestCase
 		$this->getJson('/api/v1/health')->assertStatus(429);
 	}
 
+	/**
+	 * Chaque utilisateur a son propre compteur.
+	 *
+	 * @return void
+	 */
 	public function test_each_user_has_their_own_counter(): void
 	{
 		config(['api.rate_limits.standard.per_minute' => 1]);
@@ -106,6 +141,11 @@ class RateLimitTest extends TestCase
 		$this->getJson('/api/v1/_debit/connecte')->assertOk();
 	}
 
+	/**
+	 * Des utilisateurs à jetons réels derrière une même adresse ont chacun leur compteur.
+	 *
+	 * @return void
+	 */
 	public function test_users_with_real_tokens_behind_one_address_have_their_own_counter(): void
 	{
 		// Vrai jeton Bearer, sans Sanctum::actingAs (qui change le garde par défaut) :
@@ -123,6 +163,11 @@ class RateLimitTest extends TestCase
 		$this->withToken($tokenBob)->getJson('/api/v1/user')->assertOk();
 	}
 
+	/**
+	 * Les classes écriture lourde et export ont leurs propres plafonds.
+	 *
+	 * @return void
+	 */
 	public function test_heavy_write_and_export_classes_have_their_own_ceilings(): void
 	{
 		config(['api.rate_limits.heavy.per_minute' => 1, 'api.rate_limits.export.per_minute' => 1]);
@@ -135,6 +180,11 @@ class RateLimitTest extends TestCase
 		$this->postJson('/api/v1/_debit/export')->assertStatus(429);
 	}
 
+	/**
+	 * La classe auth compte par adresse, même pour des utilisateurs différents.
+	 *
+	 * @return void
+	 */
 	public function test_auth_class_counts_per_address_even_for_different_users(): void
 	{
 		config(['api.rate_limits.auth.per_minute' => 1]);
@@ -148,6 +198,11 @@ class RateLimitTest extends TestCase
 			->assertOk();
 	}
 
+	/**
+	 * La classe auth regroupe les adresses IPv6 par préfixe /64.
+	 *
+	 * @return void
+	 */
 	public function test_auth_class_groups_ipv6_addresses_by_64_bit_prefix(): void
 	{
 		// Un client disposant d'un /64 ne multiplie pas ses compteurs en changeant d'adresse.
@@ -158,6 +213,11 @@ class RateLimitTest extends TestCase
 		$this->withServerVariables(['REMOTE_ADDR' => '2001:db8:0:2::1'])->postJson('/api/v1/_debit/connexion')->assertOk();
 	}
 
+	/**
+	 * Les blocages de la classe auth s'allongent à chaque fois.
+	 *
+	 * @return void
+	 */
 	public function test_auth_lockouts_get_longer_each_time(): void
 	{
 		config(['api.rate_limits.auth.per_minute' => 1]);
@@ -171,6 +231,11 @@ class RateLimitTest extends TestCase
 		$this->postJson('/api/v1/_debit/connexion')->assertStatus(429)->assertHeader('Retry-After', '120');
 	}
 
+	/**
+	 * Un blocage de la classe auth ne dépasse jamais le maximum.
+	 *
+	 * @return void
+	 */
 	public function test_auth_lockout_never_exceeds_the_maximum(): void
 	{
 		config(['api.rate_limits.auth.per_minute' => 1, 'api.rate_limits.auth.max_lockout_seconds' => 90]);
@@ -183,6 +248,11 @@ class RateLimitTest extends TestCase
 		$this->postJson('/api/v1/_debit/connexion')->assertStatus(429)->assertHeader('Retry-After', '90');
 	}
 
+	/**
+	 * Un dépassement de plafond émet un événement d'audit.
+	 *
+	 * @return void
+	 */
 	public function test_exceeding_a_ceiling_emits_an_audit_event(): void
 	{
 		Event::fake([RateLimitExceeded::class]);
@@ -197,6 +267,11 @@ class RateLimitTest extends TestCase
 			&& $event->path === 'api/v1/_debit/standard');
 	}
 
+	/**
+	 * L'événement d'audit ne porte jamais le corps de la requête.
+	 *
+	 * @return void
+	 */
 	public function test_the_audit_event_never_carries_the_request_body(): void
 	{
 		Event::fake([RateLimitExceeded::class]);
@@ -208,6 +283,11 @@ class RateLimitTest extends TestCase
 		Event::assertDispatched(RateLimitExceeded::class, fn (RateLimitExceeded $event) => ! str_contains(serialize($event), 'secret-de-test'));
 	}
 
+	/**
+	 * Un dépassement de plafond est écrit dans le journal.
+	 *
+	 * @return void
+	 */
 	public function test_exceeding_a_ceiling_is_written_to_the_log(): void
 	{
 		config(['api.rate_limits.standard.per_minute' => 1]);
@@ -222,6 +302,11 @@ class RateLimitTest extends TestCase
 			->once();
 	}
 
+	/**
+	 * Les écritures lourdes simultanées sont limitées par utilisateur.
+	 *
+	 * @return void
+	 */
 	public function test_concurrent_heavy_writes_are_limited_per_user(): void
 	{
 		$user = User::factory()->create();
@@ -242,12 +327,22 @@ class RateLimitTest extends TestCase
 		$this->postJson('/api/v1/_debit/televersement')->assertOk();
 	}
 
+	/**
+	 * Une place de concurrence est libérée après la réponse.
+	 *
+	 * @return void
+	 */
 	public function test_a_concurrency_slot_is_released_after_the_response(): void
 	{
 		$this->postJson('/api/v1/_debit/televersement')->assertOk();
 		$this->postJson('/api/v1/_debit/televersement')->assertOk();
 	}
 
+	/**
+	 * Une réponse en flux garde sa place jusqu'à la fin de la requête.
+	 *
+	 * @return void
+	 */
 	public function test_a_streamed_response_keeps_its_slot_until_the_request_ends(): void
 	{
 		config(['api.rate_limits.export.concurrent' => 1]);
