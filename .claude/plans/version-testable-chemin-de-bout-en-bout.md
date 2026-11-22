@@ -8,15 +8,15 @@ Pouvoir dérouler un parcours de testeur complet, en local comme dans Docker : c
 
 ## Étapes
 
-| Étape | Stories | Points |
-| --- | --- | --- |
-| 0. Prérequis | Détailler 14.01 (fait le 2026-11-21 : phases fixes, table commune + table par type pour le périmètre, ULID, rôle par organisation) | doc |
-| 1. Fin du sprint 3 | socle-6, identite-1, identite-3 | 7 |
-| 2. Comptes et droits | identite-5 | 5 |
-| 3. Le test | engagement-1, engagement-2, engagement-4 | 8 |
-| 4. Vulnérabilités | vulnerabilites-1, vulnerabilites-3, vulnerabilites-5 | 9 |
-| 5. Synthèse | resultats-1 | 3 |
-| 6. Rendre testable | Commande Artisan du premier administrateur, données de démonstration, procédure de test dans 42.01 | hors story |
+| Étape                | Stories                                                                                                                            | Points     |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| 0. Prérequis         | Détailler 14.01 (fait le 2026-11-21 : phases fixes, table commune + table par type pour le périmètre, ULID, rôle par organisation) | doc        |
+| 1. Fin du sprint 3   | [[socle-6]], [[identite-1]], [[identite-3]]                                                                                        | 7          |
+| 2. Comptes et droits | [[identite-5]]                                                                                                                     | 5          |
+| 3. Le test           | [[engagement-1]], [[engagement-2]], [[engagement-4]]                                                                               | 8          |
+| 4. Vulnérabilités    | [[vulnerabilites-1]], [[vulnerabilites-3]], [[vulnerabilites-5]]                                                                   | 9          |
+| 5. Synthèse          | [[resultats-1]]                                                                                                                    | 3          |
+| 6. Rendre testable   | Commande Artisan du premier administrateur, données de démonstration, procédure de test dans 42.01                                 | hors story |
 
 Total : 32 points, environ deux sprints (fin du sprint 3, sprint 4 réorganisé), 5 à 7 h au rythme mesuré.
 
@@ -26,7 +26,7 @@ Une branche `feature/<id>` par story, tests d'abord, revue par un agent, CI vert
 
 ## Risques
 
-- identite-5 (ACL, isolation multi-organisation) plus complexe que ses 5 points : isolation testée dès la première ressource, découpage si besoin.
+- [[identite-5]] (ACL, isolation multi-organisation) plus complexe que ses 5 points : isolation testée dès la première ressource, découpage si besoin.
 - Partie SPA sous-estimée dans les points : écrans sobres, accessibilité contrôlée par axe.
 - Version testable sans chiffrement des preuves : assumé, ged-chiffree-1 à 4 suivent.
 - 22.01 à mettre à jour : ce chemin passe les tests et les vulnérabilités avant la GED chiffrée.
