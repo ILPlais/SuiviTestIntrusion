@@ -3,7 +3,7 @@
 **ID:** engagement-1
 **Epic:** engagement
 **Sprint:** 4
-**Status:** in-progress
+**Status:** done
 **Points:** 2
 
 ## Context
@@ -12,8 +12,8 @@ En tant que chef de projet, je veux gérer les fiches des acteurs d'un test.
 
 ## Acceptance Criteria
 
-- [ ] CRUD entreprise prestataire, testeur, client (tenant)
-- [ ] Présentation en texte riche
+- [x] CRUD entreprise prestataire, testeur, client (tenant)
+- [x] Présentation en texte riche
 
 ## Technical Notes
 
@@ -29,6 +29,6 @@ Reporté de la revue de sécurité d'identite-5, à traiter avec les premiers ob
 
 ## Definition of Done
 
-- [ ] Tests written first cover the acceptance criteria
-- [ ] Code review and verification loop passed
-- [ ] Code merged to main
+- [x] Tests written first cover the acceptance criteria
+- [x] Code review and verification loop passed
+- [x] Code merged to main
