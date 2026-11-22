@@ -11,15 +11,21 @@
 - Plan validé : .claude/plans/version-testable-chemin-de-bout-en-bout.md (version testable : identite-5, engagement-1/2/4, vulnerabilites-1/3/5, resultats-1).
 - Conseil sur le catalogue de méthodologies : recommandation en attente de décision de l'utilisateur (PASSI en attribut d'engagement, OSSTMM via « Autre », mention au lieu d'alerte, copie nom/version/date sur le test).
 - Tableau blanc de l'interface : https://claude.ai/artifact/7tESijV5R8g3uxX3RD1DHM (envoyé au projet Suivi Test Intrusion).
+- Mise en conformité DocBlock/JSDoc fusionnée : règle Larastan TestsPHPStanRequireTypedDocBlockRule, règles phpdoc_* de PHP-CS-Fixer, eslint-plugin-jsdoc (21.01).
+- Sprint 4 planifié (13 points) : identite-5 terminée (0 h 30 ; tenants, TenantRole, TenantScope échouant fermé, trait BelongsToTenant, 404 hors organisation), engagement-1 terminée (0 h 40 ; TenantPolicy, fiche entreprise, profil, texte riche en Markdown rendu par src/render/ avec liste blanche DOMPurify stricte, styles de base 24 px). Restent engagement-2 et engagement-4.
 - Nouvelles conventions (2026-11-21) : DocBlock typé pour chaque élément PHP, JSDoc pour chaque fonction JS/TS (21.01, CLAUDE.md, mémoire).
 
 ### Next Session
-1. Mise en conformité DocBlock/JSDoc du code existant dans une branche dédiée, avec règles de lint bloquantes (PHP-CS-Fixer phpdoc_*, eslint-plugin-jsdoc).
-2. story-lifecycle plan-sprint 4 (identite-5, engagement-1, engagement-2, engagement-4…), puis implement identite-5.
-3. Points reportés des revues : DOMPurify en liste blanche, usage explicite de sti-worker, intercepteur CSRF de Swagger UI, réauthentification avant enrôlement TOTP, désactivation par code de secours, rejet de « * » dans CORS_ALLOWED_ORIGINS.
+1. implement engagement-2 (tests, statuts, 5 phases fixes, équipe test_user), puis engagement-4 (périmètre réseau, table commune + tables par type) ; appliquer les notes techniques d'engagement-1 restantes : tenant_id hors Fillable et affecté côté serveur, policies par rôle, interdire DB::table/withoutGlobalScope hors AppTenancy, mémoriser visibleTenantIds par requête.
+2. Puis plan-sprint 5 : vulnerabilites-1/3/5, resultats-1 ; étape 6 du plan (données démo, procédure 42.01).
+3. Points reportés des revues : intercepteur CSRF de Swagger UI, réauthentification avant enrôlement TOTP, désactivation par code de secours, rejet de « * » dans CORS_ALLOWED_ORIGINS, journal d'audit à la suppression d'une organisation (identite-6).
+4. Décision de l'utilisateur toujours en attente sur le catalogue de méthodologies (conseil).
 
 ### Notes
 - Chromium ne démarre pas dans le WSL (libasound2) : E2E en CI seulement, sauf `sudo npx playwright install-deps chromium`.
 - Docker absent du WSL : pile vérifiée par docker/tests/smoke.sh en CI.
+- Texte écrit dans un heredoc bash : les \ sont réduits ; écrire les fichiers PHP avec Write/Edit.
+- Mode page de ApiListQuery : paramètre ?page=1 ; deux role=status possibles (pied de page santé) dans les tests e2e : cibler par texte.
+- Toute nouvelle dépendance npm : régénérer THIRD-PARTY-NOTICES.md (node scripts/licenses/licenses.mjs).
 - GateGuard (ECC) double le coût de chaque création de fichier : suggérer GATEGUARD_EXEMPT_GLOBS.
 - Remplacements par script Node : utiliser split/join (jamais String.replace avec une chaîne contenant $).
