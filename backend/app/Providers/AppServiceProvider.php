@@ -37,6 +37,9 @@ class AppServiceProvider extends ServiceProvider
 		// Documentation de l'API : administrateurs d'instance seulement (11.03).
 		Gate::define('view-api-documentation', fn (User $user) => $user->is_instance_admin);
 
+		// Fiche de l'entreprise prestataire : administrateurs d'instance (engagement-1).
+		Gate::define('manage-company-profile', fn (User $user) => $user->is_instance_admin);
+
 		// Un joker dans TRUSTED_PROXIES est écarté (13.06) ; l'exploitant en est averti,
 		// car son proxy n'est alors pas reconnu (URL en HTTP, adresse du proxy journalisée).
 		if (config('trustedproxy.wildcard_rejected')) {

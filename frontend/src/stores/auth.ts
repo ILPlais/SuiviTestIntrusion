@@ -16,6 +16,10 @@ export interface CurrentUser {
 	name: string
 	email: string
 	is_instance_admin: boolean
+	/** Poste (profil de testeur, engagement-1). */
+	job_title: string | null
+	/** Présentation en Markdown (engagement-1). */
+	presentation: string | null
 	/** Double authentification confirmée (identite-3). */
 	two_factor_enabled: boolean
 	/** La politique d'instance impose un second facteur que le compte n'a pas encore. */

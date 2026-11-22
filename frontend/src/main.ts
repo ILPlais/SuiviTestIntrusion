@@ -8,6 +8,7 @@ import App from './App.vue'
 import { i18n } from './i18n'
 import { createAppRouter } from './router'
 import { installTrustedTypesPolicies } from './security/trustedTypes'
+import './styles/base.css'
 
 // Politiques Trusted Types avant tout rendu : la CSP refuse toute chaîne brute (13.04).
 installTrustedTypesPolicies()

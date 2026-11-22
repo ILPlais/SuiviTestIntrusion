@@ -1,0 +1,42 @@
+/*
+ * Styles de base de la SPA (13.07) : servis comme fichier de la même origine
+ * (CSP style-src 'self'). Ils assurent des cibles d'au moins 24 px (WCAG 2.2,
+ * critère 2.5.8) et une mise en page lisible, en attendant la charte graphique.
+ */
+
+/* Navigation : liens et boutons espacés, de taille suffisante au doigt. */
+header nav {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+header nav a,
+button {
+	display: inline-flex;
+	align-items: center;
+	min-height: 24px;
+	min-width: 24px;
+	padding: 0.25rem 0.5rem;
+}
+
+/* Formulaires : un champ par ligne, sous son libellé. */
+form label,
+form input,
+form textarea {
+	display: block;
+	margin-block: 0.25rem;
+}
+
+form input,
+form textarea {
+	width: min(40rem, 100%);
+	min-height: 24px;
+}
+
+/* Listes de liens (organisations) : lignes assez hautes pour être touchées. */
+main li {
+	min-height: 24px;
+	margin-block: 0.25rem;
+}

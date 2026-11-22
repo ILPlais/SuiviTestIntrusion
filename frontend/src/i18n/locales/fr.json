@@ -2,6 +2,56 @@
 	"app": {
 		"title": "Suivi des tests d'intrusion"
 	},
+	"common": {
+		"loading": "Chargement…",
+		"save": "Enregistrer",
+		"saved": "Modifications enregistrées.",
+		"edit": "Modifier",
+		"cancel": "Annuler",
+		"none": "non renseigné"
+	},
+	"nav": {
+		"organisations": "Organisations",
+		"company": "Entreprise"
+	},
+	"markdown": {
+		"help": "Mise en forme Markdown : **gras**, *italique*, listes avec « - », titres avec « ## », liens [texte](https://…).",
+		"preview": "Aperçu",
+		"edit": "Revenir à la saisie"
+	},
+	"roles": {
+		"project_manager": "chef de projet",
+		"tester": "testeur",
+		"client": "client final",
+		"administrator": "administrateur de l'instance"
+	},
+	"organisations": {
+		"heading": "Organisations clientes",
+		"empty": "Aucune organisation.",
+		"name": "Nom",
+		"legalName": "Raison sociale",
+		"presentation": "Présentation",
+		"role": "Votre rôle",
+		"roleSuffix": " — {role}",
+		"create": "Créer une organisation",
+		"delete": "Supprimer l'organisation",
+		"confirmDelete": "Supprimer définitivement l'organisation « {name} » et tout ce qui lui appartient ?",
+		"notFound": "Cette organisation est introuvable."
+	},
+	"company": {
+		"heading": "Entreprise prestataire",
+		"empty": "La fiche de l'entreprise n'est pas encore remplie.",
+		"name": "Nom",
+		"legalName": "Raison sociale",
+		"presentation": "Présentation"
+	},
+	"profile": {
+		"heading": "Mon profil",
+		"email": "Adresse e-mail : {email}",
+		"name": "Nom",
+		"jobTitle": "Poste",
+		"presentation": "Présentation"
+	},
 	"health": {
 		"heading": "État de l'instance",
 		"checking": "Vérification de l'API…",

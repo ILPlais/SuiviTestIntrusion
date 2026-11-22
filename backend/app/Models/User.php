@@ -25,6 +25,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property int $id
  * @property string $name
  * @property string $email
+ * @property string|null $job_title
+ * @property string|null $presentation
  * @property bool $is_instance_admin
  * @property int $failed_login_count
  * @property \Carbon\CarbonImmutable|\Illuminate\Support\Carbon|null $last_failed_login_at
@@ -44,6 +46,14 @@ class User extends Authenticatable
 	/** @use HasFactory<UserFactory> */
 	use HasFactory;
 	use Notifiable;
+
+	/**
+	 * Valeurs par défaut, identiques à celles de la base : un compte tout juste
+	 * créé, pas encore relu, n'est jamais administrateur.
+	 *
+	 * @var array<string, mixed>
+	 */
+	protected $attributes = ['is_instance_admin' => false];
 
 	/**
 	 * Organisations de rattachement, avec le rôle dans chacune (identite-5). C'est
@@ -99,7 +109,7 @@ class User extends Authenticatable
 	 * « two_factor_setup_required » : la politique d'instance impose un second
 	 * facteur que le compte n'a pas encore.
 	 *
-	 * @return array{id: int, name: string, email: string, is_instance_admin: bool, two_factor_enabled: bool, two_factor_setup_required: bool}
+	 * @return array{id: int, name: string, email: string, is_instance_admin: bool, job_title: string|null, presentation: string|null, two_factor_enabled: bool, two_factor_setup_required: bool}
 	 */
 	public function toPublicArray(): array
 	{
@@ -108,6 +118,8 @@ class User extends Authenticatable
 			'name' => $this->name,
 			'email' => $this->email,
 			'is_instance_admin' => $this->is_instance_admin,
+			'job_title' => $this->job_title,
+			'presentation' => $this->presentation,
 			'two_factor_enabled' => $this->hasTwoFactor(),
 			'two_factor_setup_required' => (bool) config('suivi.authentication.two_factor_required') && ! $this->hasTwoFactor(),
 		];

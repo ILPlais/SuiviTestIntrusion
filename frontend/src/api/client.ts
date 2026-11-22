@@ -90,6 +90,28 @@ export async function deleteJson<T = null>(path: string, body: unknown = {}): Pr
 }
 
 /**
+ * PATCH (JSON) avec jeton CSRF : modifie les champs fournis.
+ *
+ * @param path Chemin relatif à `/api/v1`.
+ * @param body Champs modifiés, envoyés en JSON.
+ * @returns Le corps JSON décodé.
+ */
+export async function patchJson<T>(path: string, body: unknown): Promise<T> {
+	return send<T>('PATCH', path, body)
+}
+
+/**
+ * PUT (JSON) avec jeton CSRF : remplace la ressource.
+ *
+ * @param path Chemin relatif à `/api/v1`.
+ * @param body Ressource complète, envoyée en JSON.
+ * @returns Le corps JSON décodé.
+ */
+export async function putJson<T>(path: string, body: unknown): Promise<T> {
+	return send<T>('PUT', path, body)
+}
+
+/**
  * Requête qui modifie quelque chose : corps JSON et jeton CSRF de Sanctum.
  *
  * @param method Verbe HTTP.
@@ -97,7 +119,7 @@ export async function deleteJson<T = null>(path: string, body: unknown = {}): Pr
  * @param body Corps envoyé en JSON.
  * @returns Le corps JSON décodé, ou null pour 204.
  */
-async function send<T>(method: 'POST' | 'DELETE', path: string, body: unknown): Promise<T> {
+async function send<T>(method: 'POST' | 'PUT' | 'PATCH' | 'DELETE', path: string, body: unknown): Promise<T> {
 	const response = await fetch(`${API_BASE}${path}`, {
 		method,
 		credentials: 'same-origin',

@@ -19,6 +19,10 @@ export function createAppRouter(history: RouterHistory = createWebHistory()): Ro
 		routes: [
 			{ path: '/', name: 'home', component: () => import('./views/HomeView.vue'), meta: { requiresAuth: true } },
 			{ path: '/securite', name: 'security', component: () => import('./views/SecurityView.vue'), meta: { requiresAuth: true } },
+			{ path: '/profil', name: 'profile', component: () => import('./views/ProfileView.vue'), meta: { requiresAuth: true } },
+			{ path: '/organisations', name: 'organisations', component: () => import('./views/OrganisationsView.vue'), meta: { requiresAuth: true } },
+			{ path: '/organisations/:id', name: 'organisation', component: () => import('./views/OrganisationView.vue'), props: true, meta: { requiresAuth: true } },
+			{ path: '/entreprise', name: 'company', component: () => import('./views/CompanyView.vue'), meta: { requiresAuth: true } },
 			{ path: '/connexion', name: 'login', component: () => import('./views/LoginView.vue') },
 			{ path: '/activation/:token', name: 'activation', component: () => import('./views/ActivationView.vue'), props: true },
 			{ path: '/:chemin(.*)*', redirect: { name: 'home' } },

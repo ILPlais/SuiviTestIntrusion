@@ -27,7 +27,15 @@ async function logout(): Promise<void> {
 			v-if="auth.user"
 			:aria-label="t('auth.accountMenu')"
 		>
-			<span>{{ auth.user.name }}</span>
+			<RouterLink :to="{ name: 'organisations' }">
+				{{ t('nav.organisations') }}
+			</RouterLink>
+			<RouterLink :to="{ name: 'company' }">
+				{{ t('nav.company') }}
+			</RouterLink>
+			<RouterLink :to="{ name: 'profile' }">
+				{{ auth.user.name }}
+			</RouterLink>
 			<RouterLink :to="{ name: 'security' }">
 				{{ t('auth.security') }}
 			</RouterLink>
