@@ -47,6 +47,8 @@ async function load(): Promise<void> {
 		organisations.value = tenants.data
 		form.value.tenant_id = managed.value[0]?.id ?? ''
 	} catch {
+		// Liste vide plutôt qu'un « Chargement… » permanent sous l'alerte.
+		tests.value = []
 		error.value = t('auth.unexpected')
 	}
 }

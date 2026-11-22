@@ -73,24 +73,27 @@ function historyLine(change: StatusChange): string {
  * @param id Identifiant du test.
  */
 async function load(id: string): Promise<void> {
+	// Changement de fiche : rien de la précédente ne doit subsister (formulaire
+	// ouvert, messages, saisie de statut).
+	test.value = null
 	missing.value = false
+	editing.value = false
+	message.value = null
+	error.value = null
+	transition.value = { status: '', comment: '' }
 	try {
-		show((await getJson<{ data: PenetrationTest }>(`/tests/${encodeURIComponent(id)}`)).data)
+		const received = (await getJson<{ data: PenetrationTest }>(`/tests/${encodeURIComponent(id)}`)).data
+		// Réponse d'une fiche quittée entre-temps : ignorée.
+		if (id === props.id) {
+			test.value = received
+		}
 	} catch (caught) {
-		test.value = null
+		if (id !== props.id) {
+			return
+		}
 		missing.value = caught instanceof ApiError && caught.status === 404
 		error.value = missing.value ? null : t('auth.unexpected')
 	}
-}
-
-/**
- * Affiche une fiche reçue de l'API et réinitialise le changement de statut.
- *
- * @param received Fiche du test.
- */
-function show(received: PenetrationTest): void {
-	test.value = received
-	transition.value = { status: '', comment: '' }
 }
 
 /** Ouvre le formulaire, prérempli avec la fiche courante. */
@@ -119,8 +122,13 @@ async function write(request: () => Promise<{ data: PenetrationTest }>, done: st
 	busy.value = true
 	error.value = null
 	message.value = null
+	const id = props.id
 	try {
-		show((await request()).data)
+		const received = (await request()).data
+		if (id !== props.id) {
+			return
+		}
+		test.value = received
 		editing.value = false
 		message.value = done
 	} catch (caught) {
@@ -145,6 +153,11 @@ async function changeStatus(): Promise<void> {
 		status: transition.value.status,
 		comment: transition.value.comment || null,
 	}), t('tests.statusChanged'))
+	// La saisie n'est vidée qu'après un changement réussi : en cas d'erreur, elle
+	// reste à corriger.
+	if (!error.value) {
+		transition.value = { status: '', comment: '' }
+	}
 }
 
 /** Supprime le test après confirmation, puis revient à la liste. */
@@ -153,6 +166,7 @@ async function remove(): Promise<void> {
 		return
 	}
 	busy.value = true
+	error.value = null
 	try {
 		await deleteJson(`/tests/${encodeURIComponent(props.id)}`)
 		await router.push({ name: 'tests' })

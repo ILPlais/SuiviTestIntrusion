@@ -50,6 +50,8 @@ return new class () extends Migration {
 			$table->timestamps();
 
 			$table->unique(['test_id', 'code']);
+			// PostgreSQL n'indexe pas les clés étrangères : le filtre par organisation en a besoin.
+			$table->index('tenant_id');
 		});
 
 		Schema::create('test_status_changes', function (Blueprint $table) {
@@ -64,6 +66,7 @@ return new class () extends Migration {
 			$table->timestamps();
 
 			$table->index(['test_id', 'created_at']);
+			$table->index('tenant_id');
 		});
 	}
 

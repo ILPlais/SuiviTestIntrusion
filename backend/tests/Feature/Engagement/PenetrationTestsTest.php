@@ -190,6 +190,47 @@ class PenetrationTestsTest extends TestCase
 	}
 
 	/**
+	 * Les dates prévues sont ramenées en UTC, et bornées pour rester valides sur
+	 * tous les SGBD.
+	 *
+	 * @return void
+	 */
+	public function test_planned_dates_are_stored_in_utc_within_a_sane_range(): void
+	{
+		Sanctum::actingAs($this->member(TenantRole::ProjectManager));
+
+		$this->postJson('/api/v1/tests', $this->payload([
+			'planned_start' => '2026-12-01T10:00:00+02:00',
+			'planned_end' => '2026-12-01T18:00:00+02:00',
+		]))->assertCreated()
+			->assertJsonPath('data.planned_start', '2026-12-01T08:00:00Z')
+			->assertJsonPath('data.planned_end', '2026-12-01T16:00:00Z');
+
+		$this->postJson('/api/v1/tests', $this->payload(['reference' => 'PT-ANCIEN', 'planned_start' => '0001-01-01T00:00:00Z']))
+			->assertUnprocessable()
+			->assertJsonValidationErrors('planned_start', 'details');
+	}
+
+	/**
+	 * Une modification partielle qui place le début après la fin enregistrée est
+	 * refusée, et l'erreur porte sur le champ envoyé.
+	 *
+	 * @return void
+	 */
+	public function test_a_partial_update_cannot_put_the_start_after_the_end(): void
+	{
+		$test = $this->existingTest(null, ['planned_start' => '2026-12-01 08:00:00', 'planned_end' => '2026-12-05 18:00:00']);
+		Sanctum::actingAs($this->member(TenantRole::ProjectManager));
+
+		$this->patchJson("/api/v1/tests/{$test->id}", ['planned_start' => '2026-12-10T08:00:00Z'])
+			->assertUnprocessable()
+			->assertJsonValidationErrors('planned_start', 'details');
+		$this->patchJson("/api/v1/tests/{$test->id}", ['planned_end' => '2026-11-30T08:00:00Z'])
+			->assertUnprocessable()
+			->assertJsonValidationErrors('planned_end', 'details');
+	}
+
+	/**
 	 * La référence est unique dans une organisation, mais deux organisations
 	 * peuvent employer la même.
 	 *

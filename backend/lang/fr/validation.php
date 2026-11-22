@@ -47,6 +47,9 @@ return [
 		'planned_end' => [
 			'before_start' => 'La fin prévue ne peut pas précéder le début prévu.',
 		],
+		'planned' => [
+			'range' => 'La date doit être comprise entre les années 2000 et 2099.',
+		],
 		'status' => [
 			'unchanged' => 'Le test a déjà ce statut.',
 		],

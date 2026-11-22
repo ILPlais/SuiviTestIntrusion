@@ -15,6 +15,7 @@ use App\Models\TestStatusChange;
 use App\Models\User;
 use App\Policies\PenetrationTestPolicy;
 use Carbon\CarbonInterface;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
@@ -94,7 +95,7 @@ class PenetrationTestController extends Controller
 		$attributes = $this->validated($request, $tenant->id, null);
 		$attributes['tenant_id'] = $tenant->id;
 
-		$test = PenetrationTest::open($attributes, $this->user($request));
+		$test = $this->guardReference(fn () => PenetrationTest::open($attributes, $this->user($request)));
 
 		return $this->detailResponse($request, $test, 201);
 	}
@@ -111,9 +112,30 @@ class PenetrationTestController extends Controller
 	{
 		Gate::authorize('update', $test);
 
-		$test->update($this->validated($request, $test->tenant_id, $test));
+		$attributes = $this->validated($request, $test->tenant_id, $test);
+		$this->guardReference(fn () => $test->update($attributes));
 
 		return $this->detailResponse($request, $test);
+	}
+
+	/**
+	 * Exécute une écriture et traduit une violation de l'unicité de la référence
+	 * en erreur de validation : deux écritures simultanées de la même référence
+	 * passent toutes deux la règle `unique`, et seule la contrainte de la base
+	 * départage.
+	 *
+	 * @template TResult
+	 *
+	 * @param callable(): TResult $write Écriture à protéger.
+	 * @return TResult
+	 */
+	private function guardReference(callable $write): mixed
+	{
+		try {
+			return $write();
+		} catch (UniqueConstraintViolationException) {
+			throw ValidationException::withMessages(['reference' => [__('validation.custom.reference.unique')]]);
+		}
 	}
 
 	/**
@@ -133,13 +155,10 @@ class PenetrationTestController extends Controller
 			'comment' => ['sometimes', 'nullable', 'string', 'max:2000'],
 		]);
 
-		$status = TestStatus::from($valid['status']);
-		if ($status === $test->status) {
+		$comment = isset($valid['comment']) && trim($valid['comment']) !== '' ? $valid['comment'] : null;
+		if (! $test->changeStatus(TestStatus::from($valid['status']), $this->user($request), $comment)) {
 			throw ValidationException::withMessages(['status' => [__('validation.custom.status.unchanged')]]);
 		}
-
-		$comment = isset($valid['comment']) && trim($valid['comment']) !== '' ? $valid['comment'] : null;
-		$test->changeStatus($status, $this->user($request), $comment);
 
 		return $this->detailResponse($request, $test);
 	}
@@ -177,16 +196,24 @@ class PenetrationTestController extends Controller
 
 		// Une date reçue avec un décalage (+02:00) est ramenée en UTC avant
 		// l'enregistrement : la base ne garde pas le fuseau.
+		// Plage bornée : une année extrême passerait la règle `date` mais serait
+		// refusée par certains SGBD (DATETIME de MySQL), soit une erreur 500.
 		foreach (['planned_start', 'planned_end'] as $field) {
-			if (array_key_exists($field, $valid)) {
-				$valid[$field] = $valid[$field] === null ? null : Date::parse($valid[$field])->utc();
+			if (array_key_exists($field, $valid) && $valid[$field] !== null) {
+				$date = Date::parse($valid[$field])->utc();
+				if ($date->year < 2000 || $date->year > 2099) {
+					throw ValidationException::withMessages([$field => [__('validation.custom.planned.range')]]);
+				}
+				$valid[$field] = $date;
 			}
 		}
 
 		$start = array_key_exists('planned_start', $valid) ? $valid['planned_start'] : $test?->planned_start;
 		$end = array_key_exists('planned_end', $valid) ? $valid['planned_end'] : $test?->planned_end;
 		if ($start instanceof CarbonInterface && $end instanceof CarbonInterface && $end->lt($start)) {
-			throw ValidationException::withMessages(['planned_end' => [__('validation.custom.planned_end.before_start')]]);
+			// L'erreur porte sur le champ envoyé : seul le début peut avoir été modifié.
+			$field = array_key_exists('planned_end', $valid) ? 'planned_end' : 'planned_start';
+			throw ValidationException::withMessages([$field => [__('validation.custom.planned_end.before_start')]]);
 		}
 
 		return $valid;

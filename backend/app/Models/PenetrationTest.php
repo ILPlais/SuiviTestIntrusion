@@ -81,22 +81,32 @@ class PenetrationTest extends Model
 
 	/**
 	 * Change le statut et trace la transition ; toutes les transitions sont
-	 * permises (décision du 2026-11-22), le refus d'un statut inchangé revient à
-	 * l'appelant.
+	 * permises (décision du 2026-11-22), sauf vers le statut courant.
+	 *
+	 * La ligne est relue verrouillée dans la transaction : deux changements
+	 * simultanés s'enchaînent, et chacun inscrit le vrai statut de départ.
 	 *
 	 * @param TestStatus $status Nouveau statut.
 	 * @param User $author Auteur du changement.
 	 * @param string|null $comment Commentaire facultatif (motif d'un retour, par exemple).
-	 * @return void
+	 * @return bool Faux si le test avait déjà ce statut (rien n'est écrit).
 	 */
-	public function changeStatus(TestStatus $status, User $author, ?string $comment): void
+	public function changeStatus(TestStatus $status, User $author, ?string $comment): bool
 	{
-		DB::transaction(function () use ($status, $author, $comment): void {
-			$previous = $this->status;
+		return DB::transaction(function () use ($status, $author, $comment): bool {
+			$locked = static::query()->lockForUpdate()->findOrFail($this->id);
+			$previous = $locked->status;
+			if ($previous === $status) {
+				$this->status = $previous;
+
+				return false;
+			}
+
 			$this->status = $status;
 			$this->save();
-
 			$this->recordStatusChange($previous, $status, $author, $comment);
+
+			return true;
 		});
 	}
 
