@@ -50,6 +50,21 @@
 		overflow-wrap: anywhere;
 	}
 
+	/*
+	 * Titres en thème clair : Catppuccin les colore d'accents (h2 pêche, h3 jaune,
+	 * h4 vert…) qui, sur le fond de Latte (#eff1f5), n'atteignent pas 4,5:1
+	 * (WCAG 1.4.3 ; pêche 2,64:1). Seuls rouge (h1, 4,80:1) et mauve (4,79:1)
+	 * passent : h2 en mauve, les niveaux suivants dans la couleur du texte (7,06:1).
+	 * En Mocha (sombre), les accents du thème sont conformes et restent.
+	 */
+	[data-webtui-theme='catppuccin-latte'] h2 {
+		color: var(--mauve);
+	}
+
+	[data-webtui-theme='catppuccin-latte'] :is(h3, h4, h5, h6) {
+		color: var(--foreground0);
+	}
+
 	/* WebTUI supprime tout contour : le focus clavier doit rester visible (WCAG 2.4.7). */
 	:focus-visible {
 		outline: 2px solid var(--blue, var(--foreground0));
@@ -83,10 +98,11 @@
 		padding: 0.5lh 1ch;
 	}
 
-	header h1 {
-		display: inline-flex;
-		align-items: center;
-		gap: 1ch;
+	/* Emplacement du throbber global, réservé pour éviter tout décalage. */
+	header .activity {
+		flex: 1;
+		min-width: 22ch;
+		color: var(--foreground1);
 	}
 
 	/* Navigation : liens et boutons espacés, de taille suffisante au doigt. */
@@ -111,7 +127,8 @@
 		text-decoration: underline;
 	}
 
-	button + button {
+	/* Boutons voisins du contenu ; la navigation a déjà son espacement (gap). */
+	main button + button {
 		margin-inline-start: 1ch;
 	}
 

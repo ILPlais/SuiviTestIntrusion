@@ -19,3 +19,17 @@ test('la page d\'accueil ne présente aucune violation d\'accessibilité détect
 
 	await expectNoAccessibilityViolations(page)
 })
+
+// Thème sombre (socle-8) : la préférence du système sélectionne Catppuccin Mocha,
+// dont les contrastes sont contrôlés à leur tour ; les autres tests voient Latte.
+test.describe('en thème sombre', () => {
+	test.use({ colorScheme: 'dark' })
+
+	test('la page d\'accueil passe en Mocha sans violation d\'accessibilité détectable', async ({ page }) => {
+		await page.goto('/')
+		await expect(page.locator('html')).toHaveAttribute('data-webtui-theme', 'catppuccin-mocha')
+		await expect(page.getByRole('status')).toHaveText(fr.health.ok)
+
+		await expectNoAccessibilityViolations(page)
+	})
+})

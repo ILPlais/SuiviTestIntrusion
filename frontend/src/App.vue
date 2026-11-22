@@ -3,12 +3,13 @@
 	connecté, déconnexion), écran de la route courante et pied de page avec l'état
 	de l'instance, visible même sans être connecté.
 
-	Tant qu'une requête vers l'API est en cours, l'en-tête montre un throbber et
-	la zone principale porte aria-busy (socle-8) ; les icônes de la navigation
-	sont décoratives, le texte des liens porte leur sens.
+	Quand une requête vers l'API dure plus de 300 ms, l'en-tête montre un
+	throbber, hors du titre (socle-8). Pas d'aria-busy sur la zone principale :
+	certains lecteurs d'écran y taisent alors les alertes d'erreur. Les icônes
+	de la navigation sont décoratives, le texte des liens porte leur sens.
 -->
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { activeRequests } from './api/activity'
@@ -21,8 +22,21 @@ const { t } = useI18n()
 const auth = useAuthStore()
 const router = useRouter()
 
-/** Vrai tant qu'une requête vers l'API est en cours. */
-const working = computed(() => activeRequests.value > 0)
+/** Délai avant d'afficher le throbber : une requête rapide ne fait rien clignoter. */
+const THROBBER_DELAY_MS = 300
+
+/** Vrai quand des requêtes sont en cours depuis plus de THROBBER_DELAY_MS. */
+const working = ref(false)
+let timer: ReturnType<typeof setTimeout> | undefined
+
+watch(() => activeRequests.value > 0, (pending) => {
+	clearTimeout(timer)
+	if (pending) {
+		timer = setTimeout(() => { working.value = true }, THROBBER_DELAY_MS)
+	} else {
+		working.value = false
+	}
+})
 
 /** Ferme la session puis revient à l'écran de connexion. */
 async function logout(): Promise<void> {
@@ -33,13 +47,15 @@ async function logout(): Promise<void> {
 
 <template>
 	<header box-="round">
-		<h1>
-			{{ t('app.title') }}
+		<h1>{{ t('app.title') }}</h1>
+		<!-- Emplacement réservé : l'apparition du throbber ne décale pas l'en-tête. -->
+		<span class="activity">
 			<LoadingThrobber
 				v-if="working"
 				:label="t('common.working')"
+				visible-label
 			/>
-		</h1>
+		</span>
 		<nav
 			v-if="auth.user"
 			:aria-label="t('auth.accountMenu')"
@@ -67,7 +83,7 @@ async function logout(): Promise<void> {
 			</button>
 		</nav>
 	</header>
-	<main :aria-busy="working">
+	<main>
 		<RouterView />
 	</main>
 	<footer>
