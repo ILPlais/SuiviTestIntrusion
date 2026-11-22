@@ -9,6 +9,8 @@ import { useRouter } from 'vue-router'
 import { ApiError, getJson, postJson } from '../api/client'
 import type { Organisation } from '../api/organisations'
 import { useAuthStore } from '../stores/auth'
+import ActionIcon from '../components/ActionIcon.vue'
+import LoadingThrobber from '../components/LoadingThrobber.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -54,7 +56,10 @@ onMounted(load)
 		{{ error }}
 	</p>
 	<p v-if="organisations === null">
-		{{ t('common.loading') }}
+		<LoadingThrobber
+			:label="t('common.loading')"
+			visible-label
+		/>
 	</p>
 	<p v-else-if="organisations.length === 0">
 		{{ t('organisations.empty') }}
@@ -87,7 +92,10 @@ onMounted(load)
 			type="submit"
 			:disabled="busy"
 		>
-			{{ t('organisations.create') }}
+			<ActionIcon
+				name="create"
+				:busy="busy"
+			/>{{ t('organisations.create') }}
 		</button>
 	</form>
 </template>

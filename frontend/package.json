@@ -16,6 +16,8 @@
 		"test:e2e:production": "playwright test --config playwright.production.config.ts"
 	},
 	"dependencies": {
+		"@webtui/css": "0.1.10",
+		"@webtui/theme-catppuccin": "0.0.5",
 		"@zxcvbn-ts/core": "^4.3.0",
 		"@zxcvbn-ts/language-common": "^4.2.0",
 		"argon2id": "^1.0.1",

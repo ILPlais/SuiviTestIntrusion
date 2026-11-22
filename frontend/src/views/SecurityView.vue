@@ -10,6 +10,7 @@ import { useI18n } from 'vue-i18n'
 import QRCode from 'qrcode'
 import { ApiError, deleteJson, postJson } from '../api/client'
 import { useAuthStore } from '../stores/auth'
+import ActionIcon from '../components/ActionIcon.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -119,7 +120,7 @@ function disable(): Promise<void> {
 				type="button"
 				@click="recoveryCodes = null"
 			>
-				{{ t('security.done') }}
+				<ActionIcon name="check" />{{ t('security.done') }}
 			</button>
 		</div>
 
@@ -139,14 +140,20 @@ function disable(): Promise<void> {
 				:disabled="busy || !code"
 				@click="regenerate"
 			>
-				{{ t('security.regenerate') }}
+				<ActionIcon
+					name="refresh"
+					:busy="busy"
+				/>{{ t('security.regenerate') }}
 			</button>
 			<button
 				type="button"
 				:disabled="busy || !code"
 				@click="disable"
 			>
-				{{ t('security.disable') }}
+				<ActionIcon
+					name="cancel"
+					:busy="busy"
+				/>{{ t('security.disable') }}
 			</button>
 		</template>
 
@@ -158,7 +165,10 @@ function disable(): Promise<void> {
 				:disabled="busy"
 				@click="start"
 			>
-				{{ t('security.enable') }}
+				<ActionIcon
+					name="twoFactor"
+					:busy="busy"
+				/>{{ t('security.enable') }}
 			</button>
 			<form
 				v-else
@@ -188,7 +198,10 @@ function disable(): Promise<void> {
 					type="submit"
 					:disabled="busy"
 				>
-					{{ t('security.confirm') }}
+					<ActionIcon
+						name="check"
+						:busy="busy"
+					/>{{ t('security.confirm') }}
 				</button>
 			</form>
 		</template>

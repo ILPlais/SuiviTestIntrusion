@@ -4,8 +4,12 @@
  * La SPA et l'API partagent la même origine : les requêtes emportent les
  * cookies de session Sanctum, sans CORS (13.06). Les requêtes qui modifient
  * quelque chose portent le jeton CSRF de Sanctum (en-tête X-XSRF-TOKEN, lu dans
- * le cookie XSRF-TOKEN, obtenu au besoin par /sanctum/csrf-cookie).
+ * le cookie XSRF-TOKEN, obtenu au besoin par /sanctum/csrf-cookie). Chaque
+ * requête est comptée pendant son exécution (activity.ts) : l'en-tête affiche
+ * un throbber tant qu'il en reste une (socle-8).
  */
+
+import { track } from './activity'
 
 /** Préfixe de toutes les routes de l'API. */
 export const API_BASE = '/api/v1'
@@ -50,11 +54,11 @@ export class ApiError extends Error {
  * @returns La réponse HTTP brute ; l'appelant interprète le code et le corps.
  */
 export function apiGet(path: string): Promise<Response> {
-	return fetch(`${API_BASE}${path}`, {
+	return track(fetch(`${API_BASE}${path}`, {
 		method: 'GET',
 		credentials: 'same-origin',
 		headers: { Accept: 'application/json' },
-	})
+	}))
 }
 
 /**
@@ -120,7 +124,7 @@ export async function putJson<T>(path: string, body: unknown): Promise<T> {
  * @returns Le corps JSON décodé, ou null pour 204.
  */
 async function send<T>(method: 'POST' | 'PUT' | 'PATCH' | 'DELETE', path: string, body: unknown): Promise<T> {
-	const response = await fetch(`${API_BASE}${path}`, {
+	const response = await track(fetch(`${API_BASE}${path}`, {
 		method,
 		credentials: 'same-origin',
 		headers: {
@@ -129,7 +133,7 @@ async function send<T>(method: 'POST' | 'PUT' | 'PATCH' | 'DELETE', path: string
 			'X-XSRF-TOKEN': await csrfToken(),
 		},
 		body: JSON.stringify(body),
-	})
+	}))
 
 	return parse<T>(response)
 }
@@ -162,7 +166,7 @@ async function parse<T>(response: Response): Promise<T> {
 async function csrfToken(): Promise<string> {
 	let token = readCookie('XSRF-TOKEN')
 	if (token === null) {
-		await fetch('/sanctum/csrf-cookie', { credentials: 'same-origin' })
+		await track(fetch('/sanctum/csrf-cookie', { credentials: 'same-origin' }))
 		token = readCookie('XSRF-TOKEN')
 	}
 

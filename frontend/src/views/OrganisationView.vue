@@ -12,6 +12,7 @@ import type { Organisation } from '../api/organisations'
 import MarkdownField from '../components/MarkdownField.vue'
 import MarkdownView from '../render/MarkdownView.vue'
 import { useAuthStore } from '../stores/auth'
+import ActionIcon from '../components/ActionIcon.vue'
 
 const props = defineProps<{
 	/** Identifiant (ULID) de l'organisation. */
@@ -143,13 +144,16 @@ watch(() => props.id, load, { immediate: true })
 				type="submit"
 				:disabled="busy"
 			>
-				{{ t('common.save') }}
+				<ActionIcon
+					name="save"
+					:busy="busy"
+				/>{{ t('common.save') }}
 			</button>
 			<button
 				type="button"
 				@click="editing = false"
 			>
-				{{ t('common.cancel') }}
+				<ActionIcon name="cancel" />{{ t('common.cancel') }}
 			</button>
 		</form>
 		<template v-else>
@@ -166,7 +170,7 @@ watch(() => props.id, load, { immediate: true })
 				type="button"
 				@click="edit"
 			>
-				{{ t('common.edit') }}
+				<ActionIcon name="edit" />{{ t('common.edit') }}
 			</button>
 			<button
 				v-if="auth.user?.is_instance_admin"
@@ -174,7 +178,10 @@ watch(() => props.id, load, { immediate: true })
 				:disabled="busy"
 				@click="remove"
 			>
-				{{ t('organisations.delete') }}
+				<ActionIcon
+					name="delete"
+					:busy="busy"
+				/>{{ t('organisations.delete') }}
 			</button>
 		</template>
 	</template>

@@ -1,17 +1,28 @@
 <!--
-	Composant racine : en-tête (titre, compte connecté, déconnexion), écran de la
-	route courante et pied de page avec l'état de l'instance, visible même sans
-	être connecté.
+	Composant racine : en-tête (titre, indicateur des requêtes en cours, compte
+	connecté, déconnexion), écran de la route courante et pied de page avec l'état
+	de l'instance, visible même sans être connecté.
+
+	Tant qu'une requête vers l'API est en cours, l'en-tête montre un throbber et
+	la zone principale porte aria-busy (socle-8) ; les icônes de la navigation
+	sont décoratives, le texte des liens porte leur sens.
 -->
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { activeRequests } from './api/activity'
 import HealthStatus from './components/HealthStatus.vue'
+import NfIcon from './components/NfIcon.vue'
+import LoadingThrobber from './components/LoadingThrobber.vue'
 import { useAuthStore } from './stores/auth'
 
 const { t } = useI18n()
 const auth = useAuthStore()
 const router = useRouter()
+
+/** Vrai tant qu'une requête vers l'API est en cours. */
+const working = computed(() => activeRequests.value > 0)
 
 /** Ferme la session puis revient à l'écran de connexion. */
 async function logout(): Promise<void> {
@@ -21,36 +32,42 @@ async function logout(): Promise<void> {
 </script>
 
 <template>
-	<header>
-		<h1>{{ t('app.title') }}</h1>
+	<header box-="round">
+		<h1>
+			{{ t('app.title') }}
+			<LoadingThrobber
+				v-if="working"
+				:label="t('common.working')"
+			/>
+		</h1>
 		<nav
 			v-if="auth.user"
 			:aria-label="t('auth.accountMenu')"
 		>
 			<RouterLink :to="{ name: 'tests' }">
-				{{ t('nav.tests') }}
+				<NfIcon name="tests" />{{ t('nav.tests') }}
 			</RouterLink>
 			<RouterLink :to="{ name: 'organisations' }">
-				{{ t('nav.organisations') }}
+				<NfIcon name="organisations" />{{ t('nav.organisations') }}
 			</RouterLink>
 			<RouterLink :to="{ name: 'company' }">
-				{{ t('nav.company') }}
+				<NfIcon name="company" />{{ t('nav.company') }}
 			</RouterLink>
 			<RouterLink :to="{ name: 'profile' }">
-				{{ auth.user.name }}
+				<NfIcon name="profile" />{{ auth.user.name }}
 			</RouterLink>
 			<RouterLink :to="{ name: 'security' }">
-				{{ t('auth.security') }}
+				<NfIcon name="security" />{{ t('auth.security') }}
 			</RouterLink>
 			<button
 				type="button"
 				@click="logout"
 			>
-				{{ t('auth.logout') }}
+				<NfIcon name="logout" />{{ t('auth.logout') }}
 			</button>
 		</nav>
 	</header>
-	<main>
+	<main :aria-busy="working">
 		<RouterView />
 	</main>
 	<footer>

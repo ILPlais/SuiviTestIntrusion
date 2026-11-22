@@ -10,6 +10,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ApiError } from '../api/client'
 import { CryptoError } from '../crypto'
 import { useAuthStore } from '../stores/auth'
+import ActionIcon from '../components/ActionIcon.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -129,7 +130,10 @@ async function submitCode(): Promise<void> {
 				type="submit"
 				:disabled="busy"
 			>
-				{{ busy ? t('auth.checking') : t('auth.login') }}
+				<ActionIcon
+					name="login"
+					:busy="busy"
+				/>{{ busy ? t('auth.checking') : t('auth.login') }}
 			</button>
 		</form>
 		<form
@@ -159,13 +163,16 @@ async function submitCode(): Promise<void> {
 				type="submit"
 				:disabled="busy"
 			>
-				{{ t('auth.verify') }}
+				<ActionIcon
+					name="check"
+					:busy="busy"
+				/>{{ t('auth.verify') }}
 			</button>
 			<button
 				type="button"
 				@click="useRecovery = !useRecovery"
 			>
-				{{ useRecovery ? t('auth.useTotpCode') : t('auth.useRecoveryCode') }}
+				<ActionIcon name="recovery" />{{ useRecovery ? t('auth.useTotpCode') : t('auth.useRecoveryCode') }}
 			</button>
 		</form>
 	</section>

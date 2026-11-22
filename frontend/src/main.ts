@@ -8,10 +8,14 @@ import App from './App.vue'
 import { i18n } from './i18n'
 import { createAppRouter } from './router'
 import { installTrustedTypesPolicies } from './security/trustedTypes'
+import { installTheme } from './theme'
 import './styles/base.css'
 
 // Politiques Trusted Types avant tout rendu : la CSP refuse toute chaîne brute (13.04).
 installTrustedTypesPolicies()
+
+// Thème WebTUI selon la préférence du système, avant le premier affichage (socle-8).
+installTheme(document.documentElement, globalThis.matchMedia('(prefers-color-scheme: dark)'))
 
 createApp(App).use(createPinia()).use(i18n).use(createAppRouter()).mount('#app')
 

@@ -1,42 +1,211 @@
 /*
- * Styles de base de la SPA (13.07) : servis comme fichier de la même origine
- * (CSP style-src 'self'). Ils assurent des cibles d'au moins 24 px (WCAG 2.2,
- * critère 2.5.8) et une mise en page lisible, en attendant la charte graphique.
+ * Styles de la SPA (socle-8) : WebTUI (@webtui/css) pour l'allure d'une
+ * interface en mode texte, thème Catppuccin (Mocha ou Latte selon la préférence
+ * du système, posé par src/theme.ts), icônes Nerd Fonts auto-hébergées.
+ *
+ * Servis comme fichiers de la même origine (CSP style-src et font-src 'self',
+ * 13.04). Les couches fixent la priorité : les règles de la couche « app »
+ * corrigent celles de WebTUI là où l'accessibilité l'exige (13.07) : focus
+ * visible, cibles d'au moins 24 px (WCAG 2.2, critère 2.5.8), césure des mots,
+ * animations réduites.
  */
+@layer base, utils, components, app;
 
-/* Navigation : liens et boutons espacés, de taille suffisante au doigt. */
-header nav {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 0.75rem;
+@import '@webtui/css/base.css';
+@import '@webtui/css/utils/box.css';
+@import '@webtui/css/components/typography.css';
+@import '@webtui/css/components/button.css';
+@import '@webtui/css/components/input.css';
+@import '@webtui/css/components/textarea.css';
+@import '@webtui/css/components/table.css';
+@import '@webtui/css/components/badge.css';
+@import '@webtui/css/components/separator.css';
+@import '@webtui/css/components/spinner.css';
+@import '@webtui/theme-catppuccin';
+
+/*
+ * Police d'icônes : sous-ensemble de Symbols Nerd Font Mono réduit aux glyphes
+ * de src/icons/glyphs.json (scripts/subset-nerd-font.mjs ; licences dans
+ * src/assets/fonts/LICENSE.md). Même nom de famille que le plugin
+ * @webtui/plugin-nf, qui la chargerait depuis un CDN, refusé par la CSP.
+ */
+@font-face {
+	font-family: 'Symbols Nerd Font';
+	src: url('../assets/fonts/SymbolsNerdFontMono-subset.woff2') format('woff2');
+	font-display: block;
+	font-style: normal;
+	font-weight: 400;
 }
 
-header nav a,
-button {
-	display: inline-flex;
-	align-items: center;
-	min-height: 24px;
-	min-width: 24px;
-	padding: 0.25rem 0.5rem;
-}
+@layer app {
+	:root {
+		/* Polices à chasse fixe du système ; les icônes en dernier recours, comme le prévoit WebTUI. */
+		--font-family: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace, 'Symbols Nerd Font';
+	}
 
-/* Formulaires : un champ par ligne, sous son libellé. */
-form label,
-form input,
-form textarea {
-	display: block;
-	margin-block: 0.25rem;
-}
+	html,
+	body {
+		/* WebTUI coupe les mots n'importe où (break-all) : illisible en français. */
+		word-break: normal;
+		overflow-wrap: anywhere;
+	}
 
-form input,
-form textarea {
-	width: min(40rem, 100%);
-	min-height: 24px;
-}
+	/* WebTUI supprime tout contour : le focus clavier doit rester visible (WCAG 2.4.7). */
+	:focus-visible {
+		outline: 2px solid var(--blue, var(--foreground0));
+		outline-offset: 2px;
+	}
 
-/* Listes de liens (organisations) : lignes assez hautes pour être touchées. */
-main li {
-	min-height: 24px;
-	margin-block: 0.25rem;
+	/* Mise en page : en-tête, contenu et pied de page espacés, largeur de lecture limitée. */
+	body > #app {
+		display: flex;
+		flex-direction: column;
+		gap: 1lh;
+		min-height: 100vh;
+		padding: 1lh 2ch;
+	}
+
+	main {
+		flex: 1;
+		max-width: 100ch;
+	}
+
+	main > * + * {
+		margin-block-start: 1lh;
+	}
+
+	header {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1lh 2ch;
+		padding: 0.5lh 1ch;
+	}
+
+	header h1 {
+		display: inline-flex;
+		align-items: center;
+		gap: 1ch;
+	}
+
+	/* Navigation : liens et boutons espacés, de taille suffisante au doigt. */
+	header nav {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5lh 2ch;
+	}
+
+	header nav a,
+	button {
+		display: inline-flex;
+		align-items: center;
+		gap: 1ch;
+		min-height: 24px;
+		min-width: 24px;
+	}
+
+	header nav a[aria-current='page'] {
+		font-weight: var(--font-weight-bold);
+		text-decoration: underline;
+	}
+
+	button + button {
+		margin-inline-start: 1ch;
+	}
+
+	/* Formulaires : un champ par ligne, sous son libellé ; select aligné sur les champs WebTUI. */
+	form {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5lh;
+	}
+
+	form label {
+		font-weight: var(--font-weight-bold);
+	}
+
+	form input:not([type='checkbox'], [type='radio']),
+	form textarea,
+	form select {
+		width: min(60ch, 100%);
+		min-height: 24px;
+	}
+
+	select {
+		background-color: var(--background1);
+		color: var(--foreground0);
+		border: none;
+		padding: 0 1ch;
+		font: inherit;
+		height: 1lh;
+	}
+
+	/* Listes : lignes assez hautes pour être touchées. */
+	main li {
+		min-height: 24px;
+	}
+
+	dl {
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		gap: 0 2ch;
+	}
+
+	dt {
+		color: var(--foreground1);
+	}
+
+	/* Tableaux : pleine largeur, légende alignée à gauche. */
+	main table {
+		width: 100%;
+	}
+
+	caption {
+		text-align: start;
+		color: var(--foreground1);
+	}
+
+	/*
+	 * Erreurs en rouge, toujours accompagnées d'un texte. Les messages role="status"
+	 * gardent la couleur du texte : l'état de l'API en est un, et un « ne répond
+	 * pas » ne doit pas paraître rassurant ; leur icône porte l'état.
+	 */
+	[role='alert'] {
+		color: var(--red, var(--foreground0));
+	}
+
+	/* Icônes Nerd Fonts : glyphe affiché depuis data-glyph, hors du texte de la page. */
+	.icon::before {
+		content: attr(data-glyph);
+		font-family: 'Symbols Nerd Font';
+		font-style: normal;
+		font-weight: normal;
+	}
+
+	/* Throbber : spinner WebTUI et libellé sur une ligne. */
+	.throbber {
+		display: inline-flex;
+		align-items: center;
+		gap: 1ch;
+	}
+
+	/* Masqué à l'écran, lu par les lecteurs d'écran. */
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	/* Animations réduites : le spinner tourne quatre fois moins vite (WCAG 2.3.3). */
+	@media (prefers-reduced-motion: reduce) {
+		[is-='spinner'] {
+			--spinner-duration: 4s;
+		}
+	}
 }

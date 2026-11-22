@@ -126,6 +126,8 @@ Dépendances livrées avec SuiviTestIntrusion et leurs licences. Fichier génér
 | npm | @vue/runtime-dom | 3.5.46 | MIT |
 | npm | @vue/server-renderer | 3.5.46 | MIT |
 | npm | @vue/shared | 3.5.46 | MIT |
+| npm | @webtui/css | 0.1.10 | MIT |
+| npm | @webtui/theme-catppuccin | 0.0.5 | MIT |
 | npm | @zxcvbn-ts/core | 4.3.0 | MIT |
 | npm | @zxcvbn-ts/dictionary-compression | 3.0.1 | MIT |
 | npm | @zxcvbn-ts/language-common | 4.2.0 | MIT |
