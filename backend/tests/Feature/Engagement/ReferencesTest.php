@@ -129,6 +129,8 @@ class ReferencesTest extends TestCase
 		Sanctum::actingAs($this->member(TenantRole::ProjectManager));
 
 		$this->patchJson('/api/v1/tenants/'.$foreign->id, ['name' => 'Piraté'])->assertNotFound();
+		$this->deleteJson('/api/v1/tenants/'.$foreign->id)->assertNotFound();
+		$this->assertDatabaseHas('tenants', ['id' => $foreign->id, 'name' => $foreign->name]);
 	}
 
 	/**

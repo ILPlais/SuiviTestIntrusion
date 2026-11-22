@@ -40,9 +40,13 @@ class CompanyProfileController extends Controller
 			'presentation' => ['nullable', 'string', 'max:20000'],
 		]);
 
-		$profile = CompanyProfile::current();
-		$profile->fill(['name' => $valid['name'], 'legal_name' => $valid['legal_name'] ?? null, 'presentation' => $valid['presentation'] ?? null]);
-		$profile->save();
+		// updateOrCreate : deux premières écritures simultanées ne se heurtent pas
+		// sur la ligne unique (identifiant 1).
+		$profile = CompanyProfile::query()->updateOrCreate(['id' => 1], [
+			'name' => $valid['name'],
+			'legal_name' => $valid['legal_name'] ?? null,
+			'presentation' => $valid['presentation'] ?? null,
+		]);
 
 		return new JsonResponse(['data' => $this->present($profile)]);
 	}
