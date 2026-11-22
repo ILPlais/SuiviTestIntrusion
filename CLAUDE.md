@@ -24,12 +24,12 @@ Application Web de suivi de tests d'intrusion. Le projet est en **début de dév
 
 ## Planification (ECC)
 
-Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 epics, 74 stories (55 en V1 dont 15 terminées, 19 reportées en V2 : mention « Reportée en V2 » dans la story), sprint 2 terminé, sprint 3 en cours (12 points : socle-2, socle-5, identite-1 et identite-3 terminées, socle-6) ; planification en points dans `22.01`.
+Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 epics, 74 stories (55 en V1 dont 16 terminées, 19 reportées en V2 : mention « Reportée en V2 » dans la story), sprints 2 et 3 terminés ; planification en points dans `22.01`.
 
 - Projet personnel mené sur du temps libre : aucune date prévue (ni sprint, ni livraison). Un sprint est un lot d'environ 15 points ; seul le **temps réellement passé** compte, noté dans le tableau de `22.01` à la fin de chaque story.
 
 - Toute écriture dans `.stories/` passe par `ledger.js` du skill (`node <skill-dir>/scripts/ledger.js <commande> --root <racine>`), jamais à la main.
-- L'epic `decisions` (ADR crypto, KDF, LDAP/AD, infra, licence/i18n) passe **avant tout code**. Prochaine étape : `story-lifecycle implement socle-6` (puis identite-5), selon le plan `.claude/plans/version-testable-chemin-de-bout-en-bout.md`.
+- L'epic `decisions` (ADR crypto, KDF, LDAP/AD, infra, licence/i18n) passe **avant tout code**. Prochaine étape : mise en conformité DocBlock/JSDoc du code existant (règles de lint), puis `story-lifecycle plan-sprint 4` et `implement identite-5`, selon le plan `.claude/plans/version-testable-chemin-de-bout-en-bout.md`.
 - Pas d'issues GitHub : le suivi reste dans les fichiers.
 
 ## Reprise sur un autre poste
@@ -42,7 +42,7 @@ Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 e
 ## Conventions
 
 - Commits en français.
-- Style du code (`21.01`) : indentation par tabulations (`.editorconfig`), code bien commenté en français (en-tête de chaque fichier, classe et fonction exportée, pourquoi des choix non évidents), noms longs des options de commandes (`--message`, `--set-upstream`, `--no-interaction`…), y compris dans les commandes que Claude lance.
+- Style du code (`21.01`) : indentation par tabulations (`.editorconfig`), code bien commenté en français (en-tête de chaque fichier, classe et fonction exportée, pourquoi des choix non évidents), noms longs des options de commandes (`--message`, `--set-upstream`, `--no-interaction`…), y compris dans les commandes que Claude lance ; DocBlock typé pour chaque élément PHP, JSDoc pour chaque fonction JS/TS.
 - Chaque fonctionnalité (story) est développée dans sa propre branche `feature/<id>` (correctifs : `fix/<id>`), créée depuis `main`, publiée sur GitHub (`git push --set-upstream origin feature/<id>`), puis intégrée à `main` par `git merge --no-ff` une fois revue et testée ; la branche est ensuite supprimée. Détail : `21.01`.
 - Restent directement sur `main` : documentation, `.stories/`, notes de session et plans (`.claude/`), commits de version.
 - Formules CVSS en LaTeX dans le CDC (`11.10`) ; les tableaux contiennent des espaces insécables après les emojis.
