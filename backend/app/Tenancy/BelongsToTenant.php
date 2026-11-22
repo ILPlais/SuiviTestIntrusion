@@ -30,8 +30,21 @@ trait BelongsToTenant
 
 		static::saving(function (Model $model): void {
 			$tenantId = $model->getAttribute('tenant_id');
-			if (! TenantAccess::allows(is_string($tenantId) ? $tenantId : null)) {
+			if (! is_string($tenantId) || ! TenantAccess::allows($tenantId)) {
 				throw new TenantMismatch('Écriture hors des organisations de l\'utilisateur ('.static::class.').');
+			}
+
+			// Ligne existante : son organisation d'origine doit aussi être accessible
+			// (une instance chargée sans filtre ne se réécrit pas hors du bloc), et un
+			// objet ne change jamais d'organisation, sauf restriction levée.
+			if ($model->exists) {
+				$original = $model->getOriginal('tenant_id');
+				if (! is_string($original) || ! TenantAccess::allows($original)) {
+					throw new TenantMismatch('Écriture hors des organisations de l\'utilisateur ('.static::class.').');
+				}
+				if ($original !== $tenantId && TenantAccess::visibleTenantIds() !== null) {
+					throw new TenantMismatch('Un objet ne change pas d\'organisation ('.static::class.').');
+				}
 			}
 		});
 	}

@@ -214,6 +214,98 @@ class TenantIsolationTest extends TestCase
 	}
 
 	/**
+	 * Une instance chargée sans filtre ne se réécrit pas hors du bloc, et un
+	 * objet ne change pas d'organisation, même vers une autre des siennes.
+	 *
+	 * @return void
+	 */
+	public function test_a_row_of_another_organisation_cannot_be_rewritten(): void
+	{
+		$foreign = $this->probe($this->beta, 'à eux');
+		$member = $this->member($this->alpha, TenantRole::ProjectManager);
+		$member->tenants()->attach($this->beta->id, ['role' => TenantRole::Client->value]);
+		$own = $this->probe($this->alpha, 'à moi');
+
+		Auth::setUser($this->member($this->alpha, TenantRole::Tester));
+		try {
+			$foreign->update(['label' => 'modifié']);
+			$this->fail('La réécriture hors organisation aurait dû être refusée.');
+		} catch (TenantMismatch) {
+			// Refus attendu.
+		}
+
+		Auth::setUser($member);
+		$this->expectException(TenantMismatch::class);
+		$own->update(['tenant_id' => $this->beta->id]);
+	}
+
+	/**
+	 * La levée de la restriction cesse à la fin du bloc, même sur exception.
+	 *
+	 * @return void
+	 */
+	public function test_the_restriction_comes_back_after_an_exception(): void
+	{
+		$this->probe($this->alpha, 'à moi');
+
+		try {
+			TenantProbe::withoutTenantRestriction(fn () => throw new \RuntimeException('échec'));
+		} catch (\RuntimeException) {
+			// Échec attendu.
+		}
+
+		$this->assertSame(0, TenantProbe::query()->count());
+	}
+
+	/**
+	 * Un compte sans rattachement ne voit aucune organisation ; le total de la
+	 * pagination par page ne compte pas les organisations étrangères.
+	 *
+	 * @return void
+	 */
+	public function test_counts_and_totals_never_include_foreign_organisations(): void
+	{
+		Sanctum::actingAs(User::factory()->create());
+		$this->getJson('/api/v1/tenants?page=1')->assertOk()->assertJsonCount(0, 'data')->assertJsonPath('meta.total', 0);
+		$this->getJson('/api/v1/tenants/'.$this->alpha->id)->assertNotFound();
+
+		Sanctum::actingAs($this->member($this->alpha, TenantRole::Client));
+		$this->getJson('/api/v1/tenants?page=1')->assertOk()->assertJsonCount(1, 'data')->assertJsonPath('meta.total', 1);
+	}
+
+	/**
+	 * Un curseur obtenu par un utilisateur ne donne à un autre que ses propres
+	 * organisations.
+	 *
+	 * @return void
+	 */
+	public function test_a_replayed_cursor_stays_within_ones_organisations(): void
+	{
+		$admin = User::factory()->create();
+		$admin->forceFill(['is_instance_admin' => true])->save();
+		Sanctum::actingAs($admin);
+		$cursor = $this->getJson('/api/v1/tenants?limit=1')->assertOk()->json('meta.next_cursor');
+		$this->assertIsString($cursor);
+
+		Sanctum::actingAs($this->member($this->alpha, TenantRole::Client));
+		$ids = $this->getJson('/api/v1/tenants?limit=1&cursor='.urlencode($cursor))->assertOk()->json('data.*.id');
+		$this->assertNotContains($this->beta->id, $ids);
+	}
+
+	/**
+	 * La politique de double authentification s'applique aux routes métier.
+	 *
+	 * @return void
+	 */
+	public function test_business_routes_follow_the_two_factor_policy(): void
+	{
+		config(['suivi.authentication.two_factor_required' => true]);
+		Sanctum::actingAs($this->member($this->alpha, TenantRole::Tester));
+
+		$this->getJson('/api/v1/tenants')->assertForbidden();
+	}
+
+	/**
 	 * Le rôle d'un membre est unique par organisation.
 	 *
 	 * @return void
