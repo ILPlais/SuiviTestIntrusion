@@ -15,6 +15,27 @@ use Tests\PHPStan\RequireTypedDocBlockRule;
 class RequireTypedDocBlockRuleTest extends RuleTestCase
 {
 	/**
+	 * Crée le cache des listes de répertoires de PHPStan s'il manque : PHPStan le
+	 * lit avec `@file_get_contents`, et le gestionnaire d'erreurs de
+	 * `php artisan test` (Collision) signalerait sinon un avertissement au premier
+	 * passage. Un fichier vide est ignoré puis réécrit par PHPStan.
+	 *
+	 * @return void
+	 */
+	public static function setUpBeforeClass(): void
+	{
+		parent::setUpBeforeClass();
+
+		$cache = sys_get_temp_dir().'/phpstan-tests/cache';
+		if (! is_dir($cache)) {
+			mkdir($cache, 0o777, true);
+		}
+		if (! is_file($cache.'/directory-listings.bin')) {
+			touch($cache.'/directory-listings.bin');
+		}
+	}
+
+	/**
 	 * Règle testée, construite par le conteneur de PHPStan.
 	 *
 	 * @return Rule<\PhpParser\Node>

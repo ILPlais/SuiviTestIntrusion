@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CspReportController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\InstanceController;
+use App\Http\Controllers\Api\V1\TenantController;
 use App\Http\Controllers\Api\V1\TwoFactorController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,7 +42,12 @@ Route::prefix('v1')->name('v1.')->middleware('throttle:standard')->group(functio
 		});
 	});
 
-	// Les routes métier se placeront dans un groupe auth:sanctum + two-factor.
+	// Routes métier : session, politique de double authentification, et filtre
+	// par organisation porté par les modèles (identite-5).
+	Route::middleware(['auth:sanctum', 'two-factor'])->group(function () {
+		Route::get('tenants', [TenantController::class, 'index'])->name('tenants.index');
+		Route::get('tenants/{tenant}', [TenantController::class, 'show'])->name('tenants.show');
+	});
 });
 
 /*
