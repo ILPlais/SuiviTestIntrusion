@@ -164,7 +164,9 @@ jobs:
         if: failure()
         with:
           name: rapport-playwright
-          path: frontend/playwright-report/
+          path: |
+            frontend/playwright-report/
+            frontend/playwright-report-production/
           retention-days: 7
 
   licences:

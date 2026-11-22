@@ -114,7 +114,8 @@ fi
 
 etape "CSP identique côté Laravel et côté Apache"
 csp_laravel="$(curl --silent --head "$base/" | tr --delete '\r' | grep --ignore-case '^content-security-policy:' | cut --delimiter=' ' --fields=2-)"
-asset="$(curl --silent "$base/" | grep --only-matching '/assets/[^"]*\.js' | head --lines=1)"
+page_accueil="$(curl --silent "$base/")"
+asset="$(grep --only-matching '/assets/[^"]*\.js' <<<"$page_accueil" | sed --quiet '1p')"
 csp_apache="$(curl --silent --head "$base$asset" | tr --delete '\r' | grep --ignore-case '^content-security-policy:' | cut --delimiter=' ' --fields=2-)"
 [[ -n "$csp_laravel" && "$csp_laravel" == "$csp_apache" ]] || echouer "CSP différente entre Laravel et Apache : « $csp_laravel » / « $csp_apache »"
 

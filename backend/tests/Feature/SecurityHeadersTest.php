@@ -127,6 +127,28 @@ class SecurityHeadersTest extends TestCase
 		$log->shouldNotHaveReceived('warning');
 	}
 
+	public function test_reports_never_log_link_tokens_nor_query_strings(): void
+	{
+		$log = Log::spy();
+		$token = str_repeat('a', 64);
+
+		$this->call('POST', '/api/v1/csp-reports', [], [], [], ['CONTENT_TYPE' => 'application/csp-report'], json_encode([
+			'csp-report' => ['document-uri' => "https://pentest.example.org/activation/{$token}?x=secret#frag", 'violated-directive' => 'img-src', 'blocked-uri' => 'https://tiers.example/x.png?jeton=secret'],
+		]))->assertNoContent();
+
+		$log->shouldHaveReceived('warning')->withArgs(fn (string $message, array $context) => ! str_contains((string) json_encode($context), $token)
+			&& ! str_contains((string) json_encode($context), 'secret'))->once();
+	}
+
+	public function test_error_responses_of_early_middlewares_carry_the_headers(): void
+	{
+		// 413 produit par la limite de taille, avant le routage.
+		$this->call('POST', '/api/v1/auth/login', [], [], [], ['CONTENT_TYPE' => 'application/json', 'CONTENT_LENGTH' => (string) (10 * 1024 * 1024)], '{}')
+			->assertStatus(413)
+			->assertHeader('X-Content-Type-Options', 'nosniff')
+			->assertHeader('Content-Security-Policy', "default-src 'none'; frame-ancestors 'none'; sandbox");
+	}
+
 	public function test_reports_are_limited_in_size(): void
 	{
 		$this->call('POST', '/api/v1/csp-reports', [], [], [], ['CONTENT_TYPE' => 'application/csp-report'], str_repeat('a', 70 * 1024))

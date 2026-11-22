@@ -48,7 +48,7 @@ Route::prefix('v1')->name('v1.')->middleware('throttle:standard')->group(functio
 | Documentation de l'API (socle-6, 11.03) : fichier OpenAPI 3.1 et Swagger UI,
 | réservés aux administrateurs d'instance (Gate view-api-documentation).
 */
-Route::middleware(['auth:sanctum', 'throttle:standard'])->group(function () {
+Route::middleware(['auth:sanctum', 'two-factor', 'throttle:standard'])->group(function () {
 	Route::get('openapi.json', [ApiDocumentationController::class, 'specification'])->name('api.openapi');
 	Route::get('documentation', [ApiDocumentationController::class, 'ui'])->name('api.documentation');
 });

@@ -26,8 +26,11 @@ class CspReportController extends Controller
 	 */
 	public function __invoke(Request $request): Response
 	{
+		$maximum = (int) config('security.report_max_bytes');
+		// Longueur annoncée contrôlée avant de lire le corps (point d'entrée public).
+		abort_if((int) $request->server('CONTENT_LENGTH', 0) > $maximum, 413);
 		$body = $request->getContent();
-		abort_if(strlen($body) > (int) config('security.report_max_bytes'), 413);
+		abort_if(strlen($body) > $maximum, 413);
 
 		foreach ($this->violations(json_decode($body, true)) as $violation) {
 			if (! $this->isExpected($violation)) {
@@ -60,7 +63,7 @@ class CspReportController extends Controller
 				continue;
 			}
 			$violations[] = array_map(
-				fn ($value) => mb_substr(is_scalar($value) ? (string) $value : '', 0, 300),
+				fn ($value) => self::redact(mb_substr(is_scalar($value) ? (string) $value : '', 0, 300)),
 				array_intersect_key($body, array_flip([
 					'document-uri', 'documentURL', 'violated-directive', 'effective-directive', 'effectiveDirective',
 					'blocked-uri', 'blockedURL', 'source-file', 'sourceFile', 'line-number', 'lineNumber', 'script-sample', 'sample',
@@ -72,6 +75,20 @@ class CspReportController extends Controller
 	}
 
 	/**
+	 * Retire d'une valeur journalisée ce qui peut contenir un secret : jeton d'un lien
+	 * (activation, réinitialisation), chaîne de requête et fragment des URL.
+	 *
+	 * @param string $value Valeur extraite du rapport.
+	 * @return string Valeur sans jeton ni paramètres.
+	 */
+	private static function redact(string $value): string
+	{
+		$value = (string) preg_replace('#/(activation|reinitialisation)/[^/?\#\s]+#u', '/$1/…', $value);
+
+		return (string) preg_replace('#(https?://[^\s?\#]*)[?\#]\S*#u', '$1', $value);
+	}
+
+	/**
 	 * Vrai pour le refus attendu de la politique Trusted Types « vue » (13.04).
 	 *
 	 * @param array<string, string> $violation Violation extraite d'un rapport.
@@ -80,8 +97,13 @@ class CspReportController extends Controller
 	private function isExpected(array $violation): bool
 	{
 		$directive = $violation['violated-directive'] ?? $violation['effectiveDirective'] ?? $violation['effective-directive'] ?? '';
-		$sample = $violation['script-sample'] ?? $violation['sample'] ?? '';
+		$blocked = $violation['blocked-uri'] ?? $violation['blockedURL'] ?? '';
+		$sample = trim($violation['script-sample'] ?? $violation['sample'] ?? '');
 
-		return str_starts_with($directive, 'trusted-types') && trim($sample) === 'vue';
+		// Chromium et Firefox ne remplissent pas les mêmes champs : la création de la
+		// politique « vue » se reconnaît à sa directive ou à son URI bloquée.
+		$isPolicyCreation = str_starts_with($directive, 'trusted-types') || $blocked === 'trusted-types-policy';
+
+		return $isPolicyCreation && ($sample === '' || $sample === 'vue');
 	}
 }

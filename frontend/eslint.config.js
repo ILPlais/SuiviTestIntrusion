@@ -29,7 +29,7 @@ const rawHtmlWrites = [
 ]
 
 export default tseslint.config(
-	{ ignores: ['dist/', 'node_modules/', 'playwright-report/', 'test-results/'] },
+	{ ignores: ['dist/', 'node_modules/', 'playwright-report/', 'test-results/', 'playwright-report-production/', 'public/swagger-ui/'] },
 	js.configs.recommended,
 	...tseslint.configs.recommended,
 	...pluginVue.configs['flat/recommended'],

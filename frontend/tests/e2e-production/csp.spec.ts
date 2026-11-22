@@ -39,7 +39,13 @@ test.beforeEach(async ({ page }) => {
 async function unexpectedViolations(page: Page): Promise<Violation[]> {
 	const violations = await page.evaluate(() => (window as unknown as { __violations: Violation[] }).__violations)
 
-	return violations.filter((violation) => !(violation.directive.startsWith('trusted-types') && violation.sample.trim() === 'vue'))
+	// Chromium et Firefox ne remplissent pas les mêmes champs pour ce refus.
+	return violations.filter((violation) => {
+		const policyCreation = violation.directive.startsWith('trusted-types') || violation.blocked === 'trusted-types-policy'
+		const sample = violation.sample.trim()
+
+		return !(policyCreation && (sample === '' || sample === 'vue'))
+	})
 }
 
 test('la SPA compilée est servie avec la CSP de 13.04', async ({ page }) => {

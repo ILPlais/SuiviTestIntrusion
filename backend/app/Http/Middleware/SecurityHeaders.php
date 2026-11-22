@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * - Toutes : X-Content-Type-Options, Referrer-Policy, et HSTS sur une connexion
  *   HTTPS (derrière le proxy de confiance, voir TRUSTED_PROXIES).
- * - API (/api/…) : CSP qui interdit toute interprétation de la réponse.
+ * - API (/api/…, /sanctum/…) : CSP qui interdit toute interprétation de la réponse.
  * - Autres (SPA) : CSP de 13.04 avec Trusted Types et point de rapports.
  * Une réponse qui porte déjà sa CSP (Swagger UI, à nonce) la garde.
  */
@@ -37,7 +37,7 @@ final class SecurityHeaders
 		}
 
 		if (! $headers->has('Content-Security-Policy')) {
-			if ($request->is('api', 'api/*')) {
+			if ($request->is('api', 'api/*', 'sanctum/*')) {
 				$headers->set('Content-Security-Policy', (string) config('security.api_policy'));
 			} else {
 				$headers->set('Content-Security-Policy', self::spaPolicy());

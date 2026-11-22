@@ -25,8 +25,9 @@ return Application::configure(basePath: dirname(__DIR__))
 		// Corps JSON de l'API limités en taille ; requêtes simultanées par classe (socle-5).
 		// Sessions Sanctum pour la SPA servie sur la même origine (identite-1, 13.06).
 		$middleware->statefulApi();
-		// En-têtes de sécurité sur toutes les réponses (socle-6, 13.04, 13.06).
-		$middleware->append(SecurityHeaders::class);
+		// En-têtes de sécurité sur toutes les réponses (socle-6, 13.04, 13.06), en tête de
+		// pile : les réponses des autres middlewares (maintenance, 413) les reçoivent aussi.
+		$middleware->prepend(SecurityHeaders::class);
 		// Les navigateurs envoient les rapports CSP sans cookie ni jeton CSRF.
 		$middleware->preventRequestForgery(except: ['api/v1/csp-reports']);
 		$middleware->api(append: [LimitJsonSize::class]);
