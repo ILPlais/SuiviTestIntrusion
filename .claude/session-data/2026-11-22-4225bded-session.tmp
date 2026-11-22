@@ -16,7 +16,7 @@
 - Nouvelles conventions (2026-11-21) : DocBlock typé pour chaque élément PHP, JSDoc pour chaque fonction JS/TS (21.01, CLAUDE.md, mémoire).
 
 ### Next Session
-1. implement engagement-2 (tests, statuts, 5 phases fixes, équipe test_user), puis engagement-4 (périmètre réseau, table commune + tables par type) ; appliquer les notes techniques d'engagement-1 restantes : tenant_id hors Fillable et affecté côté serveur, policies par rôle, interdire DB::table/withoutGlobalScope hors AppTenancy, mémoriser visibleTenantIds par requête.
+1. implement engagement-2 (tests, statuts, 5 phases fixes, équipe test_user), puis engagement-4 (périmètre réseau, table commune + tables par type) ; appliquer les notes techniques d'engagement-1 restantes : tenant_id hors Fillable et affecté côté serveur, policies par rôle, interdire DB::table/withoutGlobalScope hors le namespace App.Tenancy, mémoriser visibleTenantIds par requête.
 2. Puis plan-sprint 5 : vulnerabilites-1/3/5, resultats-1 ; étape 6 du plan (données démo, procédure 42.01).
 3. Points reportés des revues : intercepteur CSRF de Swagger UI, réauthentification avant enrôlement TOTP, désactivation par code de secours, rejet de « * » dans CORS_ALLOWED_ORIGINS, journal d'audit à la suppression d'une organisation (identite-6).
 4. Décision de l'utilisateur toujours en attente sur le catalogue de méthodologies (conseil).
