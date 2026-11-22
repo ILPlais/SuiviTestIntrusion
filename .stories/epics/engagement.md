@@ -27,7 +27,7 @@ Saisir le cadre d'un test : acteurs, questionnaire d'engagement, périmètre, ob
 | ID | Title | Status |
 | --- | --- | --- |
 | engagement-1 | Références entreprise, testeurs et clients | done |
-| engagement-2 | Création d'un test et statuts | in-progress |
+| engagement-2 | Création d'un test et statuts | review |
 | engagement-3 | Questionnaire d'engagement | todo |
 | engagement-4 | Périmètre réseau | todo |
 | engagement-5 | Périmètre étendu (physique, radio, ingénierie sociale) | todo |
