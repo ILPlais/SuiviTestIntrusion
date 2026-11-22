@@ -20,6 +20,7 @@
 		"@zxcvbn-ts/language-common": "^4.2.0",
 		"argon2id": "^1.0.1",
 		"dompurify": "^3.4.18",
+		"marked": "^18.2.1",
 		"pinia": "^4.1.0",
 		"qrcode": "^1.5.4",
 		"swagger-ui-dist": "^5.35.1",
