@@ -167,6 +167,7 @@ Dépendances livrées avec SuiviTestIntrusion et leurs licences. Fichier génér
 | npm | magic-string | 0.30.21 | MIT |
 | npm | magic-string | 1.4.5 | MIT |
 | npm | magic-string-ast | 1.0.3 | MIT |
+| npm | marked | 18.2.1 | MIT |
 | npm | mlly | 1.8.2 | MIT |
 | npm | muggle-string | 0.4.1 | MIT |
 | npm | nanoid | 3.3.20 | MIT |

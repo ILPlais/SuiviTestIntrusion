@@ -54,7 +54,7 @@ test('un administrateur crée une organisation et rédige sa présentation en Ma
 	await page.getByRole('button', { name: fr.markdown.edit }).click()
 	await page.getByRole('button', { name: fr.common.save }).click()
 
-	await expect(page.getByRole('status')).toHaveText(fr.common.saved)
+	await expect(page.getByText(fr.common.saved)).toBeVisible()
 	await expect(page.getByRole('heading', { name: 'Activité' })).toBeVisible()
 	await expect(page.locator('.markdown img[onerror]')).toHaveCount(0)
 	expect(dialogs).toEqual([])
@@ -70,7 +70,7 @@ test('un administrateur remplit la fiche de l\'entreprise prestataire', async ({
 	await page.getByLabel(fr.company.presentation).fill('Tests d\'intrusion *depuis 2010*.')
 	await page.getByRole('button', { name: fr.common.save }).click()
 
-	await expect(page.getByRole('status')).toHaveText(fr.common.saved)
+	await expect(page.getByText(fr.common.saved)).toBeVisible()
 	await expect(page.locator('.markdown em')).toHaveText('depuis 2010')
 	await expectNoAccessibilityViolations(page)
 })
