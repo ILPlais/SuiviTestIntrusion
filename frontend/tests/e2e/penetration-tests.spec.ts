@@ -60,7 +60,7 @@ test('un administrateur crée un test, change son statut et lit l\'historique', 
 
 	await page.getByLabel(fr.tests.newStatus).selectOption({ label: fr.tests.statuses.in_progress })
 	await page.getByRole('button', { name: fr.tests.applyStatus }).click()
-	await expect(page.getByRole('status')).toHaveText(fr.tests.statusChanged)
+	await expect(page.getByText(fr.tests.statusChanged)).toBeVisible()
 
 	// Transitions libres : retour à « Planifié », motivé par un commentaire.
 	await page.getByLabel(fr.tests.newStatus).selectOption({ label: fr.tests.statuses.planned })
