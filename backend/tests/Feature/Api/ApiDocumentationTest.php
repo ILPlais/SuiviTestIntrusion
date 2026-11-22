@@ -16,7 +16,11 @@ class ApiDocumentationTest extends TestCase
 {
 	use RefreshDatabase;
 
-	/** Crée un administrateur d'instance. */
+	/**
+	 * Crée un administrateur d'instance.
+	 *
+	 * @return User
+	 */
 	private function admin(): User
 	{
 		$user = User::factory()->create();
@@ -25,6 +29,11 @@ class ApiDocumentationTest extends TestCase
 		return $user;
 	}
 
+	/**
+	 * Le fichier OpenAPI est refusé aux visiteurs et aux utilisateurs ordinaires.
+	 *
+	 * @return void
+	 */
 	public function test_the_openapi_file_is_reserved_to_instance_administrators(): void
 	{
 		$this->getJson('/api/openapi.json')->assertUnauthorized();
@@ -33,6 +42,11 @@ class ApiDocumentationTest extends TestCase
 		$this->getJson('/api/openapi.json')->assertForbidden();
 	}
 
+	/**
+	 * Le fichier OpenAPI décrit l'API versionnée, au format OpenAPI 3.1.
+	 *
+	 * @return void
+	 */
 	public function test_the_openapi_file_describes_the_versioned_api_in_openapi_3_1(): void
 	{
 		Sanctum::actingAs($this->admin());
@@ -44,6 +58,11 @@ class ApiDocumentationTest extends TestCase
 		$this->assertArrayHasKey('/v1/auth/login', $response->json('paths'));
 	}
 
+	/**
+	 * Swagger UI est servi avec sa propre CSP à nonce.
+	 *
+	 * @return void
+	 */
 	public function test_swagger_ui_is_served_with_its_own_nonce_policy(): void
 	{
 		Sanctum::actingAs($this->admin());
@@ -58,6 +77,11 @@ class ApiDocumentationTest extends TestCase
 		$this->assertStringContainsString("frame-ancestors 'none'", $policy);
 	}
 
+	/**
+	 * Swagger UI est refusé aux utilisateurs ordinaires.
+	 *
+	 * @return void
+	 */
 	public function test_swagger_ui_is_reserved_to_instance_administrators(): void
 	{
 		Sanctum::actingAs(User::factory()->create());
@@ -65,6 +89,11 @@ class ApiDocumentationTest extends TestCase
 		$this->get('/api/documentation')->assertForbidden();
 	}
 
+	/**
+	 * Swagger UI se désactive ; le fichier OpenAPI reste disponible.
+	 *
+	 * @return void
+	 */
 	public function test_swagger_ui_can_be_disabled_while_the_file_stays_available(): void
 	{
 		config(['api.documentation.ui_enabled' => false]);
@@ -74,6 +103,11 @@ class ApiDocumentationTest extends TestCase
 		$this->getJson('/api/openapi.json')->assertOk();
 	}
 
+	/**
+	 * Les routes par défaut de Scramble ne sont pas exposées.
+	 *
+	 * @return void
+	 */
 	public function test_the_default_scramble_routes_are_not_exposed(): void
 	{
 		$this->get('/docs/api')->assertNotFound();

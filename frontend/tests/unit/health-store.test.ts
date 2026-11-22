@@ -2,6 +2,13 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
 import { useHealthStore } from '../../src/stores/health'
 
+/**
+ * Remplace fetch par une réponse JSON donnée.
+ *
+ * @param status Statut HTTP.
+ * @param body Corps JSON.
+ * @returns Le simulacre de fetch, pour vérifier ses appels.
+ */
 function mockFetch(status: number, body: unknown) {
 	const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify(body), {
 		status,

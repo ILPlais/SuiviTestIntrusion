@@ -23,6 +23,9 @@ class ActivationController extends Controller
 {
 	/**
 	 * Adresse et nom du compte à activer ; 404 si le lien est inconnu, utilisé ou échu.
+	 *
+	 * @param string $token Jeton du lien d'activation.
+	 * @return JsonResponse
 	 */
 	public function show(string $token): JsonResponse
 	{
@@ -33,6 +36,9 @@ class ActivationController extends Controller
 
 	/**
 	 * Enregistre la valeur d'authentification et invalide le lien.
+	 *
+	 * @param Request $request Requête portant la valeur d'authentification.
+	 * @return Response
 	 */
 	public function store(Request $request): Response
 	{
@@ -57,6 +63,9 @@ class ActivationController extends Controller
 
 	/**
 	 * Compte en attente d'activation pour ce jeton, comparé par son empreinte.
+	 *
+	 * @param string $token Jeton du lien d'activation.
+	 * @return User
 	 */
 	private function pendingUser(string $token): User
 	{
@@ -70,6 +79,7 @@ class ActivationController extends Controller
 	/**
 	 * Requête des comptes en attente d'activation pour ce jeton (lien valide).
 	 *
+	 * @param string $token Jeton du lien d'activation, en clair.
 	 * @return Builder<User>
 	 */
 	private function pendingQuery(string $token): Builder

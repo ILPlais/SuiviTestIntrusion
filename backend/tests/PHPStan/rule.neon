@@ -1,0 +1,4 @@
+# Enregistre la règle des DocBlocks comme service, pour RequireTypedDocBlockRuleTest.
+services:
+	-
+		class: Tests\PHPStan\RequireTypedDocBlockRule

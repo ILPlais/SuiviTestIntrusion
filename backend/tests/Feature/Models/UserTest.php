@@ -13,6 +13,11 @@ class UserTest extends TestCase
 {
 	use RefreshDatabase;
 
+	/**
+	 * Un utilisateur peut recevoir un jeton d'API.
+	 *
+	 * @return void
+	 */
 	public function test_un_utilisateur_peut_recevoir_un_jeton_api(): void
 	{
 		$user = User::factory()->create();

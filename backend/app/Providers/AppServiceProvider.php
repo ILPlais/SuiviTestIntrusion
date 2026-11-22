@@ -9,10 +9,13 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
+/** Fournisseur de services de l'application : limiteurs, événements et réglages globaux. */
 class AppServiceProvider extends ServiceProvider
 {
 	/**
-	 * Register any application services.
+	 * Enregistre les services de l'application.
+	 *
+	 * @return void
 	 */
 	public function register(): void
 	{
@@ -22,7 +25,9 @@ class AppServiceProvider extends ServiceProvider
 	}
 
 	/**
-	 * Bootstrap any application services.
+	 * Configure les services au démarrage : limiteurs, événements, contrôles de configuration.
+	 *
+	 * @return void
 	 */
 	public function boot(): void
 	{

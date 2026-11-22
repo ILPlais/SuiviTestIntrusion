@@ -21,7 +21,11 @@ const busy = ref(false)
 const error = ref<string | null>(null)
 const canvas = ref<HTMLCanvasElement | null>(null)
 
-/** Exécute une action de l'API en gérant l'état d'attente et les erreurs. */
+/**
+ * Exécute une action de l'API en gérant l'état d'attente et les erreurs.
+ *
+ * @param action Appel à l'API.
+ */
 async function run(action: () => Promise<void>): Promise<void> {
 	busy.value = true
 	error.value = null
@@ -35,7 +39,11 @@ async function run(action: () => Promise<void>): Promise<void> {
 	}
 }
 
-/** Démarre l'enrôlement et dessine le QR code. */
+/**
+ * Démarre l'enrôlement et dessine le QR code.
+ *
+ * @returns La promesse de l'action.
+ */
 function start(): Promise<void> {
 	return run(async () => {
 		enrollment.value = await postJson<{ secret: string, otpauth_url: string }>('/user/two-factor')
@@ -46,7 +54,11 @@ function start(): Promise<void> {
 	})
 }
 
-/** Confirme l'enrôlement par un premier code ; affiche les codes de secours. */
+/**
+ * Confirme l'enrôlement par un premier code ; affiche les codes de secours.
+ *
+ * @returns La promesse de l'action.
+ */
 function confirm(): Promise<void> {
 	return run(async () => {
 		const response = await postJson<{ recovery_codes: string[] }>('/user/two-factor/confirm', { code: code.value })
@@ -56,14 +68,22 @@ function confirm(): Promise<void> {
 	})
 }
 
-/** Remplace les codes de secours. */
+/**
+ * Remplace les codes de secours.
+ *
+ * @returns La promesse de l'action.
+ */
 function regenerate(): Promise<void> {
 	return run(async () => {
 		recoveryCodes.value = (await postJson<{ recovery_codes: string[] }>('/user/two-factor/recovery-codes', { code: code.value })).recovery_codes
 	})
 }
 
-/** Désactive la double authentification. */
+/**
+ * Désactive la double authentification.
+ *
+ * @returns La promesse de l'action.
+ */
 function disable(): Promise<void> {
 	return run(async () => {
 		await deleteJson('/user/two-factor', { code: code.value })

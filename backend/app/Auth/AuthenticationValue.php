@@ -19,6 +19,8 @@ final class AuthenticationValue
 	/**
 	 * Règle de validation : une chaîne Base64 qui décode exactement 32 octets.
 	 * Un mot de passe envoyé par erreur à la place de `auth` est ainsi refusé.
+	 *
+	 * @return Closure
 	 */
 	public static function rule(): Closure
 	{
@@ -35,6 +37,9 @@ final class AuthenticationValue
 	/**
 	 * Adresse e-mail telle qu'elle entre dans le sel de `auth` et dans la base :
 	 * sans espaces de bord, en minuscules, normalisée NFC (13.03).
+	 *
+	 * @param string $email Adresse saisie.
+	 * @return string
 	 */
 	public static function normalizeEmail(string $email): string
 	{
@@ -48,6 +53,8 @@ final class AuthenticationValue
 	/**
 	 * Hachage leurre, calculé une fois puis gardé en cache, vérifié quand le compte
 	 * n'existe pas ou n'est pas activé : le temps de réponse ne trahit pas son absence.
+	 *
+	 * @return string
 	 */
 	public static function decoyHash(): string
 	{

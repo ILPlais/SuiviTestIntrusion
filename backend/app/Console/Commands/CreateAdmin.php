@@ -20,10 +20,25 @@ use Illuminate\Support\Str;
  */
 class CreateAdmin extends Command
 {
+	/**
+	 * Signature de la commande : adresse du compte et nom affiché facultatif.
+	 *
+	 * @var string
+	 */
 	protected $signature = 'suivi:create-admin {email : Adresse e-mail du compte} {--name= : Nom affiché (par défaut, la partie avant @)}';
 
+	/**
+	 * Description affichée par « php artisan list ».
+	 *
+	 * @var string
+	 */
 	protected $description = 'Crée un administrateur d\'instance et affiche son lien d\'activation';
 
+	/**
+	 * Crée le compte (ou renouvelle le lien d'un compte jamais activé) et affiche le lien d'activation.
+	 *
+	 * @return int
+	 */
 	public function handle(): int
 	{
 		$email = AuthenticationValue::normalizeEmail((string) $this->argument('email'));

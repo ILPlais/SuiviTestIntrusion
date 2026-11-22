@@ -12,3 +12,10 @@ parameters:
 		- database
 		- routes
 		- tests
+	# Fixture de la règle des DocBlocks : ses manques sont volontaires.
+	excludePaths:
+		- tests/PHPStan/Fixtures
+
+# Règle du projet (21.01) : DocBlock décrit et typé sur chaque élément PHP.
+rules:
+	- Tests\PHPStan\RequireTypedDocBlockRule

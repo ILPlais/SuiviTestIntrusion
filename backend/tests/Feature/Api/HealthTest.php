@@ -11,6 +11,11 @@ use Tests\TestCase;
  */
 class HealthTest extends TestCase
 {
+	/**
+	 * La route de santé est versionnée et répond « ok ».
+	 *
+	 * @return void
+	 */
 	public function test_health_endpoint_is_versioned_and_reports_ok(): void
 	{
 		$response = $this->getJson('/api/v1/health');
@@ -23,6 +28,11 @@ class HealthTest extends TestCase
 			]);
 	}
 
+	/**
+	 * L'heure renvoyée est en UTC, au format ISO 8601.
+	 *
+	 * @return void
+	 */
 	public function test_health_time_is_utc_iso_8601(): void
 	{
 		$time = $this->getJson('/api/v1/health')->json('time');
@@ -30,11 +40,21 @@ class HealthTest extends TestCase
 		$this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/', $time);
 	}
 
+	/**
+	 * La route sans version n'existe pas.
+	 *
+	 * @return void
+	 */
 	public function test_unversioned_route_does_not_exist(): void
 	{
 		$this->getJson('/api/health')->assertNotFound();
 	}
 
+	/**
+	 * Une panne de base de données est signalée sans détail technique.
+	 *
+	 * @return void
+	 */
 	public function test_health_reports_database_failure_without_technical_details(): void
 	{
 		// Quelle que soit la base testée en CI, la connexion par défaut devient une base SQLite introuvable.

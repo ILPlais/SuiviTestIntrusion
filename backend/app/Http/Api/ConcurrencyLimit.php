@@ -31,7 +31,12 @@ final class ConcurrencyLimit
 	private const RETRY_AFTER_SECONDS = 5;
 
 	/**
-	 * @param Closure(Request): Response $next
+	 * Réserve une place de la classe de concurrence pour la durée de la requête, ou refuse en 429.
+	 *
+	 * @param Request $request Requête entrante.
+	 * @param Closure(Request): Response $next Suite de la chaîne de middlewares.
+	 * @param string $class Classe de concurrence (heavy, export…).
+	 * @return Response
 	 */
 	public function handle(Request $request, Closure $next, string $class): Response
 	{
@@ -55,6 +60,11 @@ final class ConcurrencyLimit
 
 	/**
 	 * Clé du verrou d'un créneau, pour une classe et un demandeur.
+	 *
+	 * @param string $class Classe de concurrence.
+	 * @param string $requester Identifiant du demandeur (utilisateur ou adresse).
+	 * @param int $slot Numéro de la place.
+	 * @return string
 	 */
 	public static function slotKey(string $class, string $requester, int $slot): string
 	{
@@ -64,7 +74,10 @@ final class ConcurrencyLimit
 	/**
 	 * Exécute la requête en gardant le créneau tant que la réponse n'est pas produite.
 	 *
-	 * @param Closure(Request): Response $next
+	 * @param Request $request Requête qui occupe la place.
+	 * @param Closure(Request): Response $next Suite de la chaîne de middlewares.
+	 * @param Lock $lock Verrou de la place à libérer.
+	 * @return Response
 	 */
 	private function runHoldingSlot(Request $request, Closure $next, Lock $lock): Response
 	{

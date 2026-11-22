@@ -25,7 +25,12 @@ const busy = ref(false)
 const error = ref<string | null>(null)
 const activated = route.query.activated === '1'
 
-/** Message lisible pour une erreur de connexion. */
+/**
+ * Message lisible pour une erreur de connexion.
+ *
+ * @param caught Erreur levée par la connexion.
+ * @returns Le message traduit.
+ */
 function describe(caught: unknown): string {
 	if (caught instanceof ApiError) {
 		return caught.firstMessage()

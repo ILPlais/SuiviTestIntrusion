@@ -11,6 +11,8 @@ Ce fichier suit le format [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 
 ### Modifications
 
+- Documentation du code rendue obligatoire en CI : DocBlock décrit et typé sur chaque élément PHP (règle Larastan du projet, règles phpdoc_* de PHP-CS-Fixer), JSDoc sur chaque fonction JavaScript et TypeScript (eslint-plugin-jsdoc) ; code existant mis en conformité (21.01).
+
 ### Corrections
 
 ### Sécurité

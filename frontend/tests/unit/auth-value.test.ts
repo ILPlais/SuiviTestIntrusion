@@ -13,9 +13,19 @@ import { authSalt, deriveAuth, normalizeEmail, type Argon2idFunction } from '../
 
 const INSTANCE = '3f2a9c1e-5b7d-4e8a-9c21-7d4e5f6a8b90'
 
-/** Charge le WebAssembly d'argon2id depuis node_modules (hors navigateur). */
+/**
+ * Charge le WebAssembly d'argon2id depuis node_modules (hors navigateur).
+ *
+ * @returns La fonction Argon2id.
+ */
 async function loadArgon2id(): Promise<Argon2idFunction> {
 	const require = createRequire(import.meta.url)
+	/**
+	 * Chargeur d'un binaire WebAssembly d'argon2id.
+	 *
+	 * @param file Nom du binaire dans `argon2id/dist`.
+	 * @returns La fonction d'instanciation attendue par argon2id.
+	 */
 	const load = (file: string) => async (imports: WebAssembly.Imports) =>
 		WebAssembly.instantiate(await readFile(require.resolve(`argon2id/dist/${file}`)), imports)
 

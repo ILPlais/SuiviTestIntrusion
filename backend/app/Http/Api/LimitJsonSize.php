@@ -18,7 +18,11 @@ use Symfony\Component\HttpFoundation\Response;
 final class LimitJsonSize
 {
 	/**
-	 * @param Closure(Request): Response $next
+	 * Refuse en 413 un corps JSON plus gros que la limite, avant de le lire en entier.
+	 *
+	 * @param Request $request Requête entrante.
+	 * @param Closure(Request): Response $next Suite de la chaîne de middlewares.
+	 * @return Response
 	 */
 	public function handle(Request $request, Closure $next): Response
 	{
@@ -42,6 +46,9 @@ final class LimitJsonSize
 
 	/**
 	 * Vrai pour un envoi multipart/form-data (fichiers de la GED).
+	 *
+	 * @param Request $request Requête entrante.
+	 * @return bool
 	 */
 	private function isMultipart(Request $request): bool
 	{

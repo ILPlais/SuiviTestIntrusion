@@ -34,6 +34,9 @@ export type Argon2idFunction = (params: {
 /**
  * Adresse telle qu'elle entre dans le sel : sans espaces de bord, en minuscules,
  * normalisée NFC ; le serveur applique la même règle.
+ *
+ * @param email Adresse saisie.
+ * @returns L'adresse normalisée.
  */
 export function normalizeEmail(email: string): string {
 	return email.trim().toLowerCase().normalize('NFC')
@@ -41,6 +44,10 @@ export function normalizeEmail(email: string): string {
 
 /**
  * Calcule sel_auth à partir de l'identifiant public de l'instance et de l'adresse.
+ *
+ * @param instanceId Identifiant public de l'instance.
+ * @param email Adresse du compte.
+ * @returns Les 16 octets du sel.
  */
 export async function authSalt(instanceId: string, email: string): Promise<Uint8Array> {
 	const encoder = new TextEncoder()
@@ -59,6 +66,12 @@ export async function authSalt(instanceId: string, email: string): Promise<Uint8
 
 /**
  * Dérive `auth` et le renvoie en Base64, forme attendue par l'API.
+ *
+ * @param argon2id Fonction Argon2id chargée.
+ * @param password Mot de passe saisi.
+ * @param instanceId Identifiant public de l'instance.
+ * @param email Adresse du compte.
+ * @returns La valeur `auth`, en Base64.
  */
 export async function deriveAuth(argon2id: Argon2idFunction, password: string, instanceId: string, email: string): Promise<string> {
 	const salt = await authSalt(instanceId, email)
@@ -76,6 +89,9 @@ export async function deriveAuth(argon2id: Argon2idFunction, password: string, i
 
 /**
  * Encode des octets en Base64 standard (avec remplissage), sans dépendance.
+ *
+ * @param bytes Octets à encoder.
+ * @returns La chaîne Base64.
  */
 export function toBase64(bytes: Uint8Array): string {
 	let binary = ''

@@ -9,6 +9,11 @@
 export class CryptoError extends Error {
 	readonly reason: 'out_of_memory' | 'failed'
 
+	/**
+	 * Construit l'erreur avec son motif, traduit par l'interface.
+	 *
+	 * @param reason Motif de l'échec.
+	 */
 	constructor(reason: 'out_of_memory' | 'failed') {
 		super(`Calcul cryptographique impossible : ${reason}`)
 		this.reason = reason
@@ -17,6 +22,11 @@ export class CryptoError extends Error {
 
 /**
  * Calcule la valeur d'authentification `auth` (Base64) dans le Worker crypto.
+ *
+ * @param password Mot de passe saisi.
+ * @param instanceId Identifiant public de l'instance.
+ * @param email Adresse du compte.
+ * @returns La valeur `auth`, en Base64.
  */
 export function computeAuth(password: string, instanceId: string, email: string): Promise<string> {
 	const worker = new Worker(new URL('./crypto.worker.ts', import.meta.url), { type: 'module' })

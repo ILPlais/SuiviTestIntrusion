@@ -26,8 +26,14 @@ final class TwoFactor
 	/** Tolérance de décalage d'horloge, en pas de 30 secondes. */
 	private const WINDOW = 1;
 
+	/**
+	 * Générateur et vérificateur de codes TOTP.
+	 *
+	 * @var Google2FA
+	 */
 	private readonly Google2FA $google2fa;
 
+	/** Reçoit le générateur TOTP (RFC 6238, compatible Google Authenticator). */
 	public function __construct()
 	{
 		$this->google2fa = new Google2FA();
@@ -35,6 +41,8 @@ final class TwoFactor
 
 	/**
 	 * Nouveau secret TOTP (32 caractères Base32, 160 bits).
+	 *
+	 * @return string
 	 */
 	public function generateSecret(): string
 	{
@@ -43,6 +51,10 @@ final class TwoFactor
 
 	/**
 	 * URL otpauth:// lue par les applications d'authentification (QR code).
+	 *
+	 * @param User $user Compte qui enrôle son second facteur.
+	 * @param string $secret Secret TOTP en base32.
+	 * @return string
 	 */
 	public function otpauthUrl(User $user, string $secret): string
 	{
@@ -51,6 +63,10 @@ final class TwoFactor
 
 	/**
 	 * Vérifie un code TOTP et le consomme : vrai une seule fois par code.
+	 *
+	 * @param User $user Compte dont le code est vérifié.
+	 * @param string $code Code à six chiffres saisi.
+	 * @return bool
 	 */
 	public function verifyCode(User $user, string $code): bool
 	{
@@ -83,6 +99,7 @@ final class TwoFactor
 	 * Émet de nouveaux codes de secours, remplace les anciens et les renvoie en clair
 	 * (seule fois où ils sont lisibles).
 	 *
+	 * @param User $user Compte qui reçoit de nouveaux codes.
 	 * @return list<string>
 	 */
 	public function regenerateRecoveryCodes(User $user): array
@@ -100,6 +117,10 @@ final class TwoFactor
 
 	/**
 	 * Consomme un code de secours : vrai une seule fois par code.
+	 *
+	 * @param User $user Compte qui présente un code de secours.
+	 * @param string $code Code de secours saisi.
+	 * @return bool
 	 */
 	public function useRecoveryCode(User $user, string $code): bool
 	{
@@ -122,6 +143,9 @@ final class TwoFactor
 	/**
 	 * Empreinte d'un code de secours (HMAC, clé de l'application), insensible à la
 	 * casse, aux tirets et aux espaces.
+	 *
+	 * @param string $code Code de secours, en clair.
+	 * @return string
 	 */
 	private static function hashRecoveryCode(string $code): string
 	{
@@ -130,6 +154,8 @@ final class TwoFactor
 
 	/**
 	 * Pas de temps TOTP courant (secondes Unix / 30).
+	 *
+	 * @return int
 	 */
 	private function currentTimestep(): int
 	{

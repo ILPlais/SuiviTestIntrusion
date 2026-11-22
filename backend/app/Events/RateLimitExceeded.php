@@ -16,6 +16,8 @@ final class RateLimitExceeded
 	use Dispatchable;
 
 	/**
+	 * Décrit le dépassement, sans aucun contenu de la requête.
+	 *
 	 * @param string $limitClass Classe dépassée : standard, heavy, export ou auth.
 	 * @param string $ipAddress Adresse du client (après les proxys de confiance).
 	 * @param int|string|null $userId Identifiant de l'utilisateur, null si anonyme.

@@ -16,7 +16,11 @@ use Symfony\Component\HttpFoundation\Response;
 final class EnsureTwoFactorEnrolled
 {
 	/**
-	 * @param Closure(Request): Response $next
+	 * Refuse en 403 les routes métier tant que la politique d'instance impose un second facteur non enrôlé.
+	 *
+	 * @param Request $request Requête entrante.
+	 * @param Closure(Request): Response $next Suite de la chaîne de middlewares.
+	 * @return Response
 	 */
 	public function handle(Request $request, Closure $next): Response
 	{

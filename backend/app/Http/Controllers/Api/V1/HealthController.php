@@ -16,6 +16,11 @@ use Throwable;
  */
 class HealthController extends Controller
 {
+	/**
+	 * Renvoie l'état de l'instance (base de données joignable, heure UTC), sans détail technique.
+	 *
+	 * @return JsonResponse
+	 */
 	public function __invoke(): JsonResponse
 	{
 		$database = $this->databaseIsReachable();
@@ -27,6 +32,11 @@ class HealthController extends Controller
 		], $database ? 200 : 503);
 	}
 
+	/**
+	 * Vrai si une requête triviale aboutit sur la base de données.
+	 *
+	 * @return bool
+	 */
 	private function databaseIsReachable(): bool
 	{
 		try {

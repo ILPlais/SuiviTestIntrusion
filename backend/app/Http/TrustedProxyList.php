@@ -22,6 +22,7 @@ final class TrustedProxyList
 	/**
 	 * Transforme la valeur de TRUSTED_PROXIES en liste d'adresses, sans les jokers.
 	 *
+	 * @param ?string $value Valeur de TRUSTED_PROXIES.
 	 * @return list<string>
 	 */
 	public static function fromString(?string $value): array
@@ -34,6 +35,9 @@ final class TrustedProxyList
 
 	/**
 	 * Indique si la valeur contenait un joker écarté, pour le signaler dans le journal.
+	 *
+	 * @param ?string $value Valeur de TRUSTED_PROXIES.
+	 * @return bool
 	 */
 	public static function containsWildcard(?string $value): bool
 	{
@@ -43,6 +47,7 @@ final class TrustedProxyList
 	/**
 	 * Découpe la valeur sur les virgules et retire les entrées vides.
 	 *
+	 * @param ?string $value Valeur de TRUSTED_PROXIES.
 	 * @return list<string>
 	 */
 	private static function split(?string $value): array

@@ -17,6 +17,11 @@ class PaginationTest extends TestCase
 {
 	use RefreshDatabase;
 
+	/**
+	 * Déclare une route de liste de test, avec tri et filtres en liste blanche.
+	 *
+	 * @return void
+	 */
 	protected function setUp(): void
 	{
 		parent::setUp();
@@ -31,6 +36,11 @@ class PaginationTest extends TestCase
 		});
 	}
 
+	/**
+	 * Par défaut, la liste est paginée par curseur, par tranches de 50.
+	 *
+	 * @return void
+	 */
 	public function test_par_defaut_la_liste_est_paginee_par_curseur_par_tranches_de_50(): void
 	{
 		User::factory()->count(60)->create();
@@ -52,6 +62,11 @@ class PaginationTest extends TestCase
 		$this->assertCount(60, array_unique($ids), 'aucun élément répété ni sauté');
 	}
 
+	/**
+	 * Un curseur qui ne correspond pas au tri est refusé en 422.
+	 *
+	 * @return void
+	 */
 	public function test_un_curseur_qui_ne_correspond_pas_au_tri_est_refuse_en_422(): void
 	{
 		User::factory()->count(2)->create();
@@ -63,6 +78,11 @@ class PaginationTest extends TestCase
 			->assertJsonPath('details.cursor.0', __('validation.custom.cursor.invalid'));
 	}
 
+	/**
+	 * Le mode page donne le total et la dernière page.
+	 *
+	 * @return void
+	 */
 	public function test_le_mode_page_donne_le_total_et_la_derniere_page(): void
 	{
 		User::factory()->count(45)->create();
@@ -76,6 +96,11 @@ class PaginationTest extends TestCase
 			->assertJsonPath('meta.limit', 20);
 	}
 
+	/**
+	 * Le mode de pagination par défaut se règle pour l'instance.
+	 *
+	 * @return void
+	 */
 	public function test_le_mode_par_defaut_se_regle_pour_l_instance(): void
 	{
 		config(['api.pagination' => 'page']);
@@ -84,6 +109,11 @@ class PaginationTest extends TestCase
 		$this->getJson('/api/v1/_essai/utilisateurs')->assertJsonPath('meta.total', 3);
 	}
 
+	/**
+	 * Le paramètre limit est borné à 200.
+	 *
+	 * @return void
+	 */
 	public function test_limit_est_borne_a_200(): void
 	{
 		$this->getJson('/api/v1/_essai/utilisateurs?limit=201')
@@ -95,6 +125,11 @@ class PaginationTest extends TestCase
 		$this->getJson('/api/v1/_essai/utilisateurs?limit=200')->assertOk();
 	}
 
+	/**
+	 * Le tri est limité à la liste blanche.
+	 *
+	 * @return void
+	 */
 	public function test_le_tri_est_limite_a_la_liste_blanche(): void
 	{
 		User::factory()->create(['name' => 'Bruno']);
@@ -113,6 +148,11 @@ class PaginationTest extends TestCase
 			->assertJsonStructure(['details' => ['order']]);
 	}
 
+	/**
+	 * Les filtres sont limités à la liste blanche.
+	 *
+	 * @return void
+	 */
 	public function test_les_filtres_sont_limites_a_la_liste_blanche(): void
 	{
 		User::factory()->create(['name' => 'Alice']);

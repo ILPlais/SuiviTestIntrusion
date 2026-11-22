@@ -9,6 +9,9 @@ import { useAuthStore } from './stores/auth'
 
 /**
  * Crée le routeur ; l'historique est injectable pour les tests.
+ *
+ * @param history Historique de navigation (en mémoire dans les tests).
+ * @returns Le routeur, avec la garde de session et de double authentification.
  */
 export function createAppRouter(history: RouterHistory = createWebHistory()): Router {
 	const router = createRouter({
