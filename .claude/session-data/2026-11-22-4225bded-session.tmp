@@ -1,0 +1,25 @@
+# Session: 2026-11-21 → 2026-11-22
+**Project:** SuiviTestIntrusion
+**Branch:** main
+**Worktree:** C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion
+
+## Session Summary
+
+### Completed
+- Sprint 3 terminé (12 points, 2 h 55) : socle-2 (Docker Compose, proxy, installation manuelle), socle-5 (limites de débit, corps JSON), identite-1 (connexion par valeur d'authentification Argon2id, verrouillage, activation, commande suivi:create-admin), identite-3 (TOTP, codes de secours, politique AUTH_TWO_FACTOR_REQUIRED), socle-6 (CSP 13.04, Trusted Types, en-têtes, rapports CSP, CORS, cookies, OpenAPI 3.1 + Swagger UI, E2E production Chromium/Firefox).
+- 14.01 détaillé (phases fixes, table commune + par type pour le périmètre, ULID, rôle par organisation, tenant_id partout).
+- Plan validé : .claude/plans/version-testable-chemin-de-bout-en-bout.md (version testable : identite-5, engagement-1/2/4, vulnerabilites-1/3/5, resultats-1).
+- Conseil sur le catalogue de méthodologies : recommandation en attente de décision de l'utilisateur (PASSI en attribut d'engagement, OSSTMM via « Autre », mention au lieu d'alerte, copie nom/version/date sur le test).
+- Tableau blanc de l'interface : https://claude.ai/artifact/7tESijV5R8g3uxX3RD1DHM (envoyé au projet Suivi Test Intrusion).
+- Nouvelles conventions (2026-11-21) : DocBlock typé pour chaque élément PHP, JSDoc pour chaque fonction JS/TS (21.01, CLAUDE.md, mémoire).
+
+### Next Session
+1. Mise en conformité DocBlock/JSDoc du code existant dans une branche dédiée, avec règles de lint bloquantes (PHP-CS-Fixer phpdoc_*, eslint-plugin-jsdoc).
+2. story-lifecycle plan-sprint 4 (identite-5, engagement-1, engagement-2, engagement-4…), puis implement identite-5.
+3. Points reportés des revues : DOMPurify en liste blanche, usage explicite de sti-worker, intercepteur CSRF de Swagger UI, réauthentification avant enrôlement TOTP, désactivation par code de secours, rejet de « * » dans CORS_ALLOWED_ORIGINS.
+
+### Notes
+- Chromium ne démarre pas dans le WSL (libasound2) : E2E en CI seulement, sauf `sudo npx playwright install-deps chromium`.
+- Docker absent du WSL : pile vérifiée par docker/tests/smoke.sh en CI.
+- GateGuard (ECC) double le coût de chaque création de fichier : suggérer GATEGUARD_EXEMPT_GLOBS.
+- Remplacements par script Node : utiliser split/join (jamais String.replace avec une chaîne contenant $).
