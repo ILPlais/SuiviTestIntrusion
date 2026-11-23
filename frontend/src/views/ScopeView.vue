@@ -287,6 +287,14 @@ async function remove(object: ScopeObject): Promise<void> {
 }
 
 watch(() => props.id, open, { immediate: true })
+
+// Le formulaire de service vise toujours une machine existante : sans valeur
+// présélectionnée, la liste obligatoire resterait vide et bloquerait l'envoi.
+watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
+	if (!ids.includes(serviceForm.value.parent_id)) {
+		serviceForm.value.parent_id = ids[0] ?? ''
+	}
+}, { immediate: true })
 </script>
 
 <template>
