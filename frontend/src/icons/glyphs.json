@@ -1,5 +1,5 @@
 {
-	"$comment": "Icônes de la SPA (socle-8) : nom d'usage → glyphe Nerd Fonts 3.5.1 (nom nf-*, code hexadécimal). Seuls les glyphes Material Design (nf-md-*, Apache-2.0) sont employés ; la police est réduite à cette liste par scripts/subset-nerd-font.mjs, à relancer après tout ajout.",
+	"$comment": "Icônes de la SPA (socle-8) : nom d'usage → glyphe Nerd Fonts 3.5.1 (nom nf-*, code hexadécimal, voir glyphnames.json de Nerd Fonts). Tout jeu de glyphes est accepté (décision du 2026-11-23, 13.07 ; licences dans src/assets/fonts/LICENSE.md) ; la police est réduite à cette liste par scripts/subset-nerd-font.mjs, à relancer après tout ajout.",
 	"glyphs": {
 		"tests": { "nf": "md-shield_bug", "code": "f13da" },
 		"organisations": { "nf": "md-domain", "code": "f01d7" },

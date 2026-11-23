@@ -19,7 +19,7 @@ En tant qu'utilisateur, je veux une interface lisible et réactive, qui signale 
 
 ## Technical Notes
 
-Demandée par l’utilisateur le 2026-11-22, avant engagement-4. Thème Catppuccin automatique (`prefers-color-scheme`) ; couleurs de Latte sous 4,5:1 remplacées (titres, liens, code). Police d’icônes : l’OFL avait été acceptée, mais la police complète Symbols Nerd Font mêle aussi CC BY 4.0 et des glyphes sans licence ; seul un sous-ensemble de glyphes Material Design (Apache-2.0, 31 glyphes, 2,9 Ko) est embarqué, auto-hébergé (CSP `font-src 'self'`, le plugin `@webtui/plugin-nf` chargeant depuis un CDN), dans la liste autorisée sans exception (13.07). Captures dans [[43.01 Aperçu de l'interface]] (`npm run captures`).
+Demandée par l’utilisateur le 2026-11-22, avant engagement-4. Thème Catppuccin automatique (`prefers-color-scheme`) ; couleurs de Latte sous 4,5:1 remplacées (titres, liens, code) ; champs des formulaires de largeur fixe (60 caractères), égaux sur l’écran de connexion. Police d’icônes : tous les jeux de glyphes Nerd Fonts acceptés, y compris Font Logos, sans licence (décision du 2026-11-23, 13.07) ; seuls les glyphes employés sont embarqués (`scripts/subset-nerd-font.mjs`), auto-hébergés (CSP `font-src 'self'`, le plugin `@webtui/plugin-nf` chargeant depuis un CDN) ; licences jointes au build. Captures dans [[43.01 Aperçu de l'interface]] (`npm run captures`).
 
 ## Definition of Done
 

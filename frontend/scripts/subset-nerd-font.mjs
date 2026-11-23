@@ -1,11 +1,12 @@
 /**
  * Réduit la police Symbols Nerd Font aux seules icônes de la SPA (socle-8).
  *
- * La police complète (2,6 Mo) réunit des glyphes sous des licences diverses,
- * dont certains sans licence (Font Logos) ; la SPA n'emploie que des glyphes
- * Material Design (nf-md-*, Apache-2.0), listés dans src/icons/glyphs.json. La
- * police réduite pèse quelques kilo-octets et reste dans la politique de
- * licences (13.07) sans exception.
+ * La police complète pèse 2,6 Mo ; la SPA n'en embarque que les glyphes listés
+ * dans src/icons/glyphs.json, de tout jeu (décision du 2026-11-23, 13.07 :
+ * toutes les licences acceptées, y compris Font Logos, sans licence ; textes dans
+ * src/assets/fonts/LICENSE.md). La police réduite pèse quelques kilo-octets. Un
+ * code absent de la police source arrête le script : sans cela, l'icône
+ * resterait vide sans que rien ne le signale.
  *
  * Usage, après tout ajout d'icône :
  *   1. télécharger NerdFontsSymbolsOnly.zip de la version 3.5.1 de Nerd Fonts
@@ -35,6 +36,19 @@ function unicodes(file) {
 const [source, pyftsubset = 'pyftsubset'] = process.argv.slice(2)
 if (!source) {
 	console.error('Usage : node scripts/subset-nerd-font.mjs <SymbolsNerdFontMono-Regular.ttf> [pyftsubset]')
+	process.exit(1)
+}
+
+// Contrôle préalable : chaque code demandé existe dans la police source.
+const python = pyftsubset.replace(/pyftsubset$/, 'python3')
+const missing = execFileSync(python, ['-c', [
+	'import sys',
+	'from fontTools.ttLib import TTFont',
+	'cmap = TTFont(sys.argv[1]).getBestCmap()',
+	'print(",".join(c for c in sys.argv[2].split(",") if int(c[2:], 16) not in cmap))',
+].join('\n'), source, unicodes(join(root, 'src', 'icons', 'glyphs.json'))], { encoding: 'utf8' }).trim()
+if (missing) {
+	console.error(`Glyphes absents de la police source : ${missing}`)
 	process.exit(1)
 }
 

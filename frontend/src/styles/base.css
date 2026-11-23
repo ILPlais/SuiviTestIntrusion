@@ -170,13 +170,20 @@
 	}
 
 	form label {
+		display: block;
 		font-weight: var(--font-weight-bold);
 	}
 
+	/*
+	 * Largeur fixe, bornée à l'écran : un pourcentage seul se calculerait sur le
+	 * paragraphe qui entoure le champ, dont la largeur dépend de son contenu, et
+	 * deux champs voisins (connexion) n'auraient pas la même taille.
+	 */
 	form input:not([type='checkbox'], [type='radio']),
 	form textarea,
 	form select {
-		width: min(60ch, 100%);
+		width: 60ch;
+		max-width: 100%;
 		min-height: 24px;
 	}
 

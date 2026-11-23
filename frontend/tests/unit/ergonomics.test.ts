@@ -73,11 +73,12 @@ describe('requêtes en cours', () => {
 })
 
 describe('icônes', () => {
-	it('emploie uniquement des glyphes Material Design de Nerd Fonts, sans doublon', () => {
+	it('emploie des glyphes des zones privées de Nerd Fonts, sans doublon', () => {
 		const codes = ICON_NAMES.map((name) => glyph(name).codePointAt(0) ?? 0)
 		expect(ICON_NAMES.length).toBeGreaterThan(0)
-		// Plage des glyphes nf-md-* de Nerd Fonts 3 (Material Design Icons).
-		codes.forEach((code) => expect(code >= 0xF0001 && code <= 0xF1AF0).toBe(true))
+		// Tout jeu Nerd Fonts est accepté (13.07) : zone privée du plan de base
+		// (U+E000 à U+F8FF) ou du plan 15 (glyphes nf-md-*, U+F0001 à U+F1AF0).
+		codes.forEach((code) => expect((code >= 0xE000 && code <= 0xF8FF) || (code >= 0xF0001 && code <= 0xF1AF0)).toBe(true))
 		expect(new Set(codes).size).toBe(codes.length)
 	})
 
