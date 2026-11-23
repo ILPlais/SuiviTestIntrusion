@@ -12,6 +12,6 @@
 | [[engagement-2]] | Création d'un test et statuts                                              | 3      | done   |
 | [[engagement-4]] | Périmètre réseau                                                           | 3      | todo   |
 | [[identite-5]]   | Rôles, ACL et isolation multi-tenant                                       | 5      | done   |
-| [[socle-8]]      | Ergonomie de la SPA : WebTUI, indicateurs de chargement, icônes Nerd Fonts | 3      | review |
+| [[socle-8]]      | Ergonomie de la SPA : WebTUI, indicateurs de chargement, icônes Nerd Fonts | 3      | done   |
 
 ## Total Points: 16

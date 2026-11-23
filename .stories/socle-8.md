@@ -3,7 +3,7 @@
 **ID:** socle-8
 **Epic:** socle
 **Sprint:** 4
-**Status:** review
+**Status:** done
 **Points:** 3
 
 ## Context
@@ -25,4 +25,4 @@ Demandée par l’utilisateur le 2026-11-22, avant engagement-4. Thème Catppucc
 
 - [x] Tests written first cover the acceptance criteria
 - [x] Code review and verification loop passed
-- [ ] Code merged to main
+- [x] Code merged to main

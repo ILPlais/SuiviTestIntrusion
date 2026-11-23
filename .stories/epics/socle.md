@@ -32,4 +32,4 @@ Disposer d'un squelette Laravel + SPA Vue 3 déployable, testé en CI, qui appli
 | [[socle-5]] | Rate limiting par classe et limite de taille                               | done   |
 | [[socle-6]] | OpenAPI 3.1, Swagger UI et en-têtes de sécurité                            | done   |
 | [[socle-7]] | Service web HTTPS intégré à Docker Compose                                 | todo   |
-| [[socle-8]] | Ergonomie de la SPA : WebTUI, indicateurs de chargement, icônes Nerd Fonts | review |
+| [[socle-8]] | Ergonomie de la SPA : WebTUI, indicateurs de chargement, icônes Nerd Fonts | done   |
