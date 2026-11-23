@@ -65,6 +65,15 @@
 		color: var(--foreground0);
 	}
 
+	/*
+	 * Code en ligne (clé de double authentification, Markdown) : le thème l'écrit
+	 * en rouge, qui tombe à 3,51:1 sur le fond des champs de Latte ; couleur du
+	 * texte (5,17:1 sur ce fond, 7,06:1 sur le fond de page).
+	 */
+	[data-webtui-theme='catppuccin-latte'] code {
+		color: var(--foreground0);
+	}
+
 	/* WebTUI supprime tout contour : le focus clavier doit rester visible (WCAG 2.4.7). */
 	:focus-visible {
 		outline: 2px solid var(--blue, var(--foreground0));
