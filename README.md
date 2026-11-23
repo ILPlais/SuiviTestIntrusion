@@ -2,34 +2,29 @@
 
 Application Web de **suivi de tests d'intrusion** : elle accompagne une mission de pentest de bout en bout, du questionnaire d'engagement avec le client jusqu'au rapport final, en conservant les preuves de façon chiffrée.
 
-[![GitHub license](https://badgen.net/github/license/ILPlais/SuiviTestIntrusion)](LICENSE) 
-
-[![GitHub Repo stars](https://img.shields.io/github/stars/ILPlais/SuiviTestIntrusion)](https://gitHub.com/ILPlais/SuiviTestIntrusion/stargazers/)
-
-[![GitHub forks](https://img.shields.io/github/forks/ILPlais/SuiviTestIntrusion)](https://gitHub.com/ILPlais/SuiviTestIntrusion/network/)
-
-[![GitHub watchers](https://img.shields.io/github/watchers/ILPlais/SuiviTestIntrusion)](https://github.com/ILPlais/SuiviTestIntrusion/watchers)
+[![GitHub License](https://img.shields.io/github/license/ILPlais/SuiviTestIntrusion?style=for-the-badge)](LICENSE)
+[![GitHub Repo stars](https://img.shields.io/github/stars/ILPlais/SuiviTestIntrusion?style=for-the-badge)](https://gitHub.com/ILPlais/SuiviTestIntrusion/stargazers/)
+[![GitHub forks](https://img.shields.io/github/forks/ILPlais/SuiviTestIntrusion?style=for-the-badge)](https://gitHub.com/ILPlais/SuiviTestIntrusion/network/)
+[![GitHub watchers](https://img.shields.io/github/watchers/ILPlais/SuiviTestIntrusion?style=for-the-badge)](https://github.com/ILPlais/SuiviTestIntrusion/watchers)
 
 > **État du projet :** début du développement. Le cahier des charges et les décisions d'architecture sont rédigés ; le socle Laravel + Vue 3 est en place.
 
-![GitHub Release Date](https://img.shields.io/github/release-date/ILPlais/SuiviTeestIntrusion?display_date=published_at)
+![GitHub Created At](https://img.shields.io/github/created-at/ILPlais/SuiviTestIntrusion?style=for-the-badge)
+![GitHub Release Date](https://img.shields.io/github/release-date/ILPlais/SuiviTeestIntrusion?display_date=published_at&style=for-the-badge)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/ILPlais/SuiviTestIntrusion/total?label=t%C3%A9l%C3%A9chargements&style=for-the-badge)
 
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/ILPlais/SuiviTestIntrusion/total?label=t%C3%A9l%C3%A9chargements)
-
-[![GitHub branches](https://badgen.net/github/branches/ILPlais/SuiviTestIntrusion)](https://github.com/ILPlais/SuiviTestIntrusion/branches)
-
-[![GitHub latest commit](https://badgen.net/github/last-commit/ILPlais/SuiviTestIntrusion?label=dernier%20commit)](https://github.com/ILPlais/SuiviTestIntrusion/commits/main/)
-
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ILPlais/SuiviTestIntrusion/ci.yml)
+[![GitHub branch count](https://img.shields.io/github/branches/ILPlais/SuiviTestIntrusion?style=for-the-badge)](https://github.com/ILPlais/SuiviTestIntrusion/branches)
+[![GitHub last commit](https://img.shields.io/github/last-commit/ILPlais/SuiviTestIntrusion?style=for-the-badge)](https://github.com/ILPlais/SuiviTestIntrusion/commits/main/)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ILPlais/SuiviTestIntrusion/ci.yml?style=for-the-badge)
 
 
-[![GitHub contributors](https://badgen.net/github/contributors/ILPlais/SuiviTestIntrusion)](https://github.com/ILPlais/SuiviTestIntrusion/graphs/contributors/)
+[![GitHub contributors](https://img.shields.io/github/contributors/ILPlais/SuiviTestIntrusion?style=for-the-badge)](https://github.com/ILPlais/SuiviTestIntrusion/graphs/contributors/)
+![GitHub language count](https://img.shields.io/github/languages/count/ILPlais/SuiviTestIntrusion?style=for-the-badge)
+![GitHub top language](https://img.shields.io/github/languages/top/ILPlais/SuiviTestIntrusion?style=for-the-badge)
+[![GitHub Issues](https://img.shields.io/github/issues-raw/ILPlais/SuiviTestIntrusion?style=for-the-badge)](https://github.com/ILPlais/SuiviTestIntrusion/issues)
 
-![GitHub top language](https://img.shields.io/github/languages/top/ILPlais/SuiviTestIntrusion) 
-
-![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/ILPlais/SuiviTestIntrusion?label=fichiers)
-
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ILPlais/SuiviTestIntrusion?label=taille%20du%20code)
+![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/ILPlais/SuiviTestIntrusion?style=for-the-badge)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ILPlais/SuiviTestIntrusion?style=for-the-badge)
 
 ## Fonctionnalités prévues
 
