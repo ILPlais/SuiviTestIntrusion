@@ -18,6 +18,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Périmètre réseau d'un test (engagement-4, 11.07) : machines, services et
@@ -41,6 +42,11 @@ class ScopeObjectController extends Controller
 	{
 		$user = $this->user($request);
 		$roles = $user->tenantRoles();
+
+		// Le filtre d'inclusion est comparé tel quel par ApiListQuery : seules les
+		// valeurs booléennes sont admises, sans quoi PostgreSQL répondrait par une
+		// erreur 500 et MySQL confondrait n'importe quel texte avec « exclu ».
+		$request->validate(['filter.included' => ['sometimes', 'in:0,1']]);
 
 		return ApiListQuery::make(
 			$request,
@@ -83,6 +89,7 @@ class ScopeObjectController extends Controller
 
 		$valid = $request->validate($this->rules($type, $test, null));
 		$valid['type'] = $type->value;
+		$this->ensureFreePort($type, $test, null, $valid);
 
 		return $this->detailResponse($request, ScopeObject::declare($test, $valid), 201);
 	}
@@ -103,7 +110,9 @@ class ScopeObjectController extends Controller
 		/** @var PenetrationTest $test */
 		$test = $scopeObject->test;
 
-		$scopeObject->amend($request->validate($this->rules($scopeObject->type, $test, $scopeObject)));
+		$valid = $request->validate($this->rules($scopeObject->type, $test, $scopeObject));
+		$this->ensureFreePort($scopeObject->type, $test, $scopeObject, $valid);
+		$scopeObject->amend($valid);
 
 		return $this->detailResponse($request, $scopeObject);
 	}
@@ -154,7 +163,7 @@ class ScopeObjectController extends Controller
 			ScopeObjectType::Service => [
 				'parent_id' => [$presence, 'required', 'string', 'max:26', $this->hostOf($test)],
 				'protocol' => [$presence, 'required', Rule::enum(ServiceProtocol::class)],
-				'port' => [$presence, 'required', 'integer', 'between:1,65535', $this->freePort($test, $object)],
+				'port' => [$presence, 'required', 'integer', 'between:1,65535'],
 				'name' => ['sometimes', 'nullable', 'string', 'max:64'],
 				'version' => ['sometimes', 'nullable', 'string', 'max:255'],
 			],
@@ -217,38 +226,47 @@ class ScopeObjectController extends Controller
 	}
 
 	/**
-	 * Règle : le couple protocole et port n'est pas déjà déclaré sur la machine
-	 * (hors l'objet modifié). Les valeurs absentes de la requête sont reprises de
-	 * l'objet modifié.
+	 * Vérifie, après validation, que le couple protocole et port d'un service
+	 * n'est pas déjà déclaré sur sa machine. Le contrôle porte sur les valeurs
+	 * résultantes (reçues, complétées par celles du service modifié) : déplacer
+	 * un service vers une autre machine ou changer seulement son protocole est
+	 * vérifié comme un changement de port.
 	 *
+	 * Deux écritures simultanées du même couple pourraient encore passer : la
+	 * table de détail ne connaît pas la machine (14.01), aucun index unique ne
+	 * peut donc départager ; risque accepté en V1.
+	 *
+	 * @param ScopeObjectType $type Type de l'objet.
 	 * @param PenetrationTest $test Test de l'objet.
 	 * @param ScopeObject|null $object Service modifié ; null à la création.
-	 * @return Closure(string, mixed, Closure): void
+	 * @param array<string, mixed> $valid Champs validés de la requête.
+	 * @return void
+	 *
+	 * @throws ValidationException Si le couple est déjà pris.
 	 */
-	private function freePort(PenetrationTest $test, ?ScopeObject $object): Closure
+	private function ensureFreePort(ScopeObjectType $type, PenetrationTest $test, ?ScopeObject $object, array $valid): void
 	{
-		return function (string $attribute, mixed $value, Closure $fail) use ($test, $object): void {
-			$request = request();
-			$current = $object?->detail();
-			$parent = $request->input('parent_id', $object?->parent_id);
-			$protocol = $request->input('protocol', $current?->getAttribute('protocol')?->value);
-			if (! is_string($parent) || ! is_string($protocol)) {
-				// Parent ou protocole invalide : leurs propres règles le signalent.
-				return;
-			}
+		$fields = ['parent_id', 'protocol', 'port'];
+		if ($type !== ScopeObjectType::Service || ($object !== null && array_intersect_key($valid, array_flip($fields)) === [])) {
+			return;
+		}
 
-			$taken = ScopeObject::query()
-				->where('test_id', $test->id)
-				->where('parent_id', $parent)
-				->where('type', ScopeObjectType::Service->value)
-				->when($object !== null, fn ($query) => $query->whereKeyNot($object?->id))
-				->whereHas('service', fn ($query) => $query->where('protocol', $protocol)->where('port', (int) $value))
-				->exists();
+		$current = $object?->detail();
+		$parent = $valid['parent_id'] ?? $object?->parent_id;
+		$protocol = $valid['protocol'] ?? $current?->getAttribute('protocol')?->value;
+		$port = (int) ($valid['port'] ?? $current?->getAttribute('port'));
 
-			if ($taken) {
-				$fail(__('validation.custom.port.taken'));
-			}
-		};
+		$taken = ScopeObject::query()
+			->where('test_id', $test->id)
+			->where('parent_id', $parent)
+			->where('type', ScopeObjectType::Service->value)
+			->when($object !== null, fn ($query) => $query->whereKeyNot($object?->id))
+			->whereHas('service', fn ($query) => $query->where('protocol', $protocol)->where('port', $port))
+			->exists();
+
+		if ($taken) {
+			throw ValidationException::withMessages(['port' => [__('validation.custom.port.taken')]]);
+		}
 	}
 
 	/**

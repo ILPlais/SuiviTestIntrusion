@@ -100,7 +100,7 @@ async function load(id: string): Promise<void> {
 		const all: ScopeObject[] = []
 		for (let page = 1, last = 1; page <= last; page++) {
 			const response = await getJson<{ data: ScopeObject[], meta: { last_page: number } }>(
-				`/tests/${encodeURIComponent(id)}/scope-objects?page=${page}&limit=200&sort=created_at&order=asc`,
+				`/tests/${encodeURIComponent(id)}/scope-objects?page=${page}&sort=created_at&order=asc`,
 			)
 			all.push(...response.data)
 			last = response.meta.last_page
@@ -116,7 +116,10 @@ async function load(id: string): Promise<void> {
 			error.value = missing.value ? null : t('auth.unexpected')
 		}
 	} finally {
-		loading.value = false
+		// Le chargement d'un test quitté ne masque pas celui du test affiché.
+		if (id === props.id) {
+			loading.value = false
+		}
 	}
 }
 
@@ -146,9 +149,14 @@ async function write(request: () => Promise<unknown>, done: string): Promise<boo
 	busy.value = true
 	error.value = null
 	message.value = null
+	const id = props.id
 	try {
 		await request()
-		await load(props.id)
+		// Test quitté pendant l'écriture : ni rechargement ni message sur le nouveau.
+		if (id !== props.id) {
+			return true
+		}
+		await load(id)
 		message.value = done
 		return true
 	} catch (caught) {

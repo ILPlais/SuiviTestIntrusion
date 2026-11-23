@@ -371,6 +371,83 @@ class ScopeObjectsTest extends TestCase
 	}
 
 	/**
+	 * Déplacer un service vers une machine qui a déjà son couple protocole/port,
+	 * ou changer seulement son protocole vers un couple pris, est refusé.
+	 *
+	 * @return void
+	 */
+	public function test_moving_a_service_keeps_ports_unique(): void
+	{
+		Sanctum::actingAs($this->member(TenantRole::Tester));
+		$url = "/api/v1/tests/{$this->test->id}/scope-objects";
+		$first = $this->createHost($this->test);
+		$second = $this->createHost($this->test, ['address' => '203.0.113.11', 'hostname' => 'srv-api01']);
+		$this->postJson($url, ['type' => 'service', 'parent_id' => $second, 'protocol' => 'tcp', 'port' => 443])->assertCreated();
+		$this->postJson($url, ['type' => 'service', 'parent_id' => $first, 'protocol' => 'udp', 'port' => 443])->assertCreated();
+		$service = $this->postJson($url, ['type' => 'service', 'parent_id' => $first, 'protocol' => 'tcp', 'port' => 443])->json('data.id');
+
+		$this->patchJson("/api/v1/scope-objects/{$service}", ['parent_id' => $second])
+			->assertUnprocessable()->assertJsonValidationErrors('port', 'details');
+		$this->patchJson("/api/v1/scope-objects/{$service}", ['protocol' => 'udp'])
+			->assertUnprocessable()->assertJsonValidationErrors('port', 'details');
+
+		// Son propre couple ne le bloque pas, et un port libre passe.
+		$this->patchJson("/api/v1/scope-objects/{$service}", ['port' => 443, 'version' => 'nginx 1.26'])->assertOk();
+		$this->patchJson("/api/v1/scope-objects/{$service}", ['parent_id' => $second, 'port' => 8443])
+			->assertOk()
+			->assertJsonPath('data.parent_id', $second)
+			->assertJsonPath('data.label', '8443/tcp');
+	}
+
+	/**
+	 * Un libellé déduit suit le détail ; un libellé saisi reste, et un libellé
+	 * vidé redevient déduit.
+	 *
+	 * @return void
+	 */
+	public function test_a_derived_label_follows_the_detail(): void
+	{
+		Sanctum::actingAs($this->member(TenantRole::Tester));
+		$host = $this->createHost($this->test);
+
+		$this->patchJson("/api/v1/scope-objects/{$host}", ['hostname' => 'srv-web02'])->assertJsonPath('data.label', 'srv-web02');
+		$this->patchJson("/api/v1/scope-objects/{$host}", ['label' => 'Site vitrine'])->assertJsonPath('data.label', 'Site vitrine');
+		$this->patchJson("/api/v1/scope-objects/{$host}", ['hostname' => 'srv-web03'])->assertJsonPath('data.label', 'Site vitrine');
+		$this->patchJson("/api/v1/scope-objects/{$host}", ['label' => ''])->assertJsonPath('data.label', 'srv-web03');
+	}
+
+	/**
+	 * L'administrateur d'instance tient le périmètre de toute organisation.
+	 *
+	 * @return void
+	 */
+	public function test_an_instance_administrator_manages_any_scope(): void
+	{
+		$admin = User::factory()->create();
+		$admin->forceFill(['is_instance_admin' => true])->save();
+		Sanctum::actingAs($admin);
+
+		$host = $this->createHost($this->test);
+		$this->getJson("/api/v1/scope-objects/{$host}")->assertOk()->assertJsonPath('data.can_manage', true);
+		$this->getJson("/api/v1/tests/{$this->test->id}")->assertOk()->assertJsonPath('data.can_manage_scope', true);
+		$this->deleteJson("/api/v1/scope-objects/{$host}")->assertNoContent();
+	}
+
+	/**
+	 * Le filtre d'inclusion n'accepte que 0 ou 1.
+	 *
+	 * @return void
+	 */
+	public function test_the_inclusion_filter_accepts_booleans_only(): void
+	{
+		Sanctum::actingAs($this->member(TenantRole::Tester));
+
+		$this->getJson("/api/v1/tests/{$this->test->id}/scope-objects?filter[included]=abc")
+			->assertUnprocessable()->assertJsonValidationErrors('filter.included', 'details');
+		$this->getJson("/api/v1/tests/{$this->test->id}/scope-objects?filter[included]=1")->assertOk();
+	}
+
+	/**
 	 * Le périmètre exige une session.
 	 *
 	 * @return void
