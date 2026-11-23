@@ -27,7 +27,7 @@ Documenter chaque vulnérabilité, calculer sa gravité CVSS et piloter sa remé
 
 | ID                   | Title                                                | Status |
 | -------------------- | ---------------------------------------------------- | ------ |
-| [[vulnerabilites-1]] | Moteur CVSS v3.1                                     | todo   |
+| [[vulnerabilites-1]] | Moteur CVSS v3.1                                     | review |
 | [[vulnerabilites-2]] | Moteur CVSS v4.0                                     | todo   |
 | [[vulnerabilites-3]] | Fiche vulnérabilité                                  | todo   |
 | [[vulnerabilites-4]] | Impact business                                      | todo   |

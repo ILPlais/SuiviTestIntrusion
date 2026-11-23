@@ -3,7 +3,7 @@
 **ID:** vulnerabilites-1
 **Epic:** vulnerabilites
 **Sprint:** 5
-**Status:** todo
+**Status:** review
 **Points:** 3
 
 ## Context
