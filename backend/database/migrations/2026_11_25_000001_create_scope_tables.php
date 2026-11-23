@@ -26,10 +26,9 @@ return new class () extends Migration {
 			$table->foreignUlid('tenant_id')->constrained()->cascadeOnDelete();
 			$table->foreignUlid('test_id')->constrained()->cascadeOnDelete();
 			$table->string('type', 32);
-			// Objet hôte : machine d'un service, machine éventuelle d'un compte. La
-			// suppression d'une machine emporte ses services ; ses comptes sont
-			// détachés avant par ScopeObject::remove().
-			$table->foreignUlid('parent_id')->nullable()->constrained('scope_objects')->cascadeOnDelete();
+			// Objet hôte : machine d'un service, machine éventuelle d'un compte ; clé
+			// étrangère posée après la création de la table (voir plus bas).
+			$table->ulid('parent_id')->nullable();
 			$table->string('label');
 			$table->boolean('included')->default(true);
 			$table->text('comment')->nullable();
@@ -40,6 +39,14 @@ return new class () extends Migration {
 			$table->index(['test_id', 'type']);
 			$table->index('tenant_id');
 			$table->index('parent_id');
+		});
+
+		// Clé étrangère sur la table elle-même, ajoutée une fois sa clé primaire
+		// créée : PostgreSQL refuse une référence vers une clé pas encore déclarée.
+		// La suppression d'une machine emporte ses services ; ses comptes sont
+		// détachés avant par ScopeObject::remove().
+		Schema::table('scope_objects', function (Blueprint $table) {
+			$table->foreign('parent_id')->references('id')->on('scope_objects')->cascadeOnDelete();
 		});
 
 		Schema::create('scope_hosts', function (Blueprint $table) {
