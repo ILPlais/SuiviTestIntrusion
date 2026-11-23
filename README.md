@@ -10,8 +10,8 @@ Application Web de **suivi de tests d'intrusion** : elle accompagne une mission 
 > **État du projet :** début du développement. Le cahier des charges et les décisions d'architecture sont rédigés ; le socle Laravel + Vue 3 est en place.
 
 ![GitHub Created At](https://img.shields.io/github/created-at/ILPlais/SuiviTestIntrusion?style=for-the-badge)
-![GitHub Release Date](https://img.shields.io/github/release-date/ILPlais/SuiviTeestIntrusion?display_date=published_at&style=for-the-badge)
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/ILPlais/SuiviTestIntrusion/total?label=t%C3%A9l%C3%A9chargements&style=for-the-badge)
+![GitHub Release Date](https://img.shields.io/github/release-date/ILPlais/SuiviTeestIntrusion?style=for-the-badge)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/ILPlais/SuiviTestIntrusion/total?style=for-the-badge)
 
 [![GitHub branch count](https://img.shields.io/github/branches/ILPlais/SuiviTestIntrusion?style=for-the-badge)](https://github.com/ILPlais/SuiviTestIntrusion/branches)
 [![GitHub last commit](https://img.shields.io/github/last-commit/ILPlais/SuiviTestIntrusion?style=for-the-badge)](https://github.com/ILPlais/SuiviTestIntrusion/commits/main/)
