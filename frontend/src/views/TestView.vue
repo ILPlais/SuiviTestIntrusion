@@ -12,6 +12,7 @@ import { ApiError, deleteJson, getJson, patchJson, postJson } from '../api/clien
 import { TEST_EXPOSURES, TEST_STATUSES, TEST_TYPES, type PenetrationTest, type StatusChange, type TestExposure, type TestStatus, type TestType } from '../api/penetrationTests'
 import { useAuthStore } from '../stores/auth'
 import { formatDateTime, fromLocalInput, toLocalInput } from '../utils/dates'
+import ActionIcon from '../components/ActionIcon.vue'
 
 const props = defineProps<{
 	/** Identifiant (ULID) du test. */
@@ -258,13 +259,16 @@ watch(() => props.id, load, { immediate: true })
 				type="submit"
 				:disabled="busy"
 			>
-				{{ t('common.save') }}
+				<ActionIcon
+					name="save"
+					:busy="busy"
+				/>{{ t('common.save') }}
 			</button>
 			<button
 				type="button"
 				@click="editing = false"
 			>
-				{{ t('common.cancel') }}
+				<ActionIcon name="cancel" />{{ t('common.cancel') }}
 			</button>
 		</form>
 		<template v-else>
@@ -293,7 +297,7 @@ watch(() => props.id, load, { immediate: true })
 				type="button"
 				@click="edit"
 			>
-				{{ t('common.edit') }}
+				<ActionIcon name="edit" />{{ t('common.edit') }}
 			</button>
 			<button
 				v-if="auth.user?.is_instance_admin"
@@ -301,7 +305,10 @@ watch(() => props.id, load, { immediate: true })
 				:disabled="busy"
 				@click="remove"
 			>
-				{{ t('tests.delete') }}
+				<ActionIcon
+					name="delete"
+					:busy="busy"
+				/>{{ t('tests.delete') }}
 			</button>
 		</template>
 
@@ -340,7 +347,10 @@ watch(() => props.id, load, { immediate: true })
 				type="submit"
 				:disabled="busy"
 			>
-				{{ t('tests.applyStatus') }}
+				<ActionIcon
+					name="status"
+					:busy="busy"
+				/>{{ t('tests.applyStatus') }}
 			</button>
 		</form>
 

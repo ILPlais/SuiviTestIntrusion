@@ -1,42 +1,283 @@
 /*
- * Styles de base de la SPA (13.07) : servis comme fichier de la même origine
- * (CSP style-src 'self'). Ils assurent des cibles d'au moins 24 px (WCAG 2.2,
- * critère 2.5.8) et une mise en page lisible, en attendant la charte graphique.
+ * Styles de la SPA (socle-8) : WebTUI (@webtui/css) pour l'allure d'une
+ * interface en mode texte, thème Catppuccin (Mocha ou Latte selon la préférence
+ * du système, posé par src/theme.ts), icônes Nerd Fonts auto-hébergées.
+ *
+ * Servis comme fichiers de la même origine (CSP style-src et font-src 'self',
+ * 13.04). Les couches fixent la priorité : les règles de la couche « app »
+ * corrigent celles de WebTUI là où l'accessibilité l'exige (13.07) : focus
+ * visible, cibles d'au moins 24 px (WCAG 2.2, critère 2.5.8), césure des mots,
+ * animations réduites.
  */
+@layer base, utils, components, app;
 
-/* Navigation : liens et boutons espacés, de taille suffisante au doigt. */
-header nav {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 0.75rem;
+@import '@webtui/css/base.css';
+@import '@webtui/css/utils/box.css';
+@import '@webtui/css/components/typography.css';
+@import '@webtui/css/components/button.css';
+@import '@webtui/css/components/input.css';
+@import '@webtui/css/components/textarea.css';
+@import '@webtui/css/components/table.css';
+@import '@webtui/css/components/badge.css';
+@import '@webtui/css/components/separator.css';
+@import '@webtui/css/components/spinner.css';
+@import '@webtui/theme-catppuccin';
+
+/*
+ * Cascadia Code (Microsoft, OFL-1.1, paquet @fontsource/cascadia-code), servie
+ * par l'application pour ses ligatures : graisses 400 (texte) et 700 (titres,
+ * libellés). Découpée par jeu de caractères : le navigateur ne télécharge que
+ * les fichiers utiles (latin, environ 29 Ko par graisse).
+ */
+@import '@fontsource/cascadia-code/400.css';
+@import '@fontsource/cascadia-code/700.css';
+
+/*
+ * Police d'icônes : sous-ensemble de Symbols Nerd Font Mono réduit aux glyphes
+ * de src/icons/glyphs.json (scripts/subset-nerd-font.mjs ; licences dans
+ * src/assets/fonts/LICENSE.md). Même nom de famille que le plugin
+ * @webtui/plugin-nf, qui la chargerait depuis un CDN, refusé par la CSP.
+ */
+@font-face {
+	font-family: 'Symbols Nerd Font';
+	src: url('../assets/fonts/SymbolsNerdFontMono-subset.woff2') format('woff2');
+	font-display: block;
+	font-style: normal;
+	font-weight: 400;
 }
 
-header nav a,
-button {
-	display: inline-flex;
-	align-items: center;
-	min-height: 24px;
-	min-width: 24px;
-	padding: 0.25rem 0.5rem;
-}
+@layer app {
+	:root {
+		/*
+		 * Cascadia Code d'abord (servie par l'application, voir plus haut), puis des
+		 * polices à chasse fixe du système en secours, et les icônes en dernier
+		 * recours comme le prévoit WebTUI.
+		 */
+		--font-family: 'Cascadia Code', ui-monospace, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace, 'Symbols Nerd Font';
+	}
 
-/* Formulaires : un champ par ligne, sous son libellé. */
-form label,
-form input,
-form textarea {
-	display: block;
-	margin-block: 0.25rem;
-}
+	html,
+	body {
+		/* WebTUI coupe les mots n'importe où (break-all) : illisible en français. */
+		word-break: normal;
+		overflow-wrap: anywhere;
+		/*
+		 * Les ligatures de Cascadia Code (->, =>, !=…) passent par les alternatives
+		 * contextuelles (calt), que la valeur de WebTUI (common-ligatures) n'active
+		 * pas explicitement.
+		 */
+		font-variant-ligatures: common-ligatures contextual;
+	}
 
-form input,
-form textarea {
-	width: min(40rem, 100%);
-	min-height: 24px;
-}
+	/*
+	 * Titres en thème clair : Catppuccin les colore d'accents (h2 pêche, h3 jaune,
+	 * h4 vert…) qui, sur le fond de Latte (#eff1f5), n'atteignent pas 4,5:1
+	 * (WCAG 1.4.3 ; pêche 2,64:1). Seuls rouge (h1, 4,80:1) et mauve (4,79:1)
+	 * passent : h2 en mauve, les niveaux suivants dans la couleur du texte (7,06:1).
+	 * En Mocha (sombre), les accents du thème sont conformes et restent.
+	 */
+	[data-webtui-theme='catppuccin-latte'] h2 {
+		color: var(--mauve);
+	}
 
-/* Listes de liens (organisations) : lignes assez hautes pour être touchées. */
-main li {
-	min-height: 24px;
-	margin-block: 0.25rem;
+	[data-webtui-theme='catppuccin-latte'] :is(h3, h4, h5, h6) {
+		color: var(--foreground0);
+	}
+
+	/*
+	 * Code en ligne (clé de double authentification, Markdown) : le thème l'écrit
+	 * en rouge, qui tombe à 3,51:1 sur le fond des champs de Latte ; couleur du
+	 * texte (5,17:1 sur ce fond, 7,06:1 sur le fond de page).
+	 */
+	[data-webtui-theme='catppuccin-latte'] code {
+		color: var(--foreground0);
+	}
+
+	/* WebTUI supprime tout contour : le focus clavier doit rester visible (WCAG 2.4.7). */
+	:focus-visible {
+		outline: 2px solid var(--blue, var(--foreground0));
+		outline-offset: 2px;
+	}
+
+	/* Mise en page : en-tête, contenu et pied de page espacés, largeur de lecture limitée. */
+	body > #app {
+		display: flex;
+		flex-direction: column;
+		gap: 1lh;
+		min-height: 100vh;
+		padding: 1lh 2ch;
+	}
+
+	main {
+		flex: 1;
+		max-width: 100ch;
+	}
+
+	main > * + * {
+		margin-block-start: 1lh;
+	}
+
+	/* En-tête : titre et throbber sur une ligne, navigation dessous. */
+	header {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5lh;
+		padding: 0.5lh 1ch;
+	}
+
+	header .masthead {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0 2ch;
+	}
+
+	/* Emplacement du throbber global, réservé pour éviter tout décalage. */
+	header .activity {
+		min-width: 22ch;
+		min-height: 1lh;
+		color: var(--foreground1);
+	}
+
+	/*
+	 * Liens : ni WebTUI ni le thème ne les colorent, et le bleu par défaut du
+	 * navigateur est illisible sur Mocha. Soulignés partout ; couleur du texte en
+	 * Latte (le bleu n'y atteint que 4,34:1), bleu Catppuccin en Mocha.
+	 */
+	a {
+		color: var(--foreground0);
+		text-decoration: underline;
+	}
+
+	[data-webtui-theme='catppuccin-mocha'] a {
+		color: var(--blue);
+	}
+
+	/* Navigation : liens et boutons espacés, de taille suffisante au doigt. */
+	header nav {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5lh 2ch;
+	}
+
+	header nav a,
+	button {
+		display: inline-flex;
+		align-items: center;
+		gap: 1ch;
+		min-height: 24px;
+		min-width: 24px;
+	}
+
+	header nav a[aria-current='page'] {
+		font-weight: var(--font-weight-bold);
+		text-decoration: underline;
+	}
+
+	/* Boutons voisins du contenu ; la navigation a déjà son espacement (gap). */
+	main button + button {
+		margin-inline-start: 1ch;
+	}
+
+	/* Formulaires : un champ par ligne, sous son libellé ; select aligné sur les champs WebTUI. */
+	form {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5lh;
+	}
+
+	form label {
+		display: block;
+		font-weight: var(--font-weight-bold);
+	}
+
+	/*
+	 * Largeur fixe, bornée à l'écran : un pourcentage seul se calculerait sur le
+	 * paragraphe qui entoure le champ, dont la largeur dépend de son contenu, et
+	 * deux champs voisins (connexion) n'auraient pas la même taille.
+	 */
+	form input:not([type='checkbox'], [type='radio']),
+	form textarea,
+	form select {
+		width: 60ch;
+		max-width: 100%;
+		min-height: 24px;
+	}
+
+	select {
+		background-color: var(--background1);
+		color: var(--foreground0);
+		border: none;
+		padding: 0 1ch;
+		font: inherit;
+		height: 1lh;
+	}
+
+	/* Listes : lignes assez hautes pour être touchées. */
+	main li {
+		min-height: 24px;
+	}
+
+	dl {
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		gap: 0 2ch;
+	}
+
+	dt {
+		color: var(--foreground1);
+	}
+
+	/* Tableaux : pleine largeur, légende alignée à gauche. */
+	main table {
+		width: 100%;
+	}
+
+	caption {
+		text-align: start;
+		color: var(--foreground1);
+	}
+
+	/*
+	 * Erreurs en rouge, toujours accompagnées d'un texte. Les messages role="status"
+	 * gardent la couleur du texte : l'état de l'API en est un, et un « ne répond
+	 * pas » ne doit pas paraître rassurant ; leur icône porte l'état.
+	 */
+	[role='alert'] {
+		color: var(--red, var(--foreground0));
+	}
+
+	/* Icônes Nerd Fonts : glyphe affiché depuis data-glyph, hors du texte de la page. */
+	.icon::before {
+		content: attr(data-glyph);
+		font-family: 'Symbols Nerd Font';
+		font-style: normal;
+		font-weight: normal;
+	}
+
+	/* Throbber : spinner WebTUI et libellé sur une ligne. */
+	.throbber {
+		display: inline-flex;
+		align-items: center;
+		gap: 1ch;
+	}
+
+	/* Masqué à l'écran, lu par les lecteurs d'écran. */
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	/* Animations réduites : le spinner tourne quatre fois moins vite (WCAG 2.3.3). */
+	@media (prefers-reduced-motion: reduce) {
+		[is-='spinner'] {
+			--spinner-duration: 4s;
+		}
+	}
 }

@@ -9,6 +9,7 @@ import { useI18n } from 'vue-i18n'
 import { ApiError, patchJson } from '../api/client'
 import MarkdownField from '../components/MarkdownField.vue'
 import { type CurrentUser, useAuthStore } from '../stores/auth'
+import ActionIcon from '../components/ActionIcon.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -79,7 +80,10 @@ async function save(): Promise<void> {
 			type="submit"
 			:disabled="busy"
 		>
-			{{ t('common.save') }}
+			<ActionIcon
+				name="save"
+				:busy="busy"
+			/>{{ t('common.save') }}
 		</button>
 	</form>
 </template>

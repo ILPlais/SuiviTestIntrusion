@@ -5,7 +5,9 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import type { IconName } from '../icons'
 import { useHealthStore } from '../stores/health'
+import NfIcon from './NfIcon.vue'
 import { formatDateTime } from '../utils/dates'
 
 const { t, locale } = useI18n()
@@ -17,6 +19,15 @@ const message = computed(() => {
 		case 'degraded': return t('health.degraded')
 		case 'unreachable': return t('health.unreachable')
 		default: return t('health.checking')
+	}
+})
+
+/** Icône de l'état : succès, avertissement ou échec (le texte porte le sens). */
+const icon = computed<IconName>(() => {
+	switch (health.state) {
+		case 'ok': return 'success'
+		case 'degraded': return 'warning'
+		default: return 'failure'
 	}
 })
 
@@ -36,6 +47,17 @@ onMounted(() => health.check())
 			role="status"
 			:data-state="health.state"
 		>
+			<!-- Spinner seul pendant la vérification : le message dit déjà ce qui se passe. -->
+			<span
+				v-if="health.state === 'checking'"
+				is-="spinner"
+				variant-="dots"
+				aria-hidden="true"
+			/>
+			<NfIcon
+				v-else
+				:name="icon"
+			/>
 			{{ message }}
 		</p>
 		<p v-if="serverTime">
@@ -46,7 +68,7 @@ onMounted(() => health.check())
 			:disabled="health.state === 'checking'"
 			@click="health.check()"
 		>
-			{{ t('health.retry') }}
+			<NfIcon name="refresh" />{{ t('health.retry') }}
 		</button>
 	</section>
 </template>

@@ -16,5 +16,7 @@ export async function expectNoAccessibilityViolations(page: Page): Promise<void>
 	const results = await new AxeBuilder({ page })
 		.withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
 		.analyze()
-	expect(results.violations.map((v) => `${v.id} : ${v.help}`)).toEqual([])
+	// Chaque violation cite ses éléments (sélecteur et explication d'axe) : sans
+	// eux, un échec en CI ne dit pas quoi corriger.
+	expect(results.violations.map((v) => `${v.id} : ${v.help}${v.nodes.map((node) => `\n  ${node.target.join(' ')} — ${node.failureSummary ?? ''}`).join('')}`)).toEqual([])
 }

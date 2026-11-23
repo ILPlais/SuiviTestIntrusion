@@ -10,6 +10,7 @@ import type { CompanyProfile } from '../api/organisations'
 import MarkdownField from '../components/MarkdownField.vue'
 import MarkdownView from '../render/MarkdownView.vue'
 import { useAuthStore } from '../stores/auth'
+import ActionIcon from '../components/ActionIcon.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -102,13 +103,16 @@ onMounted(load)
 			type="submit"
 			:disabled="busy"
 		>
-			{{ t('common.save') }}
+			<ActionIcon
+				name="save"
+				:busy="busy"
+			/>{{ t('common.save') }}
 		</button>
 		<button
 			type="button"
 			@click="editing = false"
 		>
-			{{ t('common.cancel') }}
+			<ActionIcon name="cancel" />{{ t('common.cancel') }}
 		</button>
 	</form>
 	<template v-else-if="profile">
@@ -127,7 +131,7 @@ onMounted(load)
 			type="button"
 			@click="edit"
 		>
-			{{ t('common.edit') }}
+			<ActionIcon name="edit" />{{ t('common.edit') }}
 		</button>
 	</template>
 </template>

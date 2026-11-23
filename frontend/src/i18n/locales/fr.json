@@ -4,6 +4,8 @@
 	},
 	"common": {
 		"loading": "Chargement…",
+		"working": "Requêtes en cours…",
+		"sending": "Envoi en cours…",
 		"save": "Enregistrer",
 		"saved": "Modifications enregistrées.",
 		"edit": "Modifier",

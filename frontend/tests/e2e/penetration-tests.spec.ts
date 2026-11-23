@@ -77,4 +77,9 @@ test('un administrateur crée un test, change son statut et lit l\'historique', 
 	await expect(page.getByRole('cell', { name: organisation })).toBeVisible()
 	await expect(page.getByRole('link', { name: reference })).toBeVisible()
 	await expectNoAccessibilityViolations(page)
+
+	// Même écran en thème sombre (Mocha) : liens, tableau et formulaire (socle-8).
+	await page.emulateMedia({ colorScheme: 'dark' })
+	await expect(page.locator('html')).toHaveAttribute('data-webtui-theme', 'catppuccin-mocha')
+	await expectNoAccessibilityViolations(page)
 })

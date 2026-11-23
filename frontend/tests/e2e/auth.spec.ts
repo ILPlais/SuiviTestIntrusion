@@ -93,6 +93,12 @@ test('les écrans de connexion et d\'activation ne présentent aucune violation 
 	await expect(page.getByRole('heading', { name: fr.auth.loginHeading })).toBeVisible()
 	await expectNoAccessibilityViolations(page)
 
+	// Champs de même largeur (socle-8), quel que soit le paragraphe qui les entoure.
+	const email = await page.getByLabel(fr.auth.email).boundingBox()
+	const password = await page.getByLabel(fr.auth.password).boundingBox()
+	expect(email?.width).toBeGreaterThan(0)
+	expect(email?.width).toBe(password?.width)
+
 	const { token } = createAdmin()
 	await page.goto(`/activation/${token}`)
 	await expect(page.getByLabel(fr.auth.newPassword)).toBeVisible()

@@ -10,6 +10,7 @@ import { useRouter } from 'vue-router'
 import { ApiError, getJson } from '../api/client'
 import { checkPassword, MIN_LENGTH, type PolicyResult } from '../crypto/passwordPolicy'
 import { useAuthStore } from '../stores/auth'
+import ActionIcon from '../components/ActionIcon.vue'
 
 const props = defineProps<{ token: string }>()
 
@@ -136,7 +137,10 @@ async function submit(): Promise<void> {
 				type="submit"
 				:disabled="!canSubmit"
 			>
-				{{ busy ? t('auth.checking') : t('auth.activate') }}
+				<ActionIcon
+					name="key"
+					:busy="busy"
+				/>{{ busy ? t('auth.checking') : t('auth.activate') }}
 			</button>
 		</form>
 	</section>

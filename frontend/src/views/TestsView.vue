@@ -12,6 +12,8 @@ import type { Organisation } from '../api/organisations'
 import { TEST_EXPOSURES, TEST_TYPES, type PenetrationTest, type PenetrationTestSummary, type TestExposure, type TestType } from '../api/penetrationTests'
 import { useAuthStore } from '../stores/auth'
 import { fromLocalInput } from '../utils/dates'
+import ActionIcon from '../components/ActionIcon.vue'
+import LoadingThrobber from '../components/LoadingThrobber.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -83,7 +85,10 @@ onMounted(load)
 		{{ error }}
 	</p>
 	<p v-if="tests === null">
-		{{ t('common.loading') }}
+		<LoadingThrobber
+			:label="t('common.loading')"
+			visible-label
+		/>
 	</p>
 	<p v-else-if="tests.length === 0">
 		{{ t('tests.empty') }}
@@ -202,7 +207,10 @@ onMounted(load)
 			type="submit"
 			:disabled="busy"
 		>
-			{{ t('tests.create') }}
+			<ActionIcon
+				name="create"
+				:busy="busy"
+			/>{{ t('tests.create') }}
 		</button>
 	</form>
 </template>
