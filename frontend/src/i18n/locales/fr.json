@@ -278,7 +278,35 @@
 				"Dégradation de la marque"
 			]
 		},
-		"level": "{level} — {label}"
+		"level": "{level} — {label}",
+		"remediation": {
+			"heading": "Remédiation",
+			"recommendations": "Recommandations techniques",
+			"resources": "Ressources (une adresse web par ligne)",
+			"resourcesHeading": "Ressources",
+			"noResource": "aucune ressource",
+			"priority": "Priorité de correction",
+			"followSuggestion": "Suivre la suggestion ({priority})",
+			"status": "Statut de remédiation",
+			"retestResult": "Résultat du retest",
+			"verified": "Vérifiée le {date} par {author}",
+			"save": "Enregistrer la remédiation",
+			"declareFixed": "Déclarer la vulnérabilité corrigée",
+			"declared": "Correction déclarée.",
+			"statuses": {
+				"todo": "À faire",
+				"in_progress": "En cours",
+				"fixed": "Corrigé",
+				"verified": "Vérifié"
+			},
+			"priorities": {
+				"P1": "P1 — immédiat",
+				"P2": "P2 — court terme",
+				"P3": "P3 — moyen terme",
+				"P4": "P4 — opportunité"
+			},
+			"overriddenNote": "(surchargée par le chef de projet ; suggestion depuis la cotation : {priority})"
+		}
 	},
 	"company": {
 		"heading": "Entreprise prestataire",
