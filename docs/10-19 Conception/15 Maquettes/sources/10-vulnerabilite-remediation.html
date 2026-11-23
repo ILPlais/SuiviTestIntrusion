@@ -1,0 +1,89 @@
+<!doctype html>
+<!--
+	Maquette 10 (15.01) : fiche de vulnérabilité, onglet Remédiation.
+	Recommandations, priorité suggérée depuis le niveau CVSS et surchargeable,
+	ressources, statut de remédiation et retest, preuves de correction.
+	Sources : 11.09 (remédiation), 11.11 (documents liés).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>10 Vulnérabilité : remédiation — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-section="vulnerabilites" data-ecran="10">
+<main>
+	<div class="actions">
+		<h3>VULN-005 Absence de limite de débit sur l'authentification de l'API</h3>
+		<span class="badge b-yellow">Important 5,3</span>
+		<span class="badge b-peach">P2</span>
+		<span class="badge b-blue">Remédiation : corrigé</span>
+	</div>
+	<nav class="tabs">
+		<a href="#">Constat</a>
+		<a href="#">Cotation</a>
+		<a href="#" aria-current="page">Remédiation</a>
+		<a href="#">Preuves (2)</a>
+		<a href="#">Commentaires (1)</a>
+		<a href="#">Historique</a>
+	</nav>
+
+	<div class="grid-2" style="grid-template-columns: 1fr 44ch">
+		<div style="display:flex; flex-direction:column; gap:1lh">
+			<fieldset>
+				<legend>Recommandations techniques</legend>
+				<ol>
+					<li>Limiter les tentatives par compte et par adresse IP sur <code>POST /api/v2/auth</code> (par exemple 5 par minute), avec un délai croissant.</li>
+					<li>Verrouiller temporairement le compte après 10 échecs et en informer l'utilisateur.</li>
+					<li>Superviser les pics d'échecs (alerte SOC).</li>
+				</ol>
+				<div class="actions"><button type="button" class="small secondary"><i class="i" data-i="edit"></i>Modifier (Markdown)</button></div>
+			</fieldset>
+			<fieldset>
+				<legend>Ressources</legend>
+				<ul>
+					<li><a href="#">CWE-307 : Improper Restriction of Excessive Authentication Attempts</a></li>
+					<li><a href="#">OWASP ASVS 4.0, V2.2 — General Authenticator Security</a></li>
+					<li><a href="#">Procédure interne : configuration du WAF</a></li>
+				</ul>
+			</fieldset>
+			<fieldset>
+				<legend>Preuves de correction <span class="callout">3</span></legend>
+				<table>
+					<tbody>
+						<tr><td><i class="i" data-i="image"></i> <a href="#">retest-429.png</a></td><td>Capture après correctif</td><td><small>Sam Leroy · 3 déc.</small></td></tr>
+						<tr><td><i class="i" data-i="document"></i> <a href="#">ticket-CHG-4471.pdf</a></td><td>Ticket de changement client</td><td><small>Dominique Bernard · 2 déc.</small></td></tr>
+					</tbody>
+				</table>
+			</fieldset>
+		</div>
+
+		<div style="display:flex; flex-direction:column; gap:1lh">
+			<fieldset>
+				<legend>Priorité de correction <span class="callout">1</span></legend>
+				<p>Suggestion depuis le niveau CVSS (Important) : <span class="badge b-yellow">P3</span></p>
+				<label class="field">Priorité retenue
+					<select><option>P2 — court terme</option></select>
+				</label>
+				<label class="field">Justification de la surcharge
+					<textarea rows="2">Impact image élevé : comptes clients exposés au bourrage d'identifiants.</textarea>
+				</label>
+				<small>Saisie par le chef de projet ; indépendante du score CVSS.</small>
+			</fieldset>
+			<fieldset>
+				<legend>Statut de remédiation <span class="callout">2</span></legend>
+				<p class="seg"><span>À faire</span><span>En cours</span><span class="on">Corrigé</span><span>Vérifié</span></p>
+				<dl>
+					<dt>Déclaré corrigé</dt><dd>par Dominique Bernard (client), 2 déc.</dd>
+				</dl>
+				<label class="field">Retest
+					<select><option>Correction efficace</option></select>
+				</label>
+				<div class="actions"><button type="button"><i class="i" data-i="validated"></i>Marquer vérifié</button></div>
+			</fieldset>
+		</div>
+	</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<!--
+	Maquette 12 (15.01) : résultats d'un test. Conclusions pré-remplies à relire
+	et valider, mesures à apporter agrégées des fiches de remédiation et
+	réordonnables, contre-mesures observées.
+	Sources : 11.12 (conclusions, mesures, contre-mesures).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>12 Résultats — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-section="resultats" data-ecran="12">
+<main>
+	<nav class="tabs">
+		<a href="#" aria-current="page">Conclusions</a>
+		<a href="#">Mesures à apporter (6)</a>
+		<a href="#">Contre-mesures (4)</a>
+	</nav>
+
+	<fieldset>
+		<legend>Conclusions <span class="badge b-yellow">Brouillon à relire</span> <span class="callout">1</span></legend>
+		<textarea rows="7">## Contexte et périmètre
+Test externe en boîte grise du site vitrine et de l'API publique de Banque Exemple, du 1er au 5 décembre 2026, sur 5 machines (1 exclue : srv-paiement, prestataire tiers).
+
+## Constats majeurs
+Le score de gravité technique est **Critique (9,8)** : exécution de code à distance sur le CMS (VULN-003, P1). Trois vulnérabilités P2 concernent l'authentification de l'API.
+
+## Limites
+…</textarea>
+		<div class="actions">
+			<button type="button" class="secondary"><i class="i" data-i="refresh"></i>Regénérer le brouillon depuis les compteurs</button>
+			<span class="spacer"></span>
+			<button type="button"><i class="i" data-i="validated"></i>Valider après relecture</button>
+		</div>
+		<small>Les conclusions doivent être validées avant tout export de rapport.</small>
+	</fieldset>
+
+	<fieldset>
+		<legend>Mesures à apporter <span class="callout">2</span></legend>
+		<table>
+			<thead><tr><th>Ordre</th><th>Mesure</th><th>Priorité</th><th>Vulnérabilités</th><th>Origine</th><th></th></tr></thead>
+			<tbody>
+				<tr><td>1</td><td>Mettre à jour le CMS en 4.2.3 et désactiver le module d'aperçu public</td><td><span class="badge b-red">P1</span></td><td>VULN-003</td><td>Fiche</td><td><button type="button" class="small secondary"><i class="i" data-i="up"></i></button> <button type="button" class="small secondary"><i class="i" data-i="down"></i></button></td></tr>
+				<tr><td>2</td><td>Durcir l'authentification de l'API (limite de débit, verrouillage, jetons courts)</td><td><span class="badge b-peach">P2</span></td><td>VULN-005, VULN-006, VULN-008</td><td>Fusion de 3 fiches</td><td><button type="button" class="small secondary"><i class="i" data-i="up"></i></button> <button type="button" class="small secondary"><i class="i" data-i="down"></i></button></td></tr>
+				<tr><td>3</td><td>Corriger l'IDOR sur les relevés de compte</td><td><span class="badge b-peach">P2</span></td><td>VULN-007</td><td>Fiche</td><td><button type="button" class="small secondary"><i class="i" data-i="up"></i></button> <button type="button" class="small secondary"><i class="i" data-i="down"></i></button></td></tr>
+				<tr><td>4</td><td>Mettre en place une revue annuelle des composants exposés</td><td><span class="badge b-yellow">P3</span></td><td>—</td><td>Transverse</td><td><button type="button" class="small secondary"><i class="i" data-i="up"></i></button> <button type="button" class="small secondary"><i class="i" data-i="down"></i></button></td></tr>
+			</tbody>
+		</table>
+		<div class="actions">
+			<button type="button" class="secondary small"><i class="i" data-i="create"></i>Mesure transverse</button>
+			<button type="button" class="secondary small">Fusionner</button>
+			<button type="button" class="secondary small">Scinder</button>
+		</div>
+	</fieldset>
+
+	<fieldset class="soft">
+		<legend>Contre-mesures observées <span class="callout">3</span></legend>
+		<table>
+			<thead><tr><th>Contrôle</th><th>Composants</th><th>Efficacité</th><th>Lien</th></tr></thead>
+			<tbody>
+				<tr><td>WAF devant srv-web01</td><td>srv-web01</td><td><span class="badge b-peach">Contourné</span></td><td>VULN-003 (contrôle insuffisant)</td></tr>
+				<tr><td>MFA des conseillers</td><td>srv-web01</td><td><span class="badge b-green">Empêche</span></td><td>—</td></tr>
+				<tr><td>Supervision SOC</td><td>fw-edge</td><td><span class="badge b-blue">Détecte</span></td><td>Mesure 4 (renforcement)</td></tr>
+			</tbody>
+		</table>
+	</fieldset>
+</main>
+</body>
+</html>

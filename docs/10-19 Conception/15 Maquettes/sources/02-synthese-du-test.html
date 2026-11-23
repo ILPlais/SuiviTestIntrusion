@@ -1,0 +1,125 @@
+<!doctype html>
+<!--
+	Maquette 02 (15.01) : synthèse (tableau de bord) d'un test. Risque global
+	sous ses trois formes, profil d'impact business, compteurs, matrice sévérité
+	× impact, jalons et avancement des phases.
+	Sources : 11.08 (planning, jalons), 11.12 (risque global, graphiques).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>02 Synthèse d'un test — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-section="synthese" data-ecran="02">
+<main>
+	<div class="grid-3">
+		<fieldset>
+			<legend>Gravité technique <span class="callout">1</span></legend>
+			<div class="kpi">
+				<span class="value c-red">9,8</span>
+				<span><span class="badge b-red">Critique</span> CVSS v3.1</span>
+				<small>Maximum des 7 vulnérabilités ouvertes (VULN-003).</small>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>Score agrégé <span class="callout">2</span></legend>
+			<div class="kpi">
+				<span class="value">7,6</span>
+				<span><span class="badge b-peach">Majeur</span> pondéré P1–P4</span>
+				<small>Informatif : ne remplace jamais le maximum.</small>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>Profil d'impact business <span class="callout">3</span></legend>
+			<dl>
+				<dt>Opérationnel</dt><dd>🔴 3 — Dégâts majeurs</dd>
+				<dt>Légal</dt><dd>🟠 2 — Norme obligatoire (RGPD)</dd>
+				<dt>Financier</dt><dd>🟡 1 — Coûts limités</dd>
+				<dt>Image</dt><dd>🔴 3 — Perte de grands comptes</dd>
+			</dl>
+		</fieldset>
+	</div>
+
+	<div class="grid-3">
+		<fieldset>
+			<legend>Par sévérité</legend>
+			<div class="bars">
+				<span>🔴 Critique</span><span class="bar c-red">████<span class="rest">░░░░░░░░░░░░</span></span><span class="num">1</span>
+				<span>🟠 Majeur</span><span class="bar c-peach">████████<span class="rest">░░░░░░░░</span></span><span class="num">2</span>
+				<span>🟡 Important</span><span class="bar c-yellow">████████<span class="rest">░░░░░░░░</span></span><span class="num">2</span>
+				<span>🟢 Mineur</span><span class="bar c-green">████████<span class="rest">░░░░░░░░</span></span><span class="num">2</span>
+				<span>⚪ Aucun</span><span class="bar c-grey"><span class="rest">░░░░░░░░░░░░░░░░</span></span><span class="num">0</span>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>Par priorité</legend>
+			<div class="bars">
+				<span><span class="badge b-red">P1</span></span><span class="bar">████<span class="rest">░░░░░░░░░░░░</span></span><span class="num">1</span>
+				<span><span class="badge b-peach">P2</span></span><span class="bar">████████████<span class="rest">░░░░</span></span><span class="num">3</span>
+				<span><span class="badge b-yellow">P3</span></span><span class="bar">████████<span class="rest">░░░░░░░░</span></span><span class="num">2</span>
+				<span><span class="badge b-grey">P4</span></span><span class="bar">████<span class="rest">░░░░░░░░░░░░</span></span><span class="num">1</span>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>Remédiation</legend>
+			<div class="bars">
+				<span>À faire</span><span class="bar">████████████████<span class="rest"></span></span><span class="num">5</span>
+				<span>En cours</span><span class="bar">██████<span class="rest">░░░░░░░░░░</span></span><span class="num">2</span>
+				<span>Corrigé</span><span class="bar">███<span class="rest">░░░░░░░░░░░░░</span></span><span class="num">1</span>
+				<span>Vérifié</span><span class="bar">███<span class="rest">░░░░░░░░░░░░░</span></span><span class="num">1</span>
+			</div>
+			<small>Les vulnérabilités vérifiées sont exclues des indicateurs.</small>
+		</fieldset>
+	</div>
+
+	<div class="grid-2">
+		<fieldset>
+			<legend>Sévérité × impact business <span class="callout">4</span></legend>
+			<table class="matrix">
+				<thead>
+					<tr><th>Sévérité</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
+				</thead>
+				<tbody>
+					<tr><th>Critique</th><td></td><td></td><td></td><td class="hot">1</td><td></td></tr>
+					<tr><th>Majeur</th><td></td><td></td><td class="warm">1</td><td class="hot">1</td><td></td></tr>
+					<tr><th>Important</th><td></td><td class="mild">1</td><td class="mild">1</td><td></td><td></td></tr>
+					<tr><th>Mineur</th><td>1</td><td>1</td><td></td><td></td><td></td></tr>
+				</tbody>
+			</table>
+			<small>Impact : niveau le plus élevé des quatre axes de chaque vulnérabilité.</small>
+		</fieldset>
+		<fieldset>
+			<legend>Jalons <span class="callout">5</span></legend>
+			<table>
+				<tbody>
+					<tr><td><input type="checkbox" checked></td><td>Kick-off / signature de l'engagement</td><td>28 nov.</td></tr>
+					<tr><td><input type="checkbox" checked></td><td>Fin de reconnaissance</td><td>1 déc.</td></tr>
+					<tr><td><input type="checkbox" checked></td><td>Fin d'énumération</td><td>2 déc.</td></tr>
+					<tr><td><input type="checkbox"></td><td>Fin d'exploitation</td><td>4 déc. <small>prévu</small></td></tr>
+					<tr><td><input type="checkbox"></td><td>Remise du rapport</td><td>12 déc. <small>prévu</small></td></tr>
+					<tr><td><input type="checkbox"></td><td>Validation client</td><td>—</td></tr>
+				</tbody>
+			</table>
+		</fieldset>
+	</div>
+
+	<fieldset>
+		<legend>Avancement des phases</legend>
+		<table>
+			<thead>
+				<tr><th>Phase</th><th>Prévu</th><th>Réel</th><th>Tâches</th><th class="num">Temps passé</th><th class="num">Vulnérabilités</th></tr>
+			</thead>
+			<tbody>
+				<tr><td>1. Reconnaissance</td><td>1 déc.</td><td>1 déc.</td><td><span class="bar">██████████</span> 6/6</td><td class="num">5 h 30</td><td class="num">0</td></tr>
+				<tr><td>2. Énumération</td><td>1 → 2 déc.</td><td>1 → 2 déc.</td><td><span class="bar">██████████</span> 9/9</td><td class="num">11 h 00</td><td class="num">2</td></tr>
+				<tr><td>3. Exploitation</td><td>2 → 4 déc.</td><td>2 déc. →</td><td><span class="bar">███<span class="rest">░░░░░░░</span></span> 3/17</td><td class="num">9 h 15</td><td class="num">7</td></tr>
+				<tr><td>4. Post-exploitation</td><td>4 → 5 déc.</td><td>—</td><td><span class="bar"><span class="rest">░░░░░░░░░░</span></span> 0/6</td><td class="num">—</td><td class="num">0</td></tr>
+				<tr><td>5. Nettoyage</td><td>5 déc.</td><td>—</td><td><span class="bar"><span class="rest">░░░░░░░░░░</span></span> 0/4</td><td class="num">—</td><td class="num">0</td></tr>
+			</tbody>
+		</table>
+	</fieldset>
+</main>
+</body>
+</html>

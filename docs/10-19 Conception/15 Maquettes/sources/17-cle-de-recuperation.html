@@ -1,0 +1,44 @@
+<!doctype html>
+<!--
+	Maquette 17 (15.01) : enrôlement, étape de la clé de récupération. Affichée
+	une seule fois en groupes de quatre caractères, puis ressaisie avant
+	l'activation du compte ; elle n'est jamais envoyée au serveur.
+	Sources : 11.06 (clé de récupération, invitation), 13.03.
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>17 Clé de récupération — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="none" data-ecran="17">
+<main style="max-width: 90ch; margin: 2lh auto; width: 100%">
+	<h1>Suivi des tests d'intrusion</h1>
+	<p class="crumbs"><i class="i" data-i="check"></i> 1. Mot de passe › <i class="i" data-i="check"></i> 2. Paire de clés › <strong>3. Clé de récupération</strong> › 4. Double authentification <span class="callout">1</span></p>
+
+	<fieldset>
+		<legend><i class="i" data-i="recovery"></i> Votre clé de récupération</legend>
+		<p>Elle seule permet de retrouver vos preuves si vous oubliez votre mot de passe. Elle n'est affichée <strong>qu'une fois</strong> et n'est jamais envoyée au serveur.</p>
+		<div class="recovery">K7QM 2X9D RT4W HB8N<br>5JVC LP3E ZA6Y G2SF <span class="callout">2</span></div>
+		<div class="actions">
+			<button type="button" class="secondary"><i class="i" data-i="copy"></i>Copier</button>
+			<button type="button" class="secondary"><i class="i" data-i="download"></i>Télécharger (.txt)</button>
+			<span class="spacer"></span>
+			<small>Rangez-la hors de cet ordinateur : gestionnaire de mots de passe, papier sous clé.</small>
+		</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Ressaisie <span class="callout">3</span></legend>
+		<label class="field">Saisissez la clé pour confirmer que vous l'avez conservée
+			<input value="K7QM 2X9D RT4W HB8N 5JVC LP3E ZA6Y G2S" style="width:100%">
+		</label>
+		<p class="muted"><i class="i" data-i="info"></i> Espaces et casse ignorés. Il manque 1 caractère.</p>
+		<div class="actions">
+			<button type="button" disabled>Activer mon compte</button>
+		</div>
+	</fieldset>
+</main>
+</body>
+</html>

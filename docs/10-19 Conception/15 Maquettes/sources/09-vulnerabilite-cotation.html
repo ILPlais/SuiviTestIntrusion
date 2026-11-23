@@ -1,0 +1,83 @@
+<!doctype html>
+<!--
+	Maquette 09 (15.01) : fiche de vulnérabilité, onglet Cotation. Calculateur
+	CVSS v3.1 (métriques de base), score et niveau, vecteur, impact business sur
+	les quatre axes.
+	Sources : 11.09 (fiche, impact business), 11.10 (échelle, calcul v3.1).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>09 Vulnérabilité : cotation — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-section="vulnerabilites" data-ecran="09">
+<main>
+	<div class="actions">
+		<h3>VULN-003 Exécution de code à distance sur le CMS</h3>
+		<span class="badge b-red">Critique 9,8</span>
+		<span class="badge b-red">P1</span>
+		<span class="badge b-grey">Remédiation : à faire</span>
+	</div>
+	<nav class="tabs">
+		<a href="#">Constat</a>
+		<a href="#" aria-current="page">Cotation</a>
+		<a href="#">Remédiation</a>
+		<a href="#">Preuves (4)</a>
+		<a href="#">Commentaires (2)</a>
+		<a href="#">Historique</a>
+	</nav>
+
+	<div class="grid-2" style="grid-template-columns: 1fr 54ch">
+		<fieldset>
+			<legend>CVSS v3.1 — métriques de base <span class="callout">1</span></legend>
+			<div class="cvss">
+				<span>Vecteur d'attaque (AV)</span><span class="seg"><span class="on">Réseau</span><span>Adjacent</span><span>Local</span><span>Physique</span></span>
+				<span>Complexité (AC)</span><span class="seg"><span class="on">Faible</span><span>Élevée</span></span>
+				<span>Privilèges requis (PR)</span><span class="seg"><span class="on">Aucun</span><span>Faibles</span><span>Élevés</span></span>
+				<span>Interaction utilisateur (UI)</span><span class="seg"><span class="on">Aucune</span><span>Requise</span></span>
+				<span>Portée (S)</span><span class="seg"><span class="on">Inchangée</span><span>Changée</span></span>
+				<span>Confidentialité (C)</span><span class="seg"><span>Aucun</span><span>Faible</span><span class="on">Élevé</span></span>
+				<span>Intégrité (I)</span><span class="seg"><span>Aucun</span><span>Faible</span><span class="on">Élevé</span></span>
+				<span>Disponibilité (A)</span><span class="seg"><span>Aucun</span><span>Faible</span><span class="on">Élevé</span></span>
+			</div>
+			<div class="actions">
+				<span>Vecteur :</span>
+				<code>CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H</code>
+				<button type="button" class="small secondary"><i class="i" data-i="copy"></i>Copier</button>
+				<button type="button" class="small secondary">Coller un vecteur…</button>
+			</div>
+			<small>Moteur v4.0 en V2 : la version est déjà enregistrée avec chaque score.</small>
+		</fieldset>
+
+		<div style="display:flex; flex-direction:column; gap:1lh">
+			<fieldset>
+				<legend>Score <span class="callout">2</span></legend>
+				<div class="kpi">
+					<span class="value c-red">9,8</span>
+					<span><span class="badge b-red">🔴 Critique</span> 9,0 → 10,0</span>
+				</div>
+				<dl>
+					<dt>Impact</dt><dd>5,9</dd>
+					<dt>Exploitabilité</dt><dd>3,9</dd>
+				</dl>
+				<small>Corriger immédiatement : risque de destruction totale du SI.</small>
+			</fieldset>
+			<fieldset>
+				<legend>Impact business <span class="callout">3</span></legend>
+				<label class="field">Opérationnel <select><option>🔴 3 — Dégâts majeurs sur la production</option></select></label>
+				<label class="field">Légal <select><option>🟠 2 — Norme obligatoire (RGPD, PCI DSS…)</option></select></label>
+				<label class="field">Financier <select><option>🟡 1 — Dommages inférieurs au coût de correction</option></select></label>
+				<label class="field">Image <select><option>🔴 3 — Perte de grands comptes</option></select></label>
+			</fieldset>
+		</div>
+	</div>
+
+	<div class="actions">
+		<button type="button"><i class="i" data-i="save"></i>Enregistrer la cotation</button>
+		<small>La priorité suggérée (P1) se met à jour dans l'onglet Remédiation.</small>
+	</div>
+</main>
+</body>
+</html>

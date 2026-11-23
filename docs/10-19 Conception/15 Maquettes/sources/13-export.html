@@ -1,0 +1,74 @@
+<!doctype html>
+<!--
+	Maquette 13 (15.01) : export d'un test. Modèles combinables, sections
+	atomiques, formats, option d'inclusion des fichiers déchiffrés dans le
+	navigateur, export de données pour sauvegarde ou migration.
+	Sources : 11.04 (modèles, migration), 11.11 (points de vigilance).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>13 Exporter — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-section="export" data-ecran="13">
+<main>
+	<div class="grid-2">
+		<fieldset>
+			<legend>1. Modèles de rapport <span class="callout">1</span></legend>
+			<label class="inline"><input type="checkbox" checked> <strong>Exécutif</strong> — contexte, risque global, graphiques, conclusions, mesures P1/P2</label>
+			<label class="inline"><input type="checkbox" checked> <strong>Technique</strong> — objectifs, phases, tâches et résultats, exécutions, vulnérabilités, contre-mesures</label>
+			<label class="inline"><input type="checkbox"> <strong>Annexes preuves</strong> — index des documents, commandes et sorties déchiffrées</label>
+			<small>Personnalisation (logo, charte, mentions) en V2.</small>
+		</fieldset>
+		<fieldset>
+			<legend>2. Sections du modèle technique <span class="callout">2</span></legend>
+			<div class="form-grid">
+				<label class="inline"><input type="checkbox" checked> Objectifs</label>
+				<label class="inline"><input type="checkbox" checked> Périmètre</label>
+				<label class="inline"><input type="checkbox" checked> Phases et tâches</label>
+				<label class="inline"><input type="checkbox" checked> Tâches non testées</label>
+				<label class="inline"><input type="checkbox" checked> Exécutions d'outils</label>
+				<label class="inline"><input type="checkbox" checked> Vulnérabilités</label>
+				<label class="inline"><input type="checkbox" checked> Contre-mesures</label>
+				<label class="inline"><input type="checkbox" disabled> Gantt <small>V2</small></label>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>3. Format</legend>
+			<div class="actions">
+				<label class="inline"><input type="radio" name="f" checked> PDF</label>
+				<label class="inline"><input type="radio" name="f"> OpenDocument (ODT)</label>
+				<label class="inline"><input type="radio" name="f"> HTML <small>(scripts interdits)</small></label>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>4. Fichiers de preuve <span class="callout">3</span></legend>
+			<label class="inline"><input type="checkbox"> Inclure les fichiers (déchiffrés dans ce navigateur)</label>
+			<small>29 des 31 documents vous sont lisibles ; 2 seront listés sans contenu. L'archive est construite localement : le serveur ne voit pas le clair.</small>
+		</fieldset>
+	</div>
+
+	<div class="alert"><i class="i" data-i="error"></i> <strong>Export bloqué :</strong> les conclusions ne sont pas encore validées. <a href="#">Ouvrir les conclusions</a></div>
+
+	<div class="actions">
+		<button type="button" disabled><i class="i" data-i="export"></i>Générer le rapport</button>
+		<button type="button" class="secondary"><i class="i" data-i="preview"></i>Aperçu</button>
+	</div>
+
+	<fieldset class="soft">
+		<legend>Sauvegarde et migration <span class="callout">4</span></legend>
+		<div class="actions">
+			<label class="inline"><input type="radio" name="d" checked> JSON</label>
+			<label class="inline"><input type="radio" name="d"> XML</label>
+			<label class="inline"><input type="checkbox" checked> Paquet des blobs chiffrés (archive à part)</label>
+			<label class="inline"><input type="checkbox"> Export des coffres utilisateurs <small>(migration contrôlée)</small></label>
+			<span class="spacer"></span>
+			<button type="button" class="secondary"><i class="i" data-i="download"></i>Exporter les données</button>
+		</div>
+		<small>Schéma versionné (<code>schema_version</code> 1) ; trousseaux toujours chiffrés.</small>
+	</fieldset>
+</main>
+</body>
+</html>

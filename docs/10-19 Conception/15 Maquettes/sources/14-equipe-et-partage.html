@@ -1,0 +1,67 @@
+<!doctype html>
+<!--
+	Maquette 14 (15.01) : équipe du test et partage des clés. Membres et état de
+	leur trousseau, partage groupé à l'affectation, demandes de partage CEK et
+	de rechiffrement à traiter dans le navigateur d'un détenteur.
+	Sources : 11.11 (gestion, révocation, départ), 13.05 (trousseau d'équipe).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>14 Équipe et partage — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-section="equipe" data-ecran="14">
+<main>
+	<fieldset>
+		<legend>Équipe du test <span class="callout">1</span></legend>
+		<table>
+			<thead><tr><th>Membre</th><th>Rôle</th><th>Trousseau</th><th>Empreinte de la clé</th><th></th></tr></thead>
+			<tbody>
+				<tr><td>Camille Martin</td><td>Chef de projet</td><td><span class="badge b-green">142/142 contenus</span></td><td><code>4F1A 92C0 … 7D3E</code></td><td></td></tr>
+				<tr><td>Alex Durand</td><td>Testeur</td><td><span class="badge b-green">142/142</span></td><td><code>B07E 11D4 … 0A9C</code></td><td><button type="button" class="small secondary"><i class="i" data-i="disable"></i>Retirer…</button></td></tr>
+				<tr><td>Sam Leroy</td><td>Testeur</td><td><span class="badge b-green">142/142</span></td><td><code>E3C9 5B21 … 66F0</code></td><td><button type="button" class="small secondary"><i class="i" data-i="disable"></i>Retirer…</button></td></tr>
+				<tr><td>Lou Petit <span class="badge b-mauve">affecté ce jour</span></td><td>Testeur</td><td><span class="badge b-yellow">0/142 — partage groupé en attente</span></td><td><code>91AD 0C7B … E215</code> <a href="#">vérifier hors bande</a></td><td></td></tr>
+				<tr class="excluded"><td>Dominique Bernard</td><td>Client final</td><td><small>hors trousseau (lecture du rapport)</small></td><td>—</td><td></td></tr>
+			</tbody>
+		</table>
+		<div class="actions"><button type="button"><i class="i" data-i="create"></i>Affecter un membre</button></div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Demandes à traiter dans votre navigateur <span class="callout">2</span></legend>
+		<table>
+			<thead><tr><th>Demande</th><th>Pour</th><th>Contenus</th><th>Depuis</th><th></th></tr></thead>
+			<tbody>
+				<tr>
+					<td><i class="i" data-i="share"></i> Partage groupé (affectation)</td>
+					<td>Lou Petit</td><td>142 (31 documents, 23 exécutions, 88 secrets)</td><td>14:05</td>
+					<td><button type="button"><i class="i" data-i="key"></i>Partager les clés</button></td>
+				</tr>
+				<tr>
+					<td><i class="i" data-i="share"></i> Partage d'un document (ACL accordée)</td>
+					<td>Camille Martin</td><td>dump-config-cms.txt</td><td>11:47</td>
+					<td><button type="button"><i class="i" data-i="key"></i>Partager la clé</button></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="ok"><i class="i" data-i="success"></i> Partage groupé en cours : 96/142 clés chiffrées pour Lou Petit (aucune donnée en clair ne quitte ce navigateur).</div>
+	</fieldset>
+
+	<fieldset>
+		<legend>Rechiffrement après un départ <span class="callout">3</span></legend>
+		<p>Jo Moreau a été retiré du test le 2 déc. (révocation douce faite). La révocation forte rechiffre chaque contenu avec une nouvelle clé, sans lui.</p>
+		<div class="bars" style="grid-template-columns: max-content 40ch max-content">
+			<span>Documents</span><span class="bar c-green">██████████████████████<span class="rest">░░░░░░░░</span></span><span>23/31</span>
+			<span>Exécutions</span><span class="bar c-green">██████████████████████████████</span><span>23/23</span>
+			<span>Secrets</span><span class="bar c-green">█████████<span class="rest">░░░░░░░░░░░░░░░░░░░░░</span></span><span>27/88</span>
+		</div>
+		<div class="actions">
+			<button type="button"><i class="i" data-i="refresh"></i>Reprendre le rechiffrement</button>
+			<small>Relance automatique des propriétaires tant que la demande n'est pas traitée.</small>
+		</div>
+	</fieldset>
+</main>
+</body>
+</html>
