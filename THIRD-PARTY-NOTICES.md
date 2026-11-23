@@ -98,6 +98,7 @@ Dépendances livrées avec SuiviTestIntrusion et leurs licences. Fichier génér
 | npm | @babel/parser | 8.1.3 | MIT |
 | npm | @babel/types | 7.29.15 | MIT |
 | npm | @babel/types | 8.1.3 | MIT |
+| npm | @fontsource/cascadia-code | 5.3.0 | OFL-1.1 |
 | npm | @intlify/core-base | 11.4.23 | MIT |
 | npm | @intlify/devtools-types | 11.4.23 | MIT |
 | npm | @intlify/message-compiler | 11.4.23 | MIT |

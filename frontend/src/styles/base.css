@@ -24,6 +24,15 @@
 @import '@webtui/theme-catppuccin';
 
 /*
+ * Cascadia Code (Microsoft, OFL-1.1, paquet @fontsource/cascadia-code), servie
+ * par l'application pour ses ligatures : graisses 400 (texte) et 700 (titres,
+ * libellés). Découpée par jeu de caractères : le navigateur ne télécharge que
+ * les fichiers utiles (latin, environ 29 Ko par graisse).
+ */
+@import '@fontsource/cascadia-code/400.css';
+@import '@fontsource/cascadia-code/700.css';
+
+/*
  * Police d'icônes : sous-ensemble de Symbols Nerd Font Mono réduit aux glyphes
  * de src/icons/glyphs.json (scripts/subset-nerd-font.mjs ; licences dans
  * src/assets/fonts/LICENSE.md). Même nom de famille que le plugin
@@ -39,8 +48,12 @@
 
 @layer app {
 	:root {
-		/* Polices à chasse fixe du système ; les icônes en dernier recours, comme le prévoit WebTUI. */
-		--font-family: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace, 'Symbols Nerd Font';
+		/*
+		 * Cascadia Code d'abord (servie par l'application, voir plus haut), puis des
+		 * polices à chasse fixe du système en secours, et les icônes en dernier
+		 * recours comme le prévoit WebTUI.
+		 */
+		--font-family: 'Cascadia Code', ui-monospace, 'SF Mono', Menlo, Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace, 'Symbols Nerd Font';
 	}
 
 	html,
@@ -48,6 +61,12 @@
 		/* WebTUI coupe les mots n'importe où (break-all) : illisible en français. */
 		word-break: normal;
 		overflow-wrap: anywhere;
+		/*
+		 * Les ligatures de Cascadia Code (->, =>, !=…) passent par les alternatives
+		 * contextuelles (calt), que la valeur de WebTUI (common-ligatures) n'active
+		 * pas explicitement.
+		 */
+		font-variant-ligatures: common-ligatures contextual;
 	}
 
 	/*

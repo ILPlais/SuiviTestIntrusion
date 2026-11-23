@@ -17,6 +17,7 @@
 		"captures": "playwright test --config playwright.captures.config.ts"
 	},
 	"dependencies": {
+		"@fontsource/cascadia-code": "5.3.0",
 		"@webtui/css": "0.1.10",
 		"@webtui/theme-catppuccin": "0.0.5",
 		"@zxcvbn-ts/core": "^4.3.0",
