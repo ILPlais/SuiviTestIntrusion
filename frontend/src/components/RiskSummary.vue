@@ -10,13 +10,14 @@ import { useI18n } from 'vue-i18n'
 import { getJson } from '../api/client'
 import { textBar, type TestRisk } from '../api/risk'
 import { IMPACT_AXES, PRIORITIES, REMEDIATION_STATUSES, SEVERITIES } from '../api/vulnerabilities'
+import { formatScore } from '../utils/cvss31'
 
 const props = defineProps<{
 	/** Identifiant (ULID) du test. */
 	testId: string
 }>()
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const risk = ref<TestRisk | null>(null)
 const failed = ref(false)
@@ -76,7 +77,7 @@ watch(() => props.testId, load, { immediate: true })
 				<dt>{{ t('risk.maxScore') }}</dt>
 				<dd>
 					<template v-if="risk.max_score !== null && risk.max_severity !== null">
-						<strong>{{ t(`vulnerabilities.severities.${risk.max_severity}`) }} {{ risk.max_score.toFixed(1) }}</strong>
+						<strong>{{ t(`vulnerabilities.severities.${risk.max_severity}`) }} {{ formatScore(risk.max_score, locale) }}</strong>
 						({{ t('vulnerabilities.cvssVersion', { version: risk.cvss_version }) }})
 					</template>
 					<template v-else>
@@ -84,7 +85,7 @@ watch(() => props.testId, load, { immediate: true })
 					</template>
 				</dd>
 				<dt>{{ t('risk.weightedAverage') }}</dt>
-				<dd>{{ risk.weighted_average !== null ? t('risk.informative', { score: risk.weighted_average.toFixed(1) }) : t('risk.none') }}</dd>
+				<dd>{{ risk.weighted_average !== null ? t('risk.informative', { score: formatScore(risk.weighted_average, locale) }) : t('risk.none') }}</dd>
 				<dt>{{ t('risk.openCount') }}</dt>
 				<dd>{{ t('risk.openOfTotal', { open: risk.open_count, total: risk.total_count }) }}</dd>
 				<template
