@@ -13,6 +13,7 @@ import { TEST_EXPOSURES, TEST_STATUSES, TEST_TYPES, type PenetrationTest, type S
 import { useAuthStore } from '../stores/auth'
 import { formatDateTime, fromLocalInput, toLocalInput } from '../utils/dates'
 import ActionIcon from '../components/ActionIcon.vue'
+import RiskSummary from '../components/RiskSummary.vue'
 
 const props = defineProps<{
 	/** Identifiant (ULID) du test. */
@@ -364,6 +365,8 @@ watch(() => props.id, load, { immediate: true })
 				{{ t('tests.vulnerabilitiesLink') }}
 			</RouterLink>
 		</p>
+
+		<RiskSummary :test-id="test.id" />
 
 		<h3>{{ t('tests.phases') }}</h3>
 		<ol>

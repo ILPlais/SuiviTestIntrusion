@@ -8,7 +8,7 @@
 
 | ID                   | Title                             | Points | Status |
 | -------------------- | --------------------------------- | ------ | ------ |
-| [[resultats-1]]      | Risque global d'un test           | 3      | todo   |
+| [[resultats-1]]      | Risque global d'un test           | 3      | review |
 | [[vulnerabilites-1]] | Moteur CVSS v3.1                  | 3      | review |
 | [[vulnerabilites-3]] | Fiche vulnérabilité               | 3      | review |
 | [[vulnerabilites-4]] | Impact business                   | 2      | review |

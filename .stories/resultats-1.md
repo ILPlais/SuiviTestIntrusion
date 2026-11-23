@@ -3,7 +3,7 @@
 **ID:** resultats-1
 **Epic:** resultats
 **Sprint:** 5
-**Status:** todo
+**Status:** review
 **Points:** 3
 
 ## Context
