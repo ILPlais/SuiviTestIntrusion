@@ -9,6 +9,12 @@ export type { Severity } from '../utils/cvss31'
 /** Niveaux de sévérité, du plus faible au plus grave (11.10). */
 export const SEVERITIES: readonly Severity[] = ['none', 'minor', 'important', 'major', 'critical']
 
+/** Axes de l'impact business (11.09), dans l'ordre d'affichage. */
+export const IMPACT_AXES = ['operational', 'legal', 'financial', 'reputation'] as const
+
+/** Axe de l'impact business. */
+export type ImpactAxis = typeof IMPACT_AXES[number]
+
 /** Composant concerné : objet du périmètre du test. */
 export interface AffectedComponent {
 	id: string
@@ -33,6 +39,8 @@ export interface Vulnerability {
 	cvss_vector: string | null
 	cvss_score: number | null
 	severity: Severity | null
+	/** Note de 0 (non applicable) à 4 par axe (vulnerabilites-4). */
+	business_impact: Record<ImpactAxis, number>
 	scope_objects: AffectedComponent[]
 	created_by: string | null
 	created_at: string
