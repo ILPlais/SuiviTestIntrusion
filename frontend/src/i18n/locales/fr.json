@@ -306,7 +306,8 @@
 				"P4": "P4 — opportunité"
 			},
 			"overriddenNote": "(surchargée par le chef de projet ; suggestion depuis la cotation : {priority})"
-		}
+		},
+		"partialRating": "La cotation est incomplète : choisissez une valeur pour les huit métriques, ou retirez la cotation."
 	},
 	"risk": {
 		"heading": "Synthèse du risque",

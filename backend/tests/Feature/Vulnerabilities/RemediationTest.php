@@ -184,6 +184,50 @@ class RemediationTest extends TestCase
 	}
 
 	/**
+	 * Une vérification ne se défait que par l'équipe : le client ne peut pas
+	 * redéclarer « Corrigé », et réenregistrer la fiche garde la date et l'auteur
+	 * du retest d'origine.
+	 *
+	 * @return void
+	 */
+	public function test_a_verification_is_kept(): void
+	{
+		$id = $this->vulnerability('CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H');
+		$url = "/api/v1/vulnerabilities/{$id}/remediation";
+		$verifier = $this->member(TenantRole::Tester);
+		Sanctum::actingAs($verifier);
+		$verifiedAt = $this->patchJson($url, ['status' => 'verified', 'retest_result' => 'Correction efficace'])->json('data.remediation.verified_at');
+
+		Sanctum::actingAs($this->member(TenantRole::Client));
+		$this->patchJson($url, ['status' => 'fixed'])->assertUnprocessable()->assertJsonValidationErrors('status', 'details');
+
+		$this->travel(2)->hours();
+		$other = $this->member(TenantRole::Tester);
+		$other->forceFill(['name' => 'Autre testeur'])->save();
+		Sanctum::actingAs($other);
+		$this->patchJson($url, ['recommendations' => 'Texte corrigé.', 'status' => 'verified', 'retest_result' => 'Correction efficace, revérifiée'])
+			->assertOk()
+			->assertJsonPath('data.remediation.verified_at', $verifiedAt)
+			->assertJsonPath('data.remediation.verified_by', $verifier->name)
+			->assertJsonPath('data.remediation.retest_result', 'Correction efficace, revérifiée');
+	}
+
+	/**
+	 * La remédiation d'une vulnérabilité d'une autre organisation est introuvable.
+	 *
+	 * @return void
+	 */
+	public function test_a_foreign_remediation_is_not_found(): void
+	{
+		$id = $this->vulnerability('CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H');
+		$stranger = User::factory()->create();
+		$stranger->tenants()->attach(Tenant::factory()->create()->id, ['role' => TenantRole::ProjectManager->value]);
+		Sanctum::actingAs($stranger);
+
+		$this->patchJson("/api/v1/vulnerabilities/{$id}/remediation", ['status' => 'fixed'])->assertNotFound();
+	}
+
+	/**
 	 * Le client déclare la correction, sans pouvoir vérifier ni rédiger.
 	 *
 	 * @return void

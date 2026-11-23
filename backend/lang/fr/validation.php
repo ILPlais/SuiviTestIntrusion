@@ -52,6 +52,7 @@ return [
 		],
 		'status' => [
 			'unchanged' => 'Le test a déjà ce statut.',
+			'already_fixed' => 'La correction de cette vulnérabilité est déjà déclarée ou vérifiée.',
 		],
 		'address' => [
 			'ip_or_cidr' => 'L\'adresse doit être une adresse IPv4 ou IPv6, ou une plage CIDR (203.0.113.0/24).',

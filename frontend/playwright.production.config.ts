@@ -27,6 +27,6 @@ export default defineConfig({
 		reuseExistingServer: !process.env.CI,
 		timeout: 120_000,
 		// Les parcours enchaînent plus de connexions que la limite Auth de production.
-		env: { ...process.env as Record<string, string>, API_RATE_AUTH: '1000' },
+		env: { ...process.env as Record<string, string>, API_RATE_AUTH: '1000', API_RATE_STANDARD: '1000' },
 	},
 })
