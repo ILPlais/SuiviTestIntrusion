@@ -1,0 +1,681 @@
+/*
+ * Feuille de style des maquettes (15.01) : imitation statique de la SPA
+ * (WebTUI, thème Catppuccin, Cascadia Code, icônes Nerd Fonts), sans
+ * dépendance à frontend/node_modules, pour que les maquettes s'ouvrent
+ * directement dans un navigateur.
+ *
+ * Ce n'est pas le code de l'application : les choix retenus ici seront
+ * repris dans frontend/src/styles/base.css au fil des stories.
+ *
+ * Thème : Latte (clair) ou Mocha (sombre), posé par maquettes.js sur
+ * <html data-theme="…"> d'après ?theme=clair|sombre ou la préférence du système.
+ */
+
+/* Palettes Catppuccin officielles, plus les rôles employés par WebTUI. */
+:root,
+[data-theme='clair'] {
+	--base: #eff1f5;
+	--mantle: #e6e9ef;
+	--crust: #dce0e8;
+	--surface0: #ccd0da;
+	--surface1: #bcc0cc;
+	--overlay0: #9ca0b0;
+	--text: #4c4f69;
+	--subtext0: #6c6f85;
+	--red: #d20f39;
+	--peach: #fe640b;
+	--yellow: #df8e1d;
+	--green: #40a02b;
+	--teal: #179299;
+	--blue: #1e66f5;
+	--lavender: #7287fd;
+	--mauve: #8839ef;
+	--pink: #ea76cb;
+	/* Accessibilité (13.07) : en Latte, titres h2 en mauve, h3 et liens dans la couleur du texte. */
+	--h1: var(--red);
+	--h2: var(--mauve);
+	--h3: var(--text);
+	--link: var(--text);
+	/* Texte des badges colorés : clair sur les teintes foncées, foncé sur les teintes claires. */
+	--on-dark: #eff1f5;
+	--on-light: #1e1e2e;
+}
+
+[data-theme='sombre'] {
+	--base: #1e1e2e;
+	--mantle: #181825;
+	--crust: #11111b;
+	--surface0: #313244;
+	--surface1: #45475a;
+	--overlay0: #6c7086;
+	--text: #cdd6f4;
+	--subtext0: #a6adc8;
+	--red: #f38ba8;
+	--peach: #fab387;
+	--yellow: #f9e2af;
+	--green: #a6e3a1;
+	--teal: #94e2d5;
+	--blue: #89b4fa;
+	--lavender: #b4befe;
+	--mauve: #cba6f7;
+	--pink: #f5c2e7;
+	--h1: var(--red);
+	--h2: var(--peach);
+	--h3: var(--yellow);
+	--link: var(--blue);
+	--on-dark: #11111b;
+	--on-light: #11111b;
+}
+
+/* Base : police à chasse fixe avec ligatures, une ligne = 1lh, comme WebTUI. */
+* {
+	box-sizing: border-box;
+}
+
+html {
+	background: var(--base);
+	color: var(--text);
+	font-family: 'CaskaydiaCove Nerd Font Mono', 'Cascadia Code', 'Cascadia Mono', Consolas, monospace;
+	font-size: 15px;
+	line-height: 1.4;
+	font-variant-ligatures: common-ligatures contextual;
+}
+
+body {
+	margin: 0;
+	padding: 1lh 2ch;
+	display: flex;
+	flex-direction: column;
+	gap: 1lh;
+	min-height: 100vh;
+	overflow-wrap: anywhere;
+}
+
+h1, h2, h3, h4 {
+	font-size: 1em;
+	margin: 0;
+}
+
+h1 { color: var(--h1); }
+h2 { color: var(--h2); }
+h3 { color: var(--h3); }
+
+p, ul, ol, dl, table, pre {
+	margin: 0;
+}
+
+ul, ol {
+	padding-inline-start: 3ch;
+}
+
+a {
+	color: var(--link);
+	text-decoration: underline;
+}
+
+small, .muted {
+	color: var(--subtext0);
+}
+
+/* Icônes Nerd Fonts : glyphe posé par maquettes.js (data-g), décoratif. */
+.i::before {
+	content: attr(data-g);
+	font-style: normal;
+	display: inline-block;
+	min-width: 1.4ch;
+}
+
+/* Cadres façon WebTUI (box-="round") : fieldset arrondi, titre dans le trait. */
+fieldset,
+.box {
+	border: 2px solid var(--text);
+	border-radius: 6px;
+	padding: 0.5lh 1.5ch;
+	margin: 0;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5lh;
+}
+
+fieldset.soft {
+	border-color: var(--surface1);
+}
+
+legend {
+	padding: 0 1ch;
+	font-weight: bold;
+	color: var(--h2);
+}
+
+/* Boutons : aplat dans la couleur du texte, comme WebTUI. */
+button,
+.btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 1ch;
+	min-height: 24px;
+	padding: 0.25lh 1.5ch;
+	border: none;
+	border-radius: 0;
+	background: var(--text);
+	color: var(--base);
+	font: inherit;
+	cursor: pointer;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+button.secondary {
+	background: var(--surface0);
+	color: var(--text);
+}
+
+button.danger {
+	background: var(--red);
+	color: var(--on-dark);
+}
+
+button.small {
+	padding: 0 1ch;
+}
+
+button[disabled] {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+.actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5lh 1ch;
+	align-items: center;
+}
+
+.actions .spacer {
+	flex: 1;
+}
+
+/* Champs : fond légèrement plus clair, sans bordure (WebTUI). */
+input,
+select,
+textarea {
+	font: inherit;
+	color: var(--text);
+	background: var(--surface0);
+	border: none;
+	padding: 0 1ch;
+	min-height: 1.4lh;
+}
+
+textarea {
+	padding: 0.25lh 1ch;
+	width: 100%;
+	resize: vertical;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+	accent-color: var(--mauve);
+	min-height: auto;
+	width: 1.1em;
+	height: 1.1em;
+	margin: 0;
+	vertical-align: middle;
+}
+
+label.field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15lh;
+	font-weight: bold;
+}
+
+label.field > :is(input, select, textarea, span) {
+	font-weight: normal;
+}
+
+label.inline {
+	display: inline-flex;
+	align-items: center;
+	gap: 1ch;
+}
+
+.form-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(28ch, 1fr));
+	gap: 0.5lh 2ch;
+}
+
+/* Tableaux : lignes séparées par un trait, en-têtes en gras. */
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th, td {
+	text-align: start;
+	vertical-align: top;
+	padding: 0.2lh 1ch;
+	border-bottom: 1px solid var(--surface1);
+}
+
+th {
+	color: var(--subtext0);
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+tr.selected td {
+	background: var(--surface0);
+}
+
+tr.excluded td {
+	color: var(--subtext0);
+}
+
+td.num, th.num {
+	text-align: end;
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+}
+
+/* Listes de définitions : libellé à gauche, valeur à droite. */
+dl {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: 0.1lh 2ch;
+}
+
+dt {
+	color: var(--subtext0);
+}
+
+dd {
+	margin: 0;
+}
+
+/* Badges : statuts, sévérités, priorités. */
+.badge {
+	display: inline-block;
+	padding: 0 1ch;
+	white-space: nowrap;
+	background: var(--surface1);
+	color: var(--text);
+}
+
+.b-red { background: var(--red); color: var(--on-dark); }
+.b-peach { background: var(--peach); color: var(--on-light); }
+.b-yellow { background: var(--yellow); color: var(--on-light); }
+.b-green { background: var(--green); color: var(--on-light); }
+.b-teal { background: var(--teal); color: var(--on-light); }
+.b-blue { background: var(--blue); color: var(--on-dark); }
+.b-mauve { background: var(--mauve); color: var(--on-dark); }
+.b-grey { background: var(--overlay0); color: var(--on-light); }
+.b-black { background: var(--text); color: var(--base); }
+.b-outline { background: transparent; box-shadow: inset 0 0 0 1px var(--text); }
+
+/* Couleur de texte seule, pour les barres et les chiffres. */
+.c-red { color: var(--red); }
+.c-peach { color: var(--peach); }
+.c-yellow { color: var(--yellow); }
+.c-green { color: var(--green); }
+.c-blue { color: var(--blue); }
+.c-mauve { color: var(--mauve); }
+.c-grey { color: var(--overlay0); }
+
+/* En-tête de l'application : titre, activité, coffre, navigation. */
+header.app {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5lh;
+}
+
+header.app .masthead {
+	display: flex;
+	align-items: center;
+	gap: 2ch;
+	flex-wrap: wrap;
+}
+
+header.app .spacer {
+	flex: 1;
+}
+
+header.app nav {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.3lh 2.5ch;
+}
+
+header.app nav a[aria-current='page'] {
+	font-weight: bold;
+	text-decoration-thickness: 2px;
+}
+
+.counter {
+	display: inline-block;
+	min-width: 2ch;
+	padding: 0 0.6ch;
+	background: var(--red);
+	color: var(--on-dark);
+	text-align: center;
+	font-size: 0.9em;
+}
+
+/* Fil d'Ariane. */
+.crumbs {
+	color: var(--subtext0);
+}
+
+/* Mise en page : menu du test à gauche, contenu à droite. */
+.layout {
+	display: grid;
+	grid-template-columns: 30ch 1fr;
+	gap: 2ch;
+	align-items: start;
+	flex: 1;
+}
+
+.layout.single {
+	grid-template-columns: 1fr;
+}
+
+aside.test-menu ol {
+	list-style: none;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.15lh;
+}
+
+aside.test-menu a {
+	display: flex;
+	gap: 1ch;
+	padding: 0.1lh 1ch;
+	text-decoration: none;
+	color: var(--text);
+}
+
+aside.test-menu a[aria-current='page'] {
+	background: var(--text);
+	color: var(--base);
+	font-weight: bold;
+}
+
+aside.test-menu .count {
+	margin-inline-start: auto;
+	color: var(--subtext0);
+}
+
+aside.test-menu a[aria-current='page'] .count {
+	color: var(--base);
+}
+
+aside.test-menu .group {
+	margin-top: 0.4lh;
+	color: var(--subtext0);
+	font-size: 0.9em;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	gap: 1lh;
+	min-width: 0;
+}
+
+/* Bandeau d'un test : référence, titre, statut, risque global. */
+.test-banner {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.3lh 2ch;
+}
+
+.test-banner h2 {
+	font-size: 1.1em;
+}
+
+/* Grilles de cartes ; un tableau posé dans une grille garde sa hauteur naturelle. */
+:is(.grid-2, .grid-3, .grid-4) > table {
+	align-self: start;
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1lh 2ch; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1lh 2ch; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1lh 2ch; }
+.span-2 { grid-column: span 2; }
+.span-all { grid-column: 1 / -1; }
+
+/* Indicateurs chiffrés. */
+.kpi {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1lh;
+}
+
+.kpi .value {
+	font-size: 1.8em;
+	font-weight: bold;
+	line-height: 1.1;
+}
+
+/* Barres en caractères pleins, à la manière d'une interface en mode texte. */
+.bars {
+	display: grid;
+	grid-template-columns: max-content 1fr max-content;
+	gap: 0.1lh 1.5ch;
+	align-items: center;
+}
+
+.bar {
+	white-space: pre;
+}
+
+.bar .rest {
+	color: var(--surface1);
+}
+
+/* Matrice sévérité × impact. */
+table.matrix td,
+table.matrix th {
+	text-align: center;
+	border: 1px solid var(--surface1);
+}
+
+table.matrix th:first-child {
+	text-align: start;
+}
+
+table.matrix td.hot { background: var(--red); color: var(--on-dark); font-weight: bold; }
+table.matrix td.warm { background: var(--peach); color: var(--on-light); font-weight: bold; }
+table.matrix td.mild { background: var(--yellow); color: var(--on-light); }
+
+/* Messages. */
+.note,
+.alert,
+.ok,
+.warn {
+	padding: 0.3lh 1.5ch;
+	border-inline-start: 4px solid var(--blue);
+	background: var(--mantle);
+}
+
+.alert {
+	border-color: var(--red);
+}
+
+.alert strong {
+	color: var(--red);
+}
+
+.ok {
+	border-color: var(--green);
+}
+
+.warn {
+	border-color: var(--peach);
+}
+
+/* Contenu chiffré : rappel visuel discret du verrou. */
+.locked {
+	color: var(--subtext0);
+	font-style: italic;
+}
+
+/* Code coloré (rendu PrismJS simulé). */
+pre.code {
+	background: var(--mantle);
+	padding: 0.5lh 1.5ch;
+	overflow: auto;
+	white-space: pre;
+	border-inline-start: 4px solid var(--surface1);
+	font-family: inherit;
+}
+
+.tok-cmd { color: var(--blue); font-weight: bold; }
+.tok-opt { color: var(--mauve); }
+.tok-str { color: var(--green); }
+.tok-num { color: var(--peach); }
+.tok-com { color: var(--subtext0); font-style: italic; }
+.tok-key { color: var(--red); }
+
+/* Fil de commentaires. */
+.thread {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6lh;
+}
+
+.comment .who {
+	font-weight: bold;
+}
+
+.comment p {
+	padding-inline-start: 2ch;
+	border-inline-start: 2px solid var(--surface1);
+}
+
+/* Onglets secondaires (dans une page). */
+nav.tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.3lh 3ch;
+	border-bottom: 2px solid var(--surface1);
+	padding-bottom: 0.2lh;
+}
+
+nav.tabs a {
+	text-decoration: none;
+	color: var(--subtext0);
+}
+
+nav.tabs a[aria-current='page'] {
+	color: var(--text);
+	font-weight: bold;
+	text-decoration: underline;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 0.35lh;
+}
+
+/* Sélecteur CVSS : une ligne par métrique, valeurs en boutons. */
+.cvss {
+	display: grid;
+	grid-template-columns: 28ch 1fr;
+	gap: 0.3lh 2ch;
+	align-items: center;
+}
+
+.seg {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 0.5ch;
+}
+
+.seg span {
+	padding: 0 1ch;
+	background: var(--surface0);
+}
+
+.seg span.on {
+	background: var(--text);
+	color: var(--base);
+	font-weight: bold;
+}
+
+/* Colonnes d'un tableau de tâches par statut. */
+.kanban {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: 1.5ch;
+}
+
+.kanban > section {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5lh;
+}
+
+.card {
+	border: 1px solid var(--surface1);
+	padding: 0.3lh 1ch;
+	display: flex;
+	flex-direction: column;
+	gap: 0.15lh;
+	background: var(--mantle);
+}
+
+/* Clé de récupération : grands groupes de quatre caractères. */
+.recovery {
+	font-size: 1.5em;
+	letter-spacing: 0.1em;
+	word-spacing: 0.6em;
+	padding: 0.5lh 2ch;
+	background: var(--mantle);
+	border: 2px dashed var(--mauve);
+	text-align: center;
+}
+
+/* Fenêtre modale simulée, posée sur un voile au-dessus de la page. */
+.overlay {
+	position: fixed;
+	inset: 0;
+	background: color-mix(in srgb, var(--crust) 75%, transparent);
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	padding-top: 8lh;
+}
+
+.modal {
+	max-width: 84ch;
+	width: 100%;
+	background: var(--base);
+}
+
+/* Pied de page : état de l'instance. */
+footer.app {
+	color: var(--subtext0);
+	border-top: 1px solid var(--surface1);
+	padding-top: 0.3lh;
+	display: flex;
+	gap: 3ch;
+	flex-wrap: wrap;
+}
+
+/* Annotation de maquette : pastille numérotée, expliquée dans 15.01. */
+.callout {
+	display: inline-block;
+	min-width: 2.4ch;
+	padding: 0 0.5ch;
+	border-radius: 1em;
+	background: var(--pink);
+	color: #11111b;
+	font-weight: bold;
+	font-size: 0.85em;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 1.5;
+}

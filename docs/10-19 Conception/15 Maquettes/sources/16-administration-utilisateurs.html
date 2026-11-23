@@ -1,0 +1,64 @@
+<!doctype html>
+<!--
+	Maquette 16 (15.01) : administration des utilisateurs, avec la fenêtre de
+	confirmation de suppression d'un compte seul détenteur de contenus.
+	Sources : 11.06 (invitation, verrouillage, cycle de vie), 11.11 (départ).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>16 Administration des utilisateurs — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="admin" data-ecran="16">
+<main>
+	<nav class="tabs">
+		<a href="#" aria-current="page">Utilisateurs (12)</a>
+		<a href="#">Invitations (2)</a>
+		<a href="#">Tenants (3)</a>
+		<a href="#">Catalogue d'outils</a>
+		<a href="#">Paramètres</a>
+		<a href="#">Journal d'audit</a>
+	</nav>
+
+	<div class="actions">
+		<button type="button"><i class="i" data-i="invite"></i>Inviter…</button>
+		<span class="spacer"></span>
+		<label class="inline">Statut <select><option>Tous</option></select></label>
+	</div>
+
+	<table>
+		<thead><tr><th>Nom</th><th>E-mail</th><th>Rôles</th><th>Tenants</th><th>État <span class="callout">1</span></th><th>Double auth.</th><th></th></tr></thead>
+		<tbody>
+			<tr><td>Camille Martin</td><td>camille.martin@exemple.test</td><td>Administrateur, chef de projet</td><td>3</td><td><span class="badge b-green">Actif</span></td><td>TOTP</td><td></td></tr>
+			<tr><td>Alex Durand</td><td>alex.durand@exemple.test</td><td>Testeur</td><td>2</td><td><span class="badge b-red"><i class="i" data-i="lock"></i> Verrouillé 11 min</span></td><td>TOTP</td><td><button type="button" class="small secondary">Déverrouiller</button></td></tr>
+			<tr><td>Lou Petit</td><td>lou.petit@exemple.test</td><td>Testeur</td><td>1</td><td><span class="badge b-yellow">Invité — expire dans 61 h</span></td><td>—</td><td><button type="button" class="small secondary"><i class="i" data-i="copy"></i>Copier le lien</button></td></tr>
+			<tr><td>Dominique Bernard</td><td>d.bernard@banque-exemple.test</td><td>Client final</td><td>1</td><td><span class="badge b-green">Actif</span></td><td>TOTP</td><td></td></tr>
+			<tr class="selected"><td>Jo Moreau</td><td>jo.moreau@exemple.test</td><td>Testeur</td><td>2</td><td><span class="badge b-grey">Désactivé le 2 déc.</span></td><td>—</td><td><button type="button" class="small secondary">Réactiver</button> <button type="button" class="small danger"><i class="i" data-i="delete"></i>Supprimer…</button></td></tr>
+		</tbody>
+	</table>
+	<div class="overlay">
+		<fieldset class="modal">
+			<legend>Supprimer le compte de Jo Moreau ? <span class="callout">2</span></legend>
+			<p>La suppression est définitive : clés, trousseaux et rattachements sont effacés ; le compte devient « Utilisateur supprimé n° 7 » dans l'historique.</p>
+			<div class="alert"><strong><i class="i" data-i="warning"></i> 3 contenus n'ont que Jo Moreau pour détenteur</strong> et deviendront illisibles :
+				<ul>
+					<li>PT-2026-0997 · notes-burp.txt (document)</li>
+					<li>PT-2026-0997 · EXE-041 sqlmap (exécution)</li>
+					<li>PT-2026-1011 · Compte d'audit Azure (secret)</li>
+				</ul>
+			</div>
+			<label class="inline"><input type="checkbox" checked> Proposer ces contenus à la purge</label>
+			<label class="field">Pour confirmer, saisir <code>SUPPRIMER</code>
+				<input value="SUPPRIMER">
+			</label>
+			<div class="actions">
+				<button type="button" class="secondary"><i class="i" data-i="cancel"></i>Annuler</button>
+				<button type="button" class="danger"><i class="i" data-i="delete"></i>Supprimer définitivement</button>
+			</div>
+		</fieldset>
+	</div>
+</main>
+</body>
+</html>

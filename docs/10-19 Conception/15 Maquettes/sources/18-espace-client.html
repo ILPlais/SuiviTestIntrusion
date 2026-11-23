@@ -1,0 +1,58 @@
+<!doctype html>
+<!--
+	Maquette 18 (15.01) : espace du client final. Lecture seule des tests de
+	son organisation, rapport final, suivi de la remédiation, validation ou
+	rejet du rapport.
+	Sources : 11.06 (ACL du client final, multi-tenant), 11.09 (statut de remédiation).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>18 Espace client — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-role="client" data-ecran="18">
+<main>
+	<p class="crumbs">Banque Exemple › Tests › PT-2026-0995 <span class="callout">1</span></p>
+	<div class="test-banner">
+		<h2>PT-2026-0995 — Test externe de l'extranet</h2>
+		<span class="badge b-green"><i class="i" data-i="done"></i> Terminé</span>
+		<span class="badge b-peach">Risque : 🟠 Majeur 8,1 (v3.1)</span>
+		<small>Lecture seule · client final</small>
+	</div>
+
+	<div class="grid-2">
+		<fieldset>
+			<legend>Rapport final <span class="callout">2</span></legend>
+			<table>
+				<tbody>
+					<tr><td><i class="i" data-i="document"></i> <a href="#">Rapport exécutif.pdf</a></td><td>18 p.</td><td><small>remis le 20 nov.</small></td></tr>
+					<tr><td><i class="i" data-i="document"></i> <a href="#">Rapport technique.pdf</a></td><td>64 p.</td><td><small>remis le 20 nov.</small></td></tr>
+				</tbody>
+			</table>
+			<label class="field">Commentaire (obligatoire en cas de rejet)
+				<textarea rows="2"></textarea>
+			</label>
+			<div class="actions">
+				<button type="button"><i class="i" data-i="validated"></i>Valider le rapport</button>
+				<button type="button" class="secondary"><i class="i" data-i="cancel"></i>Rejeter…</button>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>Suivi de la remédiation <span class="callout">3</span></legend>
+			<table>
+				<thead><tr><th>Vulnérabilité</th><th>Priorité</th><th>Statut</th><th></th></tr></thead>
+				<tbody>
+					<tr><td>VULN-001 Contournement d'authentification</td><td><span class="badge b-red">P1</span></td><td><span class="badge b-green">Vérifié</span></td><td></td></tr>
+					<tr><td>VULN-002 Injection SQL (recherche)</td><td><span class="badge b-peach">P2</span></td><td><span class="badge b-blue">Corrigé</span></td><td><small>retest à planifier</small></td></tr>
+					<tr><td>VULN-003 En-têtes de sécurité absents</td><td><span class="badge b-grey">P4</span></td><td><span class="badge">À faire</span></td><td><button type="button" class="small secondary">Déclarer corrigé…</button></td></tr>
+				</tbody>
+			</table>
+		</fieldset>
+	</div>
+
+	<div class="note"><i class="i" data-i="info"></i> Le client final ne voit que les tests de son organisation ; les preuves chiffrées et les sorties d'outils ne lui sont pas accessibles (il n'est pas dans le trousseau de l'équipe).</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!doctype html>
+<!--
+	Maquette 05 (15.01) : déroulement du test, vue par statut des tâches d'une
+	phase. Filtre par phase et par assigné, tâches libres, motifs de blocage.
+	Sources : 11.08 (phases, tâches, statuts, résultat, collaboration).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>05 Déroulement — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-section="deroulement" data-ecran="05">
+<main>
+	<nav class="tabs">
+		<a href="#">Objectifs (5)</a>
+		<a href="#">1. Reconnaissance <small>6/6</small></a>
+		<a href="#">2. Énumération <small>9/9</small></a>
+		<a href="#" aria-current="page">3. Exploitation <small>3/17</small></a>
+		<a href="#">4. Post-exploitation <small>0/6</small></a>
+		<a href="#">5. Nettoyage <small>0/4</small></a>
+	</nav>
+
+	<div class="actions">
+		<span>Prévu : 2 → 4 déc. · Réel : depuis le 2 déc. 09:12 · Temps passé : 9 h 15</span>
+		<span class="spacer"></span>
+		<label class="inline">Assigné <select><option>Tous</option></select></label>
+		<label class="inline"><input type="checkbox"> Tâches libres seulement <span class="callout">1</span></label>
+		<button type="button" class="secondary">Vue liste</button>
+		<button type="button"><i class="i" data-i="create"></i>Nouvelle tâche</button>
+	</div>
+
+	<div class="kanban">
+		<section>
+			<h3>À faire (8)</h3>
+			<div class="card">
+				<strong>T-031 Injection SQL sur /api/v2/accounts</strong>
+				<small>srv-api01 · objectif O-2</small>
+				<span><span class="badge b-outline">Libre</span> <button type="button" class="small">M'attribuer</button></span>
+			</div>
+			<div class="card">
+				<strong>T-034 Contournement du MFA conseiller</strong>
+				<small>srv-web01 · objectif O-1</small>
+				<span><i class="i" data-i="profile"></i> Alex Durand</span>
+			</div>
+			<div class="card">
+				<strong>T-036 Téléversement de fichiers (avatar)</strong>
+				<small>srv-web01</small>
+				<span><span class="badge b-outline">Libre</span> <button type="button" class="small">M'attribuer</button></span>
+			</div>
+			<small>… 5 autres</small>
+		</section>
+		<section>
+			<h3>En cours (3)</h3>
+			<div class="card">
+				<strong>T-027 IDOR sur les relevés de compte</strong>
+				<small>srv-api01 · 2 h 10</small>
+				<span><i class="i" data-i="profile"></i> Sam Leroy</span>
+			</div>
+			<div class="card">
+				<strong>T-029 Exploitation de CVE-2026-0042 (CMS)</strong>
+				<small>srv-web01 · 3 h 40</small>
+				<span><i class="i" data-i="profile"></i> Alex Durand, Sam Leroy</span>
+			</div>
+			<div class="card">
+				<strong>T-032 Énumération des sessions JWT</strong>
+				<small>srv-api01 · 0 h 45</small>
+				<span><i class="i" data-i="profile"></i> Alex Durand</span>
+			</div>
+		</section>
+		<section>
+			<h3>Bloquée (1) <span class="callout">2</span></h3>
+			<div class="card" style="border-color: var(--peach)">
+				<strong>T-033 Relais SMTP ouvert</strong>
+				<small class="c-peach">Motif : attente de l'accord de l'hébergeur</small>
+				<span><i class="i" data-i="profile"></i> Sam Leroy</span>
+			</div>
+		</section>
+		<section>
+			<h3>Terminée (2)</h3>
+			<div class="card">
+				<strong>T-025 XSS stockée dans le formulaire de contact</strong>
+				<span><span class="badge b-red">Vulnérable</span> → VULN-004</span>
+				<span><i class="i" data-i="profile"></i> Alex Durand</span>
+			</div>
+			<div class="card">
+				<strong>T-026 Fixation de session</strong>
+				<span><span class="badge b-green">Non vulnérable</span></span>
+				<span><i class="i" data-i="profile"></i> Sam Leroy</span>
+				<button type="button" class="small"><i class="i" data-i="validated"></i>Vérifier</button>
+			</div>
+		</section>
+		<section>
+			<h3>Vérifiée (1) · Abandonnée (1)</h3>
+			<div class="card">
+				<strong>T-024 Exécution de code via le CMS</strong>
+				<span><span class="badge b-red">Vulnérable</span> → VULN-003</span>
+				<span><i class="i" data-i="validated"></i> vérifiée par C. Martin</span>
+			</div>
+			<div class="card">
+				<strong>T-030 Test du module de paiement</strong>
+				<small>Motif : hors périmètre (srv-paiement exclu)</small>
+				<span class="badge b-grey">Abandonnée</span>
+			</div>
+		</section>
+	</div>
+
+	<div class="note"><i class="i" data-i="info"></i> Glisser une carte d'une colonne à l'autre propose seulement les transitions autorisées ; un blocage ou un abandon demande un motif, une fin demande un résultat. Seul le chef de projet vérifie une tâche.</div>
+</main>
+</body>
+</html>

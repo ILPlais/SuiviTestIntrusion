@@ -1,0 +1,125 @@
+<!doctype html>
+<!--
+	Maquette 04 (15.01) : périmètre réseau. Machines incluses ou exclues,
+	services, plages horaires interdites, secrets chiffrés dans le navigateur,
+	diagramme Mermaid du réseau.
+	Sources : 11.07 (objets du périmètre, réseau), 13.01 (chiffrement des secrets).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>04 Périmètre — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-section="perimetre" data-ecran="04">
+<main>
+	<nav class="tabs">
+		<a href="#" aria-current="page">Réseau (9)</a>
+		<a href="#">Applications (2)</a>
+		<a href="#">Cloud et SaaS (3)</a>
+		<a href="#">Diagramme</a>
+	</nav>
+
+	<div class="actions">
+		<button type="button"><i class="i" data-i="create"></i>Ajouter une machine</button>
+		<button type="button" class="secondary"><i class="i" data-i="upload"></i>Importer depuis Nmap</button>
+		<span class="spacer"></span>
+		<label class="inline"><input type="checkbox" checked> Afficher les exclusions</label>
+	</div>
+
+	<table>
+		<thead>
+			<tr>
+				<th>Machine</th>
+				<th>Adresse</th>
+				<th>Services</th>
+				<th>Inclusion <span class="callout">1</span></th>
+				<th>Contraintes</th>
+				<th>Secrets <span class="callout">2</span></th>
+				<th class="num">Tâches</th>
+				<th class="num">Vuln.</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><i class="i" data-i="server"></i> <a href="#">srv-web01</a></td>
+				<td>203.0.113.10</td>
+				<td>22/ssh, 80/http, 443/https</td>
+				<td><span class="badge b-green">Inclus</span></td>
+				<td>—</td>
+				<td><i class="i" data-i="lock"></i> 1</td>
+				<td class="num">12</td>
+				<td class="num">5</td>
+			</tr>
+			<tr>
+				<td><i class="i" data-i="server"></i> <a href="#">srv-api01</a></td>
+				<td>203.0.113.11</td>
+				<td>443/https</td>
+				<td><span class="badge b-green">Inclus</span></td>
+				<td><i class="i" data-i="clock"></i> pas de test 12 h → 14 h</td>
+				<td><i class="i" data-i="lock"></i> 2</td>
+				<td class="num">9</td>
+				<td class="num">3</td>
+			</tr>
+			<tr>
+				<td><i class="i" data-i="server"></i> <a href="#">srv-mail01</a></td>
+				<td>203.0.113.20</td>
+				<td>25/smtp, 587/submission</td>
+				<td><span class="badge b-green">Inclus</span></td>
+				<td><i class="i" data-i="warning"></i> fragile : pas de déni de service</td>
+				<td>—</td>
+				<td class="num">4</td>
+				<td class="num">1</td>
+			</tr>
+			<tr class="excluded">
+				<td><i class="i" data-i="server"></i> <a href="#">srv-paiement</a></td>
+				<td>203.0.113.30</td>
+				<td>443/https</td>
+				<td><span class="badge b-red">Exclu</span></td>
+				<td>Tiers (prestataire de paiement) : hors contrat</td>
+				<td>—</td>
+				<td class="num">0</td>
+				<td class="num">0</td>
+			</tr>
+			<tr>
+				<td><i class="i" data-i="server"></i> <a href="#">fw-edge</a></td>
+				<td>203.0.113.1</td>
+				<td>—</td>
+				<td><span class="badge b-green">Inclus</span></td>
+				<td>Remonte les alertes au SOC</td>
+				<td>—</td>
+				<td class="num">2</td>
+				<td class="num">0</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="grid-2">
+		<fieldset>
+			<legend>srv-api01 — secrets <span class="callout">2</span></legend>
+			<table>
+				<thead><tr><th>Libellé</th><th>Identifiant</th><th>Valeur</th><th></th></tr></thead>
+				<tbody>
+					<tr><td>Compte client de test</td><td>client.test1</td><td class="locked">●●●●●●●●●●●●</td><td><button type="button" class="small secondary"><i class="i" data-i="preview"></i>Afficher</button></td></tr>
+					<tr><td>Compte conseiller</td><td>conseiller.test</td><td><code>Pr3prod-Conseiller!2026</code></td><td><button type="button" class="small secondary"><i class="i" data-i="copy"></i>Copier</button></td></tr>
+				</tbody>
+			</table>
+			<small><i class="i" data-i="lock"></i> Déchiffré dans le navigateur ; le serveur ne voit jamais la valeur. Trousseau : équipe du test (4 détenteurs).</small>
+		</fieldset>
+		<fieldset>
+			<legend>Diagramme du réseau (Mermaid) <span class="callout">3</span></legend>
+<pre class="code">   Internet
+      │
+  ┌───┴────┐
+  │ fw-edge│ 203.0.113.1
+  └───┬────┘
+      ├──────────────┬──────────────┬────────────────┐
+  srv-web01      srv-api01      srv-mail01     srv-paiement
+  .10 (inclus)   .11 (inclus)   .20 (inclus)   .30 (EXCLU)</pre>
+			<small>Rendu assaini par DOMPurify (13.04) ; source Mermaid modifiable dans l'onglet Diagramme.</small>
+		</fieldset>
+	</div>
+</main>
+</body>
+</html>

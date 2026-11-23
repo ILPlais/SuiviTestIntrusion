@@ -1,0 +1,93 @@
+<!doctype html>
+<!--
+	Maquette 01 (15.01) : liste des tests d'intrusion des organisations de
+	l'utilisateur, avec filtres, statut, risque global et avancement des tâches.
+	Sources : 11.06 (multi-tenant), 11.08 (statuts), 11.12 (risque global).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>01 Liste des tests — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-ecran="01">
+<main>
+	<div class="actions">
+		<h2>Tests d'intrusion</h2>
+		<span class="spacer"></span>
+		<button type="button"><i class="i" data-i="create"></i>Nouveau test</button>
+	</div>
+
+	<fieldset class="soft">
+		<legend>Filtres <span class="callout">1</span></legend>
+		<div class="actions">
+			<label class="inline"><i class="i" data-i="search"></i><input type="search" value="" placeholder="Référence ou titre" size="26"></label>
+			<label class="inline">Organisation <select><option>Toutes (3)</option></select></label>
+			<label class="inline">Statut <select><option>Ouverts</option></select></label>
+			<label class="inline"><input type="checkbox" checked> Mes tests seulement</label>
+		</div>
+	</fieldset>
+
+	<table>
+		<caption class="muted" style="text-align:start">4 tests ouverts sur 7 — tri : début prévu, du plus récent</caption>
+		<thead>
+			<tr>
+				<th>Référence</th>
+				<th>Titre</th>
+				<th>Organisation</th>
+				<th>Statut</th>
+				<th>Période prévue</th>
+				<th>Risque <span class="callout">2</span></th>
+				<th>Tâches <span class="callout">3</span></th>
+				<th>Mon rôle</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="selected">
+				<td><a href="#">PT-2026-1008</a></td>
+				<td>Test externe du site vitrine</td>
+				<td>Banque Exemple</td>
+				<td><span class="badge b-blue"><i class="i" data-i="in_progress"></i> En cours</span></td>
+				<td>1 → 5 déc. 2026</td>
+				<td><span class="badge b-red">Critique 9,8</span></td>
+				<td><span class="bar">██████████<span class="rest">░░░░░░░░░░░░</span></span> 18/42</td>
+				<td>Chef de projet</td>
+			</tr>
+			<tr>
+				<td><a href="#">PT-2026-1011</a></td>
+				<td>Revue de configuration Azure</td>
+				<td>Assurances Démo</td>
+				<td><span class="badge b-blue"><i class="i" data-i="in_progress"></i> En cours</span></td>
+				<td>30 nov. → 11 déc. 2026</td>
+				<td><span class="badge b-yellow">Important 6,5</span></td>
+				<td><span class="bar">████<span class="rest">░░░░░░░░░░░░░░░░░░</span></span> 7/36</td>
+				<td>Testeur</td>
+			</tr>
+			<tr>
+				<td><a href="#">PT-2026-1014</a></td>
+				<td>Test interne du siège (boîte noire)</td>
+				<td>Banque Exemple</td>
+				<td><span class="badge b-grey"><i class="i" data-i="planned"></i> Planifié</span></td>
+				<td>12 → 23 janv. 2027</td>
+				<td><span class="muted">—</span></td>
+				<td><span class="bar"><span class="rest">░░░░░░░░░░░░░░░░░░░░░░</span></span> 0/12</td>
+				<td>Chef de projet</td>
+			</tr>
+			<tr>
+				<td><a href="#">PT-2026-0997</a></td>
+				<td>API mobile de prise de rendez-vous</td>
+				<td>Clinique Fictive</td>
+				<td><span class="badge b-green"><i class="i" data-i="done"></i> Terminé</span></td>
+				<td>3 → 14 nov. 2026</td>
+				<td><span class="badge b-peach">Majeur 8,1</span></td>
+				<td><span class="bar">██████████████████████</span> 29/29</td>
+				<td>Testeur</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="note"><i class="i" data-i="info"></i> Les tests validés sont masqués par le filtre « Ouverts ». Un client final ne voit que les tests de son organisation (11.06).</div>
+</main>
+</body>
+</html>

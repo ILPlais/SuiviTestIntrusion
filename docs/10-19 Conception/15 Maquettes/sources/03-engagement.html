@@ -1,0 +1,99 @@
+<!doctype html>
+<!--
+	Maquette 03 (15.01) : questionnaire d'engagement. Thèmes repliables avec
+	leur avancement, réponses libres ou fermées, proposition d'activation des
+	sous-modules du périmètre, jalon de kick-off.
+	Sources : 11.05 (références, questionnaire, validation), 11.07 (sous-modules).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>03 Questionnaire d'engagement — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-section="engagement" data-ecran="03">
+<main>
+	<nav class="tabs">
+		<a href="#">Références</a>
+		<a href="#" aria-current="page">Questionnaire (31/38)</a>
+		<a href="#">Contacts d'urgence</a>
+		<a href="#">Clause de non-responsabilité</a>
+	</nav>
+
+	<div class="grid-2" style="grid-template-columns: 42ch 1fr">
+		<fieldset class="soft">
+			<legend>Thèmes <span class="callout">1</span></legend>
+			<table>
+				<tbody>
+					<tr><td><i class="i" data-i="success"></i></td><td>Test d'intrusion</td><td class="num">8/8</td></tr>
+					<tr><td><i class="i" data-i="success"></i></td><td>Contexte d'intrusion</td><td class="num">3/3</td></tr>
+					<tr><td><i class="i" data-i="success"></i></td><td>Systèmes et réseaux</td><td class="num">7/7</td></tr>
+					<tr class="selected"><td><i class="i" data-i="in_progress"></i></td><td><strong>Applications</strong></td><td class="num">4/8</td></tr>
+					<tr><td><i class="i" data-i="in_progress"></i></td><td>Cloud et SaaS</td><td class="num">5/8</td></tr>
+					<tr class="excluded"><td>—</td><td>Attaque physique <small>V2</small></td><td class="num">—</td></tr>
+					<tr class="excluded"><td>—</td><td>Ingénierie sociale <small>V2</small></td><td class="num">—</td></tr>
+					<tr><td><i class="i" data-i="success"></i></td><td>Managers</td><td class="num">3/3</td></tr>
+					<tr><td><i class="i" data-i="in_progress"></i></td><td>Rapport final</td><td class="num">1/2</td></tr>
+				</tbody>
+			</table>
+		</fieldset>
+
+		<div style="display:flex; flex-direction:column; gap:1lh">
+			<fieldset>
+				<legend>Questions applicatives</legend>
+				<label class="field">Quelles applications web, API ou mobiles sont concernées ?
+					<textarea rows="2">Site vitrine https://www.banque-exemple.test (v4.2) et API publique https://api.banque-exemple.test/v2</textarea>
+				</label>
+				<label class="field">Sur quel environnement se déroule le test ? Les données y sont-elles réelles ?
+					<span class="actions">
+						<label class="inline"><input type="radio" name="env"> Production</label>
+						<label class="inline"><input type="radio" name="env" checked> Préproduction</label>
+						<label class="inline"><input type="radio" name="env"> Recette</label>
+						<label class="inline"><input type="checkbox"> Données réelles</label>
+					</span>
+				</label>
+				<label class="field">Des comptes de test sont-ils fournis ? Pour quels rôles ?
+					<textarea rows="2">Oui : client particulier (2 comptes), conseiller (1 compte). Identifiants transmis dans les secrets du périmètre.</textarea>
+				</label>
+				<label class="field">Quelle documentation est fournie ?
+					<span class="actions">
+						<label class="inline"><input type="checkbox" checked> OpenAPI</label>
+						<label class="inline"><input type="checkbox"> GraphQL</label>
+						<label class="inline"><input type="checkbox"> Collection Postman</label>
+						<label class="inline"><input type="checkbox"> Code source</label>
+					</span>
+				</label>
+				<label class="field">Un WAF, un anti-bot ou une limite de débit protège-t-il l'application ?
+					<textarea rows="1" placeholder="Réponse à saisir"></textarea>
+				</label>
+				<label class="field">Des fonctions sont-elles exclues ?
+					<textarea rows="1" placeholder="Réponse à saisir"></textarea>
+				</label>
+				<div class="actions">
+					<button type="button"><i class="i" data-i="save"></i>Enregistrer</button>
+					<button type="button" class="secondary">Thème suivant : Cloud et SaaS</button>
+					<span class="spacer"></span>
+					<small>Enregistré par Camille Martin à 14:28</small>
+				</div>
+			</fieldset>
+
+			<fieldset>
+				<legend>Sous-modules du périmètre proposés <span class="callout">2</span></legend>
+				<p>Les réponses suggèrent d'activer ces sous-modules ; le chef de projet confirme.</p>
+				<table>
+					<tbody>
+						<tr><td><input type="checkbox" checked></td><td><i class="i" data-i="scope"></i> Réseau</td><td><small>« Périmètre : plages d'IP 203.0.113.0/26 »</small></td><td><span class="badge b-green">Activé</span></td></tr>
+						<tr><td><input type="checkbox" checked></td><td><i class="i" data-i="web"></i> Applications</td><td><small>« Applications : site vitrine, API »</small></td><td><span class="badge b-green">Activé</span></td></tr>
+						<tr><td><input type="checkbox"></td><td><i class="i" data-i="cloud"></i> Cloud et SaaS</td><td><small>« Fournisseur : Azure (hébergement de l'API) »</small></td><td><button type="button" class="small">Activer</button></td></tr>
+						<tr class="excluded"><td><input type="checkbox" disabled></td><td>Radio</td><td><small>« Réseaux Wi-Fi : non »</small></td><td><small>V2</small></td></tr>
+					</tbody>
+				</table>
+			</fieldset>
+
+			<div class="note"><i class="i" data-i="milestone"></i> Validation : la lettre d'engagement est signée hors de l'application ; le chef de projet coche le jalon « Kick-off / signature de l'engagement » (fait le 28 nov.). Signature électronique en V2.</div>
+		</div>
+	</div>
+</main>
+</body>
+</html>

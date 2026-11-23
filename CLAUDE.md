@@ -10,6 +10,7 @@ Application Web de suivi de tests d'intrusion. Le projet est en **début de dév
 - `12.01 Rapport d'analyse du CDC` — lacunes du CDC (sections §1 à §6 citées par les stories) ; `12.02`–`12.05` — revues antérieures (Claude, Cursor, NotebookLM).
 - `13.xx` — ADR (index `13.00`, modèle `01.01`).
 - `14.01 Schéma des objets métier` — liaisons entre objets métier (schéma simplifié), base des modèles Eloquent et des migrations ; liens à détailler avant la première migration métier.
+- `15.01 Maquettes de l'interface` — maquette de chaque écran de la V1 (WebTUI, Catppuccin), référence des stories d'interface ; sources HTML et `capturer.mjs` (Chromium) dans `15 Maquettes/sources/`.
 - `21.01` organisation du code ; `22.01` planification (Gantt en points, temps passé, à régénérer en fin de sprint) ; `31.01` stratégie de tests, `32.xx` campagnes ; `41.01` versionnage et livraison (`CHANGELOG.md` à la racine).
 - `51.01` traitement des retours ; `52.xx` bugs, `53.xx` améliorations ; une fiche acceptée devient une story dans `.stories/`.
 - `01 Modèles` — modèles Obsidian (dossier configuré dans `.obsidian/templates.json`).

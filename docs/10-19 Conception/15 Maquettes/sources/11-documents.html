@@ -1,0 +1,89 @@
+<!doctype html>
+<!--
+	Maquette 11 (15.01) : documents (GED) d'un test. Téléversement chiffré dans
+	le navigateur, état de déchiffrement pour l'utilisateur (ACL ET trousseau),
+	liens, mots-clés, aperçu des seules images et du texte.
+	Sources : 11.11 (organisation, gestion, chiffrement, protection XSS).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>11 Documents — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-section="documents" data-ecran="11">
+<main>
+	<div class="actions">
+		<button type="button"><i class="i" data-i="upload"></i>Téléverser…</button>
+		<small><i class="i" data-i="lock"></i> Chiffré dans votre navigateur pour les 4 membres de l'équipe avant l'envoi <span class="callout">1</span></small>
+		<span class="spacer"></span>
+		<label class="inline"><i class="i" data-i="search"></i><input type="search" placeholder="Nom ou mot-clé" size="20"></label>
+		<label class="inline">Lié à <select><option>Tout le test</option></select></label>
+	</div>
+
+	<div class="grid-2" style="grid-template-columns: 1fr 44ch">
+		<table>
+			<thead>
+				<tr><th>Nom</th><th>Type</th><th class="num">Taille</th><th>Lié à</th><th>Mots-clés</th><th>Accès <span class="callout">2</span></th></tr>
+			</thead>
+			<tbody>
+				<tr class="selected">
+					<td><i class="i" data-i="image"></i> <a href="#">rce-id-hostname.png</a></td>
+					<td>PNG</td><td class="num">412 Kio</td>
+					<td>VULN-003, T-029</td><td><span class="badge">rce</span> <span class="badge">cms</span></td>
+					<td><span class="badge b-green"><i class="i" data-i="unlock"></i> Lisible</span></td>
+				</tr>
+				<tr>
+					<td><i class="i" data-i="document"></i> <a href="#">capture-dmz.pcapng</a></td>
+					<td>pcapng</td><td class="num">38,2 Mio</td>
+					<td>Phase 2</td><td><span class="badge">réseau</span></td>
+					<td><span class="badge b-green"><i class="i" data-i="unlock"></i> Lisible</span></td>
+				</tr>
+				<tr>
+					<td><i class="i" data-i="document"></i> <a href="#">dump-config-cms.txt</a></td>
+					<td>texte</td><td class="num">6 Kio</td>
+					<td>VULN-003</td><td><span class="badge">secret</span></td>
+					<td><span class="badge b-yellow"><i class="i" data-i="clock"></i> Partage demandé</span></td>
+				</tr>
+				<tr>
+					<td><i class="i" data-i="document"></i> <a href="#">ticket-CHG-4471.pdf</a></td>
+					<td>PDF</td><td class="num">220 Kio</td>
+					<td>VULN-005</td><td><span class="badge">correction</span></td>
+					<td><span class="badge b-green"><i class="i" data-i="unlock"></i> Lisible</span></td>
+				</tr>
+				<tr>
+					<td colspan="6"><small>… 27 autres documents</small></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div style="display:flex; flex-direction:column; gap:1lh">
+			<fieldset>
+				<legend>rce-id-hostname.png</legend>
+<pre class="code" style="text-align:center">┌───────────────────────────────┐
+│ $ id; hostname                │
+│ uid=33(www-data) gid=33(...)  │
+│ srv-web01                     │
+└───────────────────────────────┘
+      aperçu déchiffré en mémoire</pre>
+				<dl>
+					<dt>Propriétaire</dt><dd>Sam Leroy</dd>
+					<dt>Détenteurs</dt><dd>4 : équipe du test <a href="#">voir</a></dd>
+					<dt>Schéma</dt><dd><code>openpgp-v6/seipd2-aes256-gcm</code></dd>
+					<dt>Empreinte</dt><dd><small>SHA-256 du chiffré 9f2c…41ab</small></dd>
+					<dt>Rétention</dt><dd>jusqu'au 5 déc. 2028</dd>
+				</dl>
+				<div class="actions">
+					<button type="button" class="secondary small"><i class="i" data-i="download"></i>Télécharger</button>
+					<button type="button" class="secondary small"><i class="i" data-i="link"></i>Lier</button>
+					<button type="button" class="secondary small"><i class="i" data-i="share"></i>Partager</button>
+				</div>
+			</fieldset>
+			<div class="warn"><i class="i" data-i="clock"></i> <strong>dump-config-cms.txt</strong> : vous figurez dans les ACL, mais votre clé n'est pas encore dans le trousseau. Sam Leroy (propriétaire) a été notifié ; le document sera lisible dès qu'un détenteur aura partagé la clé depuis son navigateur.</div>
+			<small><i class="i" data-i="info"></i> Seuls les PNG, JPEG, WebP, GIF et le texte s'affichent ; les autres types se téléchargent (13.04).</small>
+		</div>
+	</div>
+</main>
+</body>
+</html>

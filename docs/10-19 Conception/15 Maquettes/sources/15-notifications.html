@@ -1,0 +1,53 @@
+<!doctype html>
+<!--
+	Maquette 15 (15.01) : centre de notifications in-app et préférences.
+	Aucune donnée sensible dans le texte d'une notification.
+	Sources : 11.06 (notifications et alertes).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>15 Notifications — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="notifications" data-ecran="15">
+<main>
+	<div class="actions">
+		<h2>Notifications</h2>
+		<span class="spacer"></span>
+		<button type="button" class="secondary"><i class="i" data-i="check"></i>Tout marquer comme lu</button>
+	</div>
+
+	<div class="grid-2" style="grid-template-columns: 1fr 44ch">
+		<table>
+			<tbody>
+				<tr class="selected"><td><i class="i" data-i="key"></i></td><td><strong>Partage de clés demandé</strong> — Lou Petit a été affecté à PT-2026-1008 ; 142 contenus à partager. <span class="callout">1</span></td><td><small>14:05</small></td><td><button type="button" class="small">Traiter</button></td></tr>
+				<tr class="selected"><td><i class="i" data-i="comment"></i></td><td><strong>Mention</strong> — Sam Leroy vous a mentionné sur T-029.</td><td><small>10:41</small></td><td><a href="#">Ouvrir</a></td></tr>
+				<tr class="selected"><td><i class="i" data-i="error"></i></td><td><strong>Cible exclue touchée</strong> — un import Nmap sur PT-2026-1008 contient srv-paiement. <span class="callout">2</span></td><td><small>09:58</small></td><td><a href="#">Ouvrir</a></td></tr>
+				<tr><td><i class="i" data-i="shield"></i></td><td>VULN-005 déclarée corrigée par le client.</td><td><small>hier</small></td><td><a href="#">Ouvrir</a></td></tr>
+				<tr><td><i class="i" data-i="tasks"></i></td><td>T-034 vous a été attribuée par Camille Martin.</td><td><small>hier</small></td><td><a href="#">Ouvrir</a></td></tr>
+				<tr><td><i class="i" data-i="status"></i></td><td>PT-2026-1008 est passé de « Planifié » à « En cours ».</td><td><small>1 déc.</small></td><td><a href="#">Ouvrir</a></td></tr>
+				<tr><td><i class="i" data-i="warning"></i></td><td>3 contenus de PT-2026-0997 n'ont plus qu'un seul détenteur.</td><td><small>28 nov.</small></td><td><a href="#">Ouvrir</a></td></tr>
+			</tbody>
+		</table>
+
+		<fieldset>
+			<legend>Préférences <span class="callout">3</span></legend>
+			<table>
+				<thead><tr><th>Événement</th><th>Application</th><th>E-mail</th></tr></thead>
+				<tbody>
+					<tr><td>Statut d'un test</td><td><input type="checkbox" checked></td><td><input type="checkbox" disabled></td></tr>
+					<tr><td>Tâche attribuée ou modifiée</td><td><input type="checkbox" checked></td><td><input type="checkbox" disabled></td></tr>
+					<tr><td>Mention</td><td><input type="checkbox" checked></td><td><input type="checkbox" disabled></td></tr>
+					<tr><td>Partage et rechiffrement</td><td><input type="checkbox" checked disabled></td><td><input type="checkbox" disabled></td></tr>
+					<tr><td>Vulnérabilité corrigée</td><td><input type="checkbox" checked></td><td><input type="checkbox" disabled></td></tr>
+					<tr><td>Validation du rapport</td><td><input type="checkbox" checked></td><td><input type="checkbox" disabled></td></tr>
+				</tbody>
+			</table>
+			<small>E-mail en V2. Les demandes de partage ne peuvent pas être désactivées : sans elles, un document resterait illisible.</small>
+		</fieldset>
+	</div>
+</main>
+</body>
+</html>

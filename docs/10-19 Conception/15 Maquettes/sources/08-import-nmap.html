@@ -1,0 +1,83 @@
+<!doctype html>
+<!--
+	Maquette 08 (15.01) : import d'une sortie Nmap XML. Le fichier est analysé
+	dans le navigateur ; les hôtes sont rapprochés du périmètre, les ports
+	proposés comme services, un hôte exclu est signalé, un hôte inconnu listé.
+	Sources : 11.08 (import de sorties natives, Nmap XML).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>08 Import Nmap XML — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-section="executions" data-ecran="08">
+<main>
+	<h3>Importer une sortie native — étape 2 sur 3 : rapprochement</h3>
+
+	<fieldset class="soft">
+		<legend>Fichier <span class="callout">1</span></legend>
+		<dl>
+			<dt>Fichier</dt><dd><code>scan-dmz.xml</code> (184 Kio) — Nmap XML, analysé dans le navigateur, sans entités externes</dd>
+			<dt>Commande</dt><dd><code>nmap -sV -p- -oX scan-dmz.xml 203.0.113.0/26</code></dd>
+			<dt>Version</dt><dd>7.95</dd>
+			<dt>Début → fin</dt><dd>2 déc. 09:14:02 → 09:51:37</dd>
+			<dt>Phase</dt><dd><select><option>2. Énumération</option></select></dd>
+		</dl>
+	</fieldset>
+
+	<div class="alert"><i class="i" data-i="error"></i> <strong>Cible interdite touchée :</strong> 203.0.113.30 (srv-paiement) est exclu du périmètre. Le chef de projet est notifié à la validation de l'import. <span class="callout">2</span></div>
+
+	<table>
+		<thead>
+			<tr><th></th><th>Hôte actif</th><th>Rapprochement</th><th>Ports ouverts proposés comme services</th><th>Décision</th></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input type="checkbox" checked></td>
+				<td>203.0.113.10</td>
+				<td><span class="badge b-green">srv-web01</span></td>
+				<td><label class="inline"><input type="checkbox" checked disabled> 22/ssh</label> <label class="inline"><input type="checkbox" checked disabled> 80/http</label> <label class="inline"><input type="checkbox" checked disabled> 443/https</label> <small>(connus)</small> <label class="inline"><input type="checkbox" checked> 8443/https-alt <span class="badge b-mauve">nouveau</span></label></td>
+				<td>Cible de l'exécution</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" checked></td>
+				<td>203.0.113.11</td>
+				<td><span class="badge b-green">srv-api01</span></td>
+				<td><label class="inline"><input type="checkbox" checked disabled> 443/https</label> <small>(connu)</small></td>
+				<td>Cible de l'exécution</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" checked></td>
+				<td>203.0.113.20</td>
+				<td><span class="badge b-green">srv-mail01</span></td>
+				<td><label class="inline"><input type="checkbox" checked disabled> 25/smtp</label> <label class="inline"><input type="checkbox" checked disabled> 587/submission</label></td>
+				<td>Cible de l'exécution</td>
+			</tr>
+			<tr style="background: color-mix(in srgb, var(--red) 15%, transparent)">
+				<td><input type="checkbox" disabled></td>
+				<td>203.0.113.30</td>
+				<td><span class="badge b-red">srv-paiement — EXCLU</span></td>
+				<td><small>443/https — non importé</small></td>
+				<td><strong class="c-red">Signalé au chef de projet</strong></td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" disabled></td>
+				<td>203.0.113.42</td>
+				<td><span class="badge b-yellow">Inconnu</span> <span class="callout">3</span></td>
+				<td><small>3389/ms-wbt-server</small></td>
+				<td><small>Ajout au périmètre : chef de projet</small> <button type="button" class="small secondary">Proposer</button></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="actions">
+		<button type="button" class="secondary">Précédent</button>
+		<button type="button"><i class="i" data-i="lock"></i>Chiffrer et importer</button>
+		<span class="spacer"></span>
+		<small>Le fichier devient le contenu chiffré de l'exécution ; il ne sera plus modifiable.</small>
+	</div>
+</main>
+</body>
+</html>

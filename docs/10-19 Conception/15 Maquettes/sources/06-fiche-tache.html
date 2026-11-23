@@ -1,0 +1,92 @@
+<!doctype html>
+<!--
+	Maquette 06 (15.01) : fiche d'une tâche. Transitions de statut autorisées,
+	résultat, assignés, dates et temps passé, liens, commentaires d'équipe,
+	historique, avertissement de verrou optimiste.
+	Sources : 11.08 (tâches, statuts, résultat, temps passé, collaboration).
+-->
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+	<title>06 Fiche d'une tâche — maquette</title>
+	<link rel="stylesheet" href="maquettes.css">
+	<script src="maquettes.js"></script>
+</head>
+<body data-nav="tests" data-section="deroulement" data-ecran="06">
+<main>
+	<div class="warn"><i class="i" data-i="warning"></i> Sam Leroy a modifié cette tâche depuis son ouverture (14:30). <a href="#">Voir ses changements</a> — votre enregistrement remplacerait les siens. <span class="callout">1</span></div>
+
+	<div class="actions">
+		<h3>T-029 Exploitation de CVE-2026-0042 (CMS)</h3>
+		<span class="badge b-blue"><i class="i" data-i="in_progress"></i> En cours</span>
+		<span class="spacer"></span>
+		<button type="button"><i class="i" data-i="edit"></i>Modifier</button>
+	</div>
+
+	<div class="grid-2" style="grid-template-columns: 1fr 46ch">
+		<div style="display:flex; flex-direction:column; gap:1lh">
+			<fieldset>
+				<legend>Changer le statut <span class="callout">2</span></legend>
+				<div class="actions">
+					<button type="button"><i class="i" data-i="done"></i>Terminer…</button>
+					<button type="button" class="secondary"><i class="i" data-i="pause"></i>Bloquer…</button>
+					<button type="button" class="secondary"><i class="i" data-i="cancel"></i>Abandonner…</button>
+				</div>
+				<label class="field">Résultat (obligatoire pour terminer)
+					<select><option>Vulnérable — au moins une vulnérabilité liée</option></select>
+				</label>
+				<label class="field">Vulnérabilité liée
+					<select><option>VULN-003 Exécution de code à distance sur le CMS</option></select>
+				</label>
+			</fieldset>
+
+			<fieldset>
+				<legend>Description</legend>
+				<p>Vérifier si la version 4.2 du CMS est exposée à CVE-2026-0042 (désérialisation dans le module d'aperçu), puis tenter une exécution de commande sans effet de bord (<code>id</code>, <code>hostname</code>).</p>
+				<p class="muted"><i class="i" data-i="lock"></i> Aucun secret ici : les identifiants vont dans les secrets du périmètre ou dans la GED.</p>
+			</fieldset>
+
+			<fieldset>
+				<legend>Commentaires d'équipe (3)</legend>
+				<div class="thread">
+					<div class="comment"><span class="who">Alex Durand</span> <small>2 déc. 16:05</small><p>Version confirmée par l'en-tête <code>X-Generator</code>. L'aperçu est accessible sans authentification.</p></div>
+					<div class="comment"><span class="who">Sam Leroy</span> <small>3 déc. 10:41</small><p>Charge utile validée en préproduction, voir EXE-017. <a href="#">@Camille Martin</a> on prévient le client avant la suite ?</p></div>
+					<div class="comment"><span class="who">Camille Martin</span> <small>3 déc. 11:02</small><p>Oui, appel passé au RSSI. On continue, sans persistance.</p></div>
+				</div>
+				<textarea rows="2" placeholder="Répondre… (@ pour mentionner)"></textarea>
+				<div class="actions"><button type="button"><i class="i" data-i="send"></i>Publier</button></div>
+			</fieldset>
+		</div>
+
+		<div style="display:flex; flex-direction:column; gap:1lh">
+			<fieldset>
+				<legend>Détails</legend>
+				<dl>
+					<dt>Phase</dt><dd>3. Exploitation</dd>
+					<dt>Assignés</dt><dd>Alex Durand, Sam Leroy <a href="#">modifier</a></dd>
+					<dt>Début prévu</dt><dd>2 déc. 14:00</dd>
+					<dt>Fin prévue</dt><dd>3 déc. 18:00</dd>
+					<dt>Début réel</dt><dd>2 déc. 15:20 <small>(passage En cours)</small></dd>
+					<dt>Fin réelle</dt><dd>—</dd>
+					<dt>Temps passé</dt><dd><input value="3 h 40" size="8"> <small>effort de l'équipe</small></dd>
+				</dl>
+			</fieldset>
+			<fieldset>
+				<legend>Liens <span class="callout">3</span></legend>
+				<dl>
+					<dt><i class="i" data-i="target"></i> Objectif</dt><dd><a href="#">O-1</a> Prendre la main sur le site vitrine</dd>
+					<dt><i class="i" data-i="server"></i> Cibles</dt><dd><a href="#">srv-web01</a></dd>
+					<dt><i class="i" data-i="console"></i> Exécutions</dt><dd><a href="#">EXE-015</a>, <a href="#">EXE-017</a></dd>
+					<dt><i class="i" data-i="bug"></i> Vulnérabilités</dt><dd><a href="#">VULN-003</a></dd>
+				</dl>
+				<div class="actions"><button type="button" class="small secondary"><i class="i" data-i="link"></i>Lier…</button><button type="button" class="small secondary"><i class="i" data-i="console"></i>Nouvelle exécution</button></div>
+			</fieldset>
+			<fieldset class="soft">
+				<legend>Historique</legend>
+				<small>3 déc. 10:40 — Sam Leroy : temps passé 2 h 50 → 3 h 40<br>2 déc. 15:20 — Alex Durand : À faire → En cours<br>2 déc. 11:00 — Camille Martin : assignés + Sam Leroy</small>
+			</fieldset>
+		</div>
+	</div>
+</main>
+</body>
+</html>
