@@ -14,6 +14,7 @@ use App\Models\Tenant;
 use App\Models\TestStatusChange;
 use App\Models\User;
 use App\Policies\PenetrationTestPolicy;
+use App\Policies\ScopeObjectPolicy;
 use Carbon\CarbonInterface;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
@@ -303,6 +304,8 @@ class PenetrationTestController extends Controller
 			// Nom affiché seulement : les comptes ne sont pas énumérables (14.01).
 			'created_by' => $creator?->name,
 			'can_manage' => PenetrationTestPolicy::manages($user, $roles[$test->tenant_id] ?? null),
+			// Le périmètre est tenu par toute l'équipe, testeurs compris (engagement-4).
+			'can_manage_scope' => ScopeObjectPolicy::manages($user, $roles[$test->tenant_id] ?? null),
 		];
 	}
 

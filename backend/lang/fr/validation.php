@@ -53,6 +53,16 @@ return [
 		'status' => [
 			'unchanged' => 'Le test a déjà ce statut.',
 		],
+		'address' => [
+			'ip_or_cidr' => 'L\'adresse doit être une adresse IPv4 ou IPv6, ou une plage CIDR (203.0.113.0/24).',
+		],
+		'parent_id' => [
+			// Même message pour un objet inconnu, d'un autre test ou d'une autre organisation.
+			'host' => 'L\'objet parent doit être une machine du périmètre de ce test.',
+		],
+		'port' => [
+			'taken' => 'Ce port est déjà déclaré pour ce protocole sur cette machine.',
+		],
 		'sort' => [
 			'in' => 'Le tri n\'est pas autorisé sur ce champ.',
 		],
@@ -74,5 +84,18 @@ return [
 		'planned_start' => 'début prévu',
 		'planned_end' => 'fin prévue',
 		'comment' => 'commentaire',
+		'label' => 'libellé',
+		'included' => 'inclusion',
+		'constraints' => 'contraintes',
+		'parent_id' => 'objet parent',
+		'address' => 'adresse',
+		'hostname' => 'nom de la machine',
+		'operating_system' => 'système d\'exploitation',
+		'protocol' => 'protocole',
+		'port' => 'port',
+		'name' => 'nom',
+		'version' => 'version',
+		'username' => 'identifiant',
+		'role_description' => 'rôle',
 	],
 ];

@@ -37,6 +37,8 @@ export interface PenetrationTestSummary {
 	created_by: string | null
 	/** Vrai si l'utilisateur peut modifier le test et changer son statut. */
 	can_manage: boolean
+	/** Vrai si l'utilisateur peut tenir le périmètre (équipe du test, testeurs compris). */
+	can_manage_scope: boolean
 }
 
 /** Phase fixe d'un test. */
