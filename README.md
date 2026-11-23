@@ -2,7 +2,34 @@
 
 Application Web de **suivi de tests d'intrusion** : elle accompagne une mission de pentest de bout en bout, du questionnaire d'engagement avec le client jusqu'au rapport final, en conservant les preuves de façon chiffrée.
 
+[![GitHub license](https://badgen.net/github/license/ILPlais/SuiviTestIntrusion)](LICENSE) 
+
+[![GitHub Repo stars](https://img.shields.io/github/stars/ILPlais/SuiviTestIntrusion)](https://gitHub.com/ILPlais/SuiviTestIntrusion/stargazers/)
+
+[![GitHub forks](https://img.shields.io/github/forks/ILPlais/SuiviTestIntrusion)](https://gitHub.com/ILPlais/SuiviTestIntrusion/network/)
+
+[![GitHub watchers](https://img.shields.io/github/watchers/ILPlais/SuiviTestIntrusion)](https://github.com/ILPlais/SuiviTestIntrusion/watchers)
+
 > **État du projet :** début du développement. Le cahier des charges et les décisions d'architecture sont rédigés ; le socle Laravel + Vue 3 est en place.
+
+![GitHub Release Date](https://img.shields.io/github/release-date/ILPlais/SuiviTeestIntrusion?display_date=published_at)
+
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/ILPlais/SuiviTestIntrusion/total?label=t%C3%A9l%C3%A9chargements)
+
+[![GitHub branches](https://badgen.net/github/branches/ILPlais/SuiviTestIntrusion)](https://github.com/ILPlais/SuiviTestIntrusion/branches)
+
+[![GitHub latest commit](https://badgen.net/github/last-commit/ILPlais/SuiviTestIntrusion?label=dernier%20commit)](https://github.com/ILPlais/SuiviTestIntrusion/commits/main/)
+
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ILPlais/SuiviTestIntrusion/ci.yml)
+
+
+[![GitHub contributors](https://badgen.net/github/contributors/ILPlais/SuiviTestIntrusion)](https://github.com/ILPlais/SuiviTestIntrusion/graphs/contributors/)
+
+![GitHub top language](https://img.shields.io/github/languages/top/ILPlais/SuiviTestIntrusion) 
+
+![GitHub repo file or directory count](https://img.shields.io/github/directory-file-count/ILPlais/SuiviTestIntrusion?label=fichiers)
+
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ILPlais/SuiviTestIntrusion?label=taille%20du%20code)
 
 ## Fonctionnalités prévues
 
