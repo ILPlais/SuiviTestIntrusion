@@ -94,7 +94,8 @@
 			"post_exploitation": "Post-exploitation",
 			"cleanup": "Nettoyage"
 		},
-		"scopeLink": "Périmètre du test"
+		"scopeLink": "Périmètre du test",
+		"vulnerabilitiesLink": "Vulnérabilités du test"
 	},
 	"scope": {
 		"heading": "Périmètre — {test}",
@@ -143,6 +144,103 @@
 			"tcp": "TCP",
 			"udp": "UDP"
 		}
+	},
+	"vulnerabilities": {
+		"heading": "Vulnérabilités — {test}",
+		"back": "Retour à la fiche du test",
+		"backToList": "Retour aux vulnérabilités du test",
+		"notFound": "Cette vulnérabilité est introuvable.",
+		"testNotFound": "Ce test est introuvable.",
+		"empty": "Aucune vulnérabilité documentée.",
+		"listCaption": "Vulnérabilités du test, de la plus récente à la plus ancienne",
+		"reference": "Référence",
+		"title": "Titre",
+		"phase": "Phase",
+		"severity": "Sévérité",
+		"score": "Score",
+		"components": "Composants concernés",
+		"noComponent": "aucun composant",
+		"noScope": "Le périmètre du test est vide : déclarez-y les machines concernées.",
+		"add": "Documenter une vulnérabilité",
+		"create": "Créer la fiche",
+		"created": "Fiche créée.",
+		"description": "Description du constat",
+		"cveIds": "Identifiants CVE (séparés par des virgules)",
+		"cweIds": "Identifiants CWE (séparés par des virgules)",
+		"createdBy": "Documentée par",
+		"save": "Enregistrer la fiche",
+		"delete": "Supprimer la fiche",
+		"confirmDelete": "Supprimer définitivement la fiche {reference} ?",
+		"finding": "Constat",
+		"rating": "Cotation CVSS v3.1",
+		"unrated": "non cotée",
+		"vector": "Vecteur",
+		"pasteVector": "Coller un vecteur",
+		"applyVector": "Appliquer le vecteur",
+		"invalidVector": "Ce vecteur n'est pas un vecteur CVSS v3.1 complet.",
+		"previewScore": "Score calculé : {score} ({severity})",
+		"clearRating": "Retirer la cotation",
+		"serverScore": "Le score enregistré est recalculé par le serveur.",
+		"severities": {
+			"none": "Aucun",
+			"minor": "Mineur",
+			"important": "Important",
+			"major": "Majeur",
+			"critical": "Critique"
+		},
+		"metrics": {
+			"AV": "Vecteur d'attaque (AV)",
+			"AC": "Complexité d'attaque (AC)",
+			"PR": "Privilèges requis (PR)",
+			"UI": "Interaction utilisateur (UI)",
+			"S": "Portée (S)",
+			"C": "Confidentialité (C)",
+			"I": "Intégrité (I)",
+			"A": "Disponibilité (A)"
+		},
+		"values": {
+			"AV": {
+				"N": "Réseau",
+				"A": "Adjacent",
+				"L": "Local",
+				"P": "Physique"
+			},
+			"AC": {
+				"L": "Faible",
+				"H": "Élevée"
+			},
+			"PR": {
+				"N": "Aucun",
+				"L": "Faibles",
+				"H": "Élevés"
+			},
+			"UI": {
+				"N": "Aucune",
+				"R": "Requise"
+			},
+			"S": {
+				"U": "Inchangée",
+				"C": "Changée"
+			},
+			"C": {
+				"H": "Élevé",
+				"L": "Faible",
+				"N": "Aucun"
+			},
+			"I": {
+				"H": "Élevé",
+				"L": "Faible",
+				"N": "Aucun"
+			},
+			"A": {
+				"H": "Élevé",
+				"L": "Faible",
+				"N": "Aucun"
+			}
+		},
+		"cvssVersion": "CVSS {version}",
+		"cve": "CVE",
+		"cwe": "CWE"
 	},
 	"company": {
 		"heading": "Entreprise prestataire",

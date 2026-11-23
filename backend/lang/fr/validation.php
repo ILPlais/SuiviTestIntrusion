@@ -63,6 +63,22 @@ return [
 		'port' => [
 			'taken' => 'Ce port est déjà déclaré pour ce protocole sur cette machine.',
 		],
+		'phase_id' => [
+			'of_test' => 'La phase doit être une phase de ce test.',
+		],
+		'scope_object_ids' => [
+			// Même message pour un objet inconnu, d'un autre test ou d'une autre organisation.
+			'of_test' => 'Le composant doit être un objet du périmètre de ce test.',
+		],
+		'cvss_vector' => [
+			'invalid' => 'Le vecteur doit être un vecteur CVSS v3.1 complet (CVSS:3.1/AV:…/A:…), sans métrique temporelle ni environnementale.',
+		],
+		'cve_ids.*' => [
+			'regex' => 'Un identifiant CVE s\'écrit CVE-AAAA-NNNN.',
+		],
+		'cwe_ids.*' => [
+			'regex' => 'Un identifiant CWE s\'écrit CWE-NNN.',
+		],
 		'sort' => [
 			'in' => 'Le tri n\'est pas autorisé sur ce champ.',
 		],
