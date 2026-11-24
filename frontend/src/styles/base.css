@@ -395,20 +395,20 @@
 	.tag-peach { background: var(--peach); }
 	.tag-yellow { background: var(--yellow); }
 	.tag-green { background: var(--green); }
-	.tag-blue { background: var(--blue); }
-	.tag-grey { background: var(--overlay0); }
+	.tag-blue { background: var(--sapphire); }
+	.tag-grey { background: var(--overlay2); }
 	.tag-outline { background: transparent; box-shadow: inset 0 0 0 1px var(--foreground0); }
 
 	/*
 	 * Contraste du texte des badges (13.07, 4,5:1) : en Mocha, toutes les teintes
-	 * sont pastel, texte foncé ; en Latte, rouge, bleu et gris foncés prennent un
-	 * texte clair, pêche, jaune et vert un texte foncé.
+	 * sont pastel, texte foncé ; en Latte, seul le rouge, foncé, prend un texte
+	 * clair (bleu saphir et gris overlay2 gardent un texte foncé, au-dessus de 4,5:1).
 	 */
 	:is(.tag-red, .tag-peach, .tag-yellow, .tag-green, .tag-blue, .tag-grey) {
 		color: #11111b;
 	}
 
-	[data-webtui-theme='catppuccin-latte'] :is(.tag-red, .tag-blue) {
+	[data-webtui-theme='catppuccin-latte'] .tag-red {
 		color: #eff1f5;
 	}
 

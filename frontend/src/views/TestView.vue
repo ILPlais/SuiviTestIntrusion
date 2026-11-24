@@ -140,7 +140,7 @@ async function write(request: () => Promise<{ data: PenetrationTest }>, done: st
 		test.value = received
 		editing.value = false
 		message.value = done
-		await context?.refresh()
+		void context?.refresh()
 	} catch (caught) {
 		error.value = caught instanceof ApiError ? caught.firstMessage() : t('auth.unexpected')
 	} finally {
