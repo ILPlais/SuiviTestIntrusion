@@ -3,7 +3,7 @@
 **ID:** identite-6
 **Epic:** identite
 **Sprint:** 6
-**Status:** review
+**Status:** done
 **Points:** 3
 
 ## Context
@@ -28,4 +28,4 @@ Le catalogue `App\Enums\AuditAction` réserve déjà les événements du CDC don
 
 - [x] Tests written first cover the acceptance criteria
 - [x] Code review and verification loop passed
-- [ ] Code merged to main
+- [x] Code merged to main

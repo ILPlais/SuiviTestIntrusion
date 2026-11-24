@@ -34,5 +34,5 @@ Authentifier les utilisateurs, appliquer les rôles et ACL, isoler strictement l
 | [[identite-3]] | Double authentification TOTP                | done   |
 | [[identite-4]] | Jetons API personnels scopés                | todo   |
 | [[identite-5]] | Rôles, ACL et isolation multi-tenant        | done   |
-| [[identite-6]] | Journal d'audit                             | review |
+| [[identite-6]] | Journal d'audit                             | done   |
 | [[identite-7]] | Cycle de vie des utilisateurs               | todo   |

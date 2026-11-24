@@ -10,7 +10,7 @@
 | ------------------ | ----------------------------------- | ------ | ------ |
 | [[ged-chiffree-1]] | Paire de clés utilisateur et coffre | 8      | todo   |
 | [[ged-chiffree-2]] | Cycle de vie de la clé en mémoire   | 2      | todo   |
-| [[identite-6]]     | Journal d'audit                     | 3      | review |
+| [[identite-6]]     | Journal d'audit                     | 3      | done   |
 | [[identite-7]]     | Cycle de vie des utilisateurs       | 5      | todo   |
 
 ## Total Points: 18
