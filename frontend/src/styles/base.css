@@ -538,6 +538,38 @@
 		outline-offset: 2px;
 	}
 
+	/*
+	 * Actions d'une ligne de tableau (périmètre) : boutons compacts sur une ligne ;
+	 * leur nom complet est lu par les lecteurs d'écran (texte masqué à l'écran).
+	 */
+	td.row-actions,
+	td li {
+		white-space: nowrap;
+	}
+
+	/* Cellules : coupure aux espaces seulement (noms de machines, adresses IP). */
+	main :is(th, td) {
+		overflow-wrap: normal;
+	}
+
+	:is(td.row-actions, td li) button {
+		padding: 0 1ch;
+		min-height: 24px;
+	}
+
+	td.row-actions button + button {
+		margin-inline-start: 0.5ch;
+	}
+
+	/* Boutons d'un cadre : à leur taille, alignés à gauche. */
+	.panel > button {
+		align-self: flex-start;
+	}
+
+	.panel > button + button {
+		margin-inline-start: 0;
+	}
+
 	/* Ligne d'un objet exclu du périmètre : atténuée, mais lisible. */
 	tr.excluded td,
 	tr.excluded th {

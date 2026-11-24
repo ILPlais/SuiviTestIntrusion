@@ -105,7 +105,7 @@
 		"filterStatus": "Statut affiché",
 		"openTests": "Ouverts (hors validés)",
 		"allTests": "Tous",
-		"listCount": "{shown} tests affichés sur {total}",
+		"listCount": "Tests affichés : {shown} sur {total}",
 		"period": "Période prévue",
 		"risk": "Risque",
 		"noRisk": "aucun"
@@ -167,7 +167,10 @@
 		"protocols": {
 			"tcp": "TCP",
 			"udp": "UDP"
-		}
+		},
+		"addressColumn": "Adresse",
+		"excludeShort": "Exclure",
+		"includeShort": "Inclure"
 	},
 	"vulnerabilities": {
 		"heading": "Vulnérabilités — {test}",
@@ -176,7 +179,7 @@
 		"notFound": "Cette vulnérabilité est introuvable.",
 		"testNotFound": "Ce test est introuvable.",
 		"empty": "Aucune vulnérabilité documentée.",
-		"listCaption": "Vulnérabilités du test, de la plus récente à la plus ancienne",
+		"listCaption": "Vulnérabilités du test, par référence",
 		"reference": "Référence",
 		"title": "Titre",
 		"phase": "Phase",
@@ -339,7 +342,8 @@
 			"rating": "Cotation",
 			"remediation": "Remédiation"
 		},
-		"remediationTag": "Remédiation : {status}"
+		"remediationTag": "Remédiation : {status}",
+		"componentOf": "{label} ({host})"
 	},
 	"risk": {
 		"heading": "Synthèse du risque",

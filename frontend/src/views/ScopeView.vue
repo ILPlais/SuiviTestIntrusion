@@ -368,6 +368,9 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 						{{ t('scope.host') }}
 					</th>
 					<th scope="col">
+						{{ t('scope.addressColumn') }}
+					</th>
+					<th scope="col">
 						{{ t('scope.services') }}
 					</th>
 					<th scope="col">
@@ -394,9 +397,13 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 					:class="{ excluded: !entry.host.included }"
 				>
 					<th scope="row">
-						{{ entry.host.label }}<br>
-						<small>{{ entry.host.host?.address }}<template v-if="entry.host.host?.operating_system"> · {{ entry.host.host.operating_system }}</template></small>
+						{{ entry.host.label }}
 					</th>
+					<td>
+						{{ entry.host.host?.address }}<template v-if="entry.host.host?.operating_system">
+							<br><small>{{ entry.host.host.operating_system }}</small>
+						</template>
+					</td>
 					<td>
 						<span v-if="entry.services.length === 0">{{ t('scope.noService') }}</span>
 						<ul v-else>
@@ -439,27 +446,31 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 					</td>
 					<td>{{ entry.host.constraints ?? '' }}</td>
 					<td>{{ entry.host.comment ?? '' }}</td>
-					<td v-if="canManage">
+					<td
+						v-if="canManage"
+						class="row-actions"
+					>
 						<button
 							type="button"
 							:disabled="busy"
 							@click="toggle(entry.host)"
 						>
-							{{ entry.host.included ? t('scope.exclude', { label: entry.host.label }) : t('scope.include', { label: entry.host.label }) }}
+							<span aria-hidden="true">{{ entry.host.included ? t('scope.excludeShort') : t('scope.includeShort') }}</span>
+							<span class="visually-hidden">{{ entry.host.included ? t('scope.exclude', { label: entry.host.label }) : t('scope.include', { label: entry.host.label }) }}</span>
 						</button>
 						<button
 							type="button"
 							:disabled="busy"
 							@click="edit(entry.host)"
 						>
-							<ActionIcon name="edit" />{{ t('scope.editObject', { label: entry.host.label }) }}
+							<ActionIcon name="edit" /><span class="visually-hidden">{{ t('scope.editObject', { label: entry.host.label }) }}</span>
 						</button>
 						<button
 							type="button"
 							:disabled="busy"
 							@click="remove(entry.host)"
 						>
-							<ActionIcon name="delete" />{{ t('scope.deleteObject', { label: entry.host.label }) }}
+							<ActionIcon name="delete" /><span class="visually-hidden">{{ t('scope.deleteObject', { label: entry.host.label }) }}</span>
 						</button>
 					</td>
 				</tr>
@@ -515,20 +526,23 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 						>{{ entry.account.included ? t('scope.included') : t('scope.excluded') }}</span>
 					</td>
 					<td>{{ entry.account.comment ?? '' }}</td>
-					<td v-if="canManage">
+					<td
+						v-if="canManage"
+						class="row-actions"
+					>
 						<button
 							type="button"
 							:disabled="busy"
 							@click="edit(entry.account)"
 						>
-							<ActionIcon name="edit" />{{ t('scope.editObject', { label: entry.account.label }) }}
+							<ActionIcon name="edit" /><span class="visually-hidden">{{ t('scope.editObject', { label: entry.account.label }) }}</span>
 						</button>
 						<button
 							type="button"
 							:disabled="busy"
 							@click="remove(entry.account)"
 						>
-							<ActionIcon name="delete" />{{ t('scope.deleteObject', { label: entry.account.label }) }}
+							<ActionIcon name="delete" /><span class="visually-hidden">{{ t('scope.deleteObject', { label: entry.account.label }) }}</span>
 						</button>
 					</td>
 				</tr>
