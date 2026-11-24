@@ -55,9 +55,9 @@ test('un administrateur cote une vulnérabilité, rédige sa remédiation et lit
 
 	await page.getByRole('link', { name: fr.nav.tests, exact: true }).click()
 	await page.getByRole('button', { name: fr.tests.newTest }).click()
-	await page.getByLabel(fr.tests.organisation).selectOption({ label: organisation })
-	await page.getByLabel(fr.tests.reference).fill(reference)
-	await page.getByLabel(fr.tests.title).fill('Test externe du site vitrine')
+	await page.getByLabel(fr.tests.organisation, { exact: true }).selectOption({ label: organisation })
+	await page.getByLabel(fr.tests.reference, { exact: true }).fill(reference)
+	await page.getByLabel(fr.tests.title, { exact: true }).fill('Test externe du site vitrine')
 	await page.getByRole('button', { name: fr.tests.create }).click()
 	await expect(page.getByRole('heading', { name: `${reference} — Test externe du site vitrine` })).toBeVisible()
 	await expect(page.getByText(fr.risk.none).first()).toBeVisible()

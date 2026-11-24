@@ -43,9 +43,9 @@ test('un administrateur crée un test, change son statut et lit l\'historique', 
 
 	await page.getByRole('link', { name: fr.nav.tests, exact: true }).click()
 	await page.getByRole('button', { name: fr.tests.newTest }).click()
-	await page.getByLabel(fr.tests.organisation).selectOption({ label: organisation })
-	await page.getByLabel(fr.tests.reference).fill(reference)
-	await page.getByLabel(fr.tests.title).fill('Test externe du site vitrine')
+	await page.getByLabel(fr.tests.organisation, { exact: true }).selectOption({ label: organisation })
+	await page.getByLabel(fr.tests.reference, { exact: true }).fill(reference)
+	await page.getByLabel(fr.tests.title, { exact: true }).fill('Test externe du site vitrine')
 	await page.getByLabel(fr.tests.type).selectOption({ label: fr.tests.types.black_box })
 	await page.getByLabel(fr.tests.exposure).selectOption({ label: fr.tests.exposures.external })
 	await page.getByLabel(fr.tests.plannedStart).fill('2026-12-01T09:00')
