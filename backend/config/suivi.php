@@ -23,4 +23,14 @@ return [
 		'two_factor_required' => (bool) env('AUTH_TWO_FACTOR_REQUIRED', false),
 	],
 
+	/*
+	| Journal d'audit (identite-6, 11.02). Les événements plus anciens que la
+	| rétention sont purgés chaque jour par `php artisan model:prune` (service
+	| scheduler) ; 0 conserve tout. Une année par défaut : assez pour retracer
+	| une campagne et ses retests.
+	*/
+	'audit' => [
+		'retention_days' => (int) env('AUDIT_RETENTION_DAYS', 365),
+	],
+
 ];

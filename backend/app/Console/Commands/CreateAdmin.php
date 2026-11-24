@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Audit\AuditLog;
 use App\Auth\AuthenticationValue;
+use App\Enums\AuditAction;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
@@ -69,6 +71,13 @@ class CreateAdmin extends Command
 			'activation_token_hash' => hash('sha256', $token),
 			'activation_expires_at' => now()->addHours($hours),
 		])->save();
+
+		// Création ou nouveau lien d'activation, consignés sans le jeton (identite-6).
+		app(AuditLog::class)->record(
+			$existing === null ? AuditAction::AccountCreated : AuditAction::AccountInvited,
+			$user,
+			after: AuditLog::snapshot($user, ['name', 'email', 'is_instance_admin', 'activation_expires_at']),
+		);
 
 		$this->info($existing === null ? "Administrateur créé : {$email}" : "Nouveau lien d'activation pour {$email} (l'ancien ne vaut plus).");
 		$this->line("Lien d'activation, valable {$hours} heures et utilisable une seule fois :");

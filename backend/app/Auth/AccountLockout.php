@@ -2,6 +2,8 @@
 
 namespace App\Auth;
 
+use App\Audit\AuditLog;
+use App\Enums\AuditAction;
 use App\Models\User;
 use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\DB;
@@ -64,8 +66,9 @@ final class AccountLockout
 			if ($locked->failed_login_count >= (int) config('suivi.authentication.lockout_failures')) {
 				$locked->locked_until = now()->addMinutes((int) config('suivi.authentication.lockout_minutes'));
 
-				// Journal en attendant l'audit (identite-6) et la notification dans l'application (exploitation-1).
+				// Journal technique et audit (identite-6) ; la notification dans l'application viendra avec exploitation-1.
 				Log::warning('Compte local verrouillé après des échecs de connexion répétés.', ['utilisateur' => $locked->id]);
+				app(AuditLog::class)->record(AuditAction::AccountLocked, $locked, after: ['locked_until' => $locked->locked_until->toIso8601ZuluString()]);
 			}
 
 			$locked->save();
