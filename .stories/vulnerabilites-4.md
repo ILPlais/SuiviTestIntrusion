@@ -3,7 +3,7 @@
 **ID:** vulnerabilites-4
 **Epic:** vulnerabilites
 **Sprint:** 5
-**Status:** todo
+**Status:** review
 **Points:** 2
 
 ## Context
@@ -12,8 +12,8 @@ En tant que chef de projet, je veux qualifier l'impact métier.
 
 ## Acceptance Criteria
 
-- [ ] Quatre axes (opérationnel, légal, financier, image) notés de 0 à 4
-- [ ] Liaison aux références réglementaires du catalogue
+- [x] Quatre axes (opérationnel, légal, financier, image) notés de 0 à 4
+- [ ] Liaison aux références réglementaires du catalogue (non livrée : le catalogue réglementaire n'existe pas encore, aucune story ne le crée ; à décider)
 
 ## Technical Notes
 

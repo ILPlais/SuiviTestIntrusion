@@ -240,7 +240,45 @@
 		},
 		"cvssVersion": "CVSS {version}",
 		"cve": "CVE",
-		"cwe": "CWE"
+		"cwe": "CWE",
+		"businessImpact": "Impact business",
+		"axes": {
+			"operational": "Opérationnel",
+			"legal": "Légal",
+			"financial": "Financier",
+			"reputation": "Image"
+		},
+		"levels": {
+			"operational": [
+				"Non applicable",
+				"Dégâts limités sur la production",
+				"Dégâts significatifs sur la production",
+				"Dégâts majeurs sur la production",
+				"Arrêt de production sur le long terme"
+			],
+			"legal": [
+				"Non applicable",
+				"Non-respect des engagements et SLA",
+				"Non-respect d'une norme obligatoire (PCI DSS, RGPD…)",
+				"Perte d'une certification (ISO, PCI DSS…)",
+				"Poursuite judiciaire possible"
+			],
+			"financial": [
+				"Non applicable",
+				"Dommages moins coûteux que la correction",
+				"Effet mineur sur le bénéfice annuel",
+				"Effet significatif sur le bénéfice annuel",
+				"Pouvant amener au dépôt de bilan"
+			],
+			"reputation": [
+				"Non applicable",
+				"Dégâts minimes",
+				"Perte de confiance",
+				"Perte de grands comptes",
+				"Dégradation de la marque"
+			]
+		},
+		"level": "{level} — {label}"
 	},
 	"company": {
 		"heading": "Entreprise prestataire",
