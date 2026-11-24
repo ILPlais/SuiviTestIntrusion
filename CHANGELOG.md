@@ -12,9 +12,11 @@ Ce fichier suit le format [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 - Fiches des références d'un test : organisations clientes (création et suppression par un administrateur, modification par le chef de projet), entreprise prestataire, profil du testeur (nom, poste, présentation) ; écrans Organisations, Entreprise et Mon profil ; présentations en Markdown, rendues dans le navigateur et assainies (engagement-1).
 - Journal d'audit : auteur, horodatage, organisation, objet, action, résumé avant / après débarrassé des secrets ; connexions, double authentification, comptes, organisations, tests, vulnérabilités, remédiations et fiche entreprise consignés ; rétention paramétrable (`AUDIT_RETENTION_DAYS`, purge quotidienne) ; API GET /api/v1/audit-events réservée aux administrateurs d'instance (identite-6).
 - Paire de clés OpenPGP v6 générée dans le Worker crypto à l'activation (openpgp.js, Argon2id, AEAD) ; clé privée stockée chiffrée en deux copies, par le mot de passe et par une clé de récupération de 128 bits affichée une seule fois et ressaisie avant l'activation ; déverrouillage à la connexion, empreinte et changement de mot de passe sans rechiffrer les fichiers dans l'écran Sécurité ; API GET /api/v1/user/vault et PUT /api/v1/user/password (ged-chiffree-1).
+- Cycle de vie des comptes : invitations par un administrateur (tout rôle) ou un chef de projet (clients finaux de ses organisations), lien de 72 heures affiché à l'invitant, renvoi et annulation, compte actif rattaché sans nouvel enrôlement ; désactivation réversible (sessions et jetons révoqués, invitations émises annulées), suppression pseudonymisée d'un compte désactivé, dernier administrateur protégé, déverrouillage anticipé ; mot de passe oublié par un lien de 24 heures émis par un administrateur, avec la clé de récupération ; écran Utilisateurs et page de réinitialisation (identite-7).
 
 ### Modifications
 
+- Lien d'activation valable 72 heures par défaut au lieu de 24 (`AUTH_ACTIVATION_HOURS`, 11.06) ; nouveau réglage `AUTH_RESET_HOURS` (identite-7).
 - Documentation du code rendue obligatoire en CI : DocBlock décrit et typé sur chaque élément PHP (règle Larastan du projet, règles phpdoc_* de PHP-CS-Fixer), JSDoc sur chaque fonction JavaScript et TypeScript (eslint-plugin-jsdoc) ; code existant mis en conformité (21.01).
 
 ### Corrections

@@ -43,6 +43,9 @@ class AppServiceProvider extends ServiceProvider
 		// Journal d'audit : administrateurs d'instance (identite-6, « qui a fait quoi et quand »).
 		Gate::define('view-audit-log', fn (User $user) => $user->is_instance_admin);
 
+		// Administration des comptes : administrateurs d'instance (identite-7, écran 16).
+		Gate::define('manage-users', fn (User $user) => $user->is_instance_admin);
+
 		// Un joker dans TRUSTED_PROXIES est écarté (13.06) ; l'exploitant en est averti,
 		// car son proxy n'est alors pas reconnu (URL en HTTP, adresse du proxy journalisée).
 		if (config('trustedproxy.wildcard_rejected')) {

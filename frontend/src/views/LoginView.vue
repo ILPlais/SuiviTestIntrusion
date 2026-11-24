@@ -25,6 +25,8 @@ const code = ref('')
 const busy = ref(false)
 const error = ref<string | null>(null)
 const activated = route.query.activated === '1'
+// Retour d'une réinitialisation du mot de passe (identite-7).
+const wasReset = route.query.reset === '1'
 
 /**
  * Message lisible pour une erreur de connexion.
@@ -95,6 +97,12 @@ async function submitCode(): Promise<void> {
 			role="status"
 		>
 			{{ t('auth.activated') }}
+		</p>
+		<p
+			v-if="wasReset && step === 'credentials'"
+			role="status"
+		>
+			{{ t('reset.done') }}
 		</p>
 		<form
 			v-if="step === 'credentials'"

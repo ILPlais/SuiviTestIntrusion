@@ -7,6 +7,7 @@
 use App\Http\Api\ApiErrorRenderer;
 use App\Http\Api\ConcurrencyLimit;
 use App\Http\Api\LimitJsonSize;
+use App\Http\Middleware\EnsureAccountActive;
 use App\Http\Middleware\EnsureTwoFactorEnrolled;
 use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
@@ -31,7 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
 		// Les navigateurs envoient les rapports CSP sans cookie ni jeton CSRF.
 		$middleware->preventRequestForgery(except: ['api/v1/csp-reports']);
 		$middleware->api(append: [LimitJsonSize::class]);
-		$middleware->alias(['concurrent' => ConcurrencyLimit::class, 'two-factor' => EnsureTwoFactorEnrolled::class]);
+		$middleware->alias(['concurrent' => ConcurrencyLimit::class, 'two-factor' => EnsureTwoFactorEnrolled::class, 'active' => EnsureAccountActive::class]);
 
 		// Un appel non authentifié à l'API reçoit une erreur 401, pas une redirection
 		// vers une page de connexion (la SPA gère elle-même l'écran de connexion).
