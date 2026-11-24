@@ -7,6 +7,7 @@ use App\Auth\AuthenticationValue;
 use App\Enums\AuditAction;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Vault\VaultInput;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,6 +21,11 @@ use Illuminate\Support\Facades\Hash;
  * e-mail en V1, il est transmis par un autre canal (13.06). La SPA lit l'adresse
  * du compte, nécessaire au sel de `auth`, puis envoie `auth` calculé à partir du
  * mot de passe choisi, après contrôle de la politique dans le navigateur (13.03).
+ *
+ * Avec `auth` arrivent le coffre de clés généré dans le navigateur (ged-chiffree-1) :
+ * clé publique, empreinte, copie de la clé privée chiffrée par le mot de passe et
+ * copie chiffrée par la clé de récupération. Le serveur les stocke sans pouvoir
+ * les ouvrir ; la clé de récupération elle-même ne lui parvient jamais.
  */
 class ActivationController extends Controller
 {
@@ -37,9 +43,9 @@ class ActivationController extends Controller
 	}
 
 	/**
-	 * Enregistre la valeur d'authentification et invalide le lien.
+	 * Enregistre la valeur d'authentification et le coffre de clés, puis invalide le lien.
 	 *
-	 * @param Request $request Requête portant la valeur d'authentification.
+	 * @param Request $request Requête portant la valeur d'authentification et le coffre.
 	 * @return Response
 	 */
 	public function store(Request $request): Response
@@ -47,6 +53,10 @@ class ActivationController extends Controller
 		$data = $request->validate([
 			'token' => ['required', 'string', 'size:64'],
 			'auth' => ['required', 'string', AuthenticationValue::rule()],
+			'public_key' => VaultInput::publicKey(),
+			'key_fingerprint' => VaultInput::fingerprint(),
+			'password_copy' => VaultInput::privateKeyCopy(),
+			'recovery_copy' => VaultInput::privateKeyCopy(),
 		]);
 
 		$user = $this->pendingQuery($data['token'])->first();
@@ -57,11 +67,17 @@ class ActivationController extends Controller
 			'password' => Hash::make($data['auth']),
 			'activation_token_hash' => null,
 			'activation_expires_at' => null,
+			'public_key' => $data['public_key'],
+			'key_fingerprint' => $data['key_fingerprint'],
+			'private_key_password_copy' => $data['password_copy'],
+			'private_key_recovery_copy' => $data['recovery_copy'],
+			'key_version' => 1,
 			'updated_at' => now(),
 		]);
 
 		abort_if($activated === 0 || $user === null, 404);
-		app(AuditLog::class)->record(AuditAction::AccountActivated, $user, actor: $user);
+		// L'empreinte reste dans le journal, même après la suppression du compte (13.05).
+		app(AuditLog::class)->record(AuditAction::AccountActivated, $user, after: ['key_fingerprint' => $data['key_fingerprint']], actor: $user);
 
 		return response()->noContent();
 	}

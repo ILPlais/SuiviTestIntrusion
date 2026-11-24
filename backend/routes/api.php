@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\ScopeObjectController;
 use App\Http\Controllers\Api\V1\TenantController;
 use App\Http\Controllers\Api\V1\TestRiskController;
 use App\Http\Controllers\Api\V1\TwoFactorController;
+use App\Http\Controllers\Api\V1\VaultController;
 use App\Http\Controllers\Api\V1\VulnerabilityController;
 use Illuminate\Support\Facades\Route;
 
@@ -69,6 +70,10 @@ Route::prefix('v1')->name('v1.')->middleware('throttle:standard')->group(functio
 		Route::get('company-profile', [CompanyProfileController::class, 'show'])->name('company-profile.show');
 		Route::put('company-profile', [CompanyProfileController::class, 'update'])->name('company-profile.update');
 		Route::patch('user/profile', [ProfileController::class, 'update'])->name('user.profile');
+		// Coffre de clés et changement de mot de passe (ged-chiffree-1) : après
+		// l'authentification complète, second facteur compris (13.03).
+		Route::get('user/vault', [VaultController::class, 'show'])->name('user.vault');
+		Route::put('user/password', [VaultController::class, 'changePassword'])->middleware('throttle:auth')->name('user.password');
 		// Journal d'audit (identite-6) : lecture seule, administrateurs d'instance.
 		Route::get('audit-events', [AuditEventController::class, 'index'])->name('audit-events.index');
 	});

@@ -37,9 +37,14 @@ use Laravel\Sanctum\HasApiTokens;
  * @property list<string>|null $two_factor_recovery_codes
  * @property int|null $two_factor_last_timestep
  * @property \Carbon\CarbonImmutable|\Illuminate\Support\Carbon|null $activation_expires_at
+ * @property string|null $public_key
+ * @property string|null $key_fingerprint
+ * @property string|null $private_key_password_copy
+ * @property string|null $private_key_recovery_copy
+ * @property int $key_version
  */
 #[Fillable(['name', 'email', 'password', 'job_title', 'presentation'])]
-#[Hidden(['password', 'remember_token', 'activation_token_hash', 'two_factor_secret', 'two_factor_recovery_codes'])]
+#[Hidden(['password', 'remember_token', 'activation_token_hash', 'two_factor_secret', 'two_factor_recovery_codes', 'public_key', 'private_key_password_copy', 'private_key_recovery_copy'])]
 class User extends Authenticatable
 {
 	use HasApiTokens;
@@ -122,7 +127,20 @@ class User extends Authenticatable
 			'presentation' => $this->presentation,
 			'two_factor_enabled' => $this->hasTwoFactor(),
 			'two_factor_setup_required' => (bool) config('suivi.authentication.two_factor_required') && ! $this->hasTwoFactor(),
+			// Empreinte de la paire de clés (ged-chiffree-1) ; nulle pour un compte enrôlé avant le coffre.
+			'key_fingerprint' => $this->key_fingerprint,
 		];
+	}
+
+	/**
+	 * Vrai si le compte a un coffre de clés (ged-chiffree-1). Les comptes activés
+	 * avant le coffre n'en ont pas ; ils en recevront un à leur prochain enrôlement.
+	 *
+	 * @return bool
+	 */
+	public function hasVault(): bool
+	{
+		return $this->key_fingerprint !== null;
 	}
 
 	/**
@@ -144,6 +162,7 @@ class User extends Authenticatable
 			'two_factor_confirmed_at' => 'datetime',
 			'two_factor_recovery_codes' => 'array',
 			'two_factor_last_timestep' => 'integer',
+			'key_version' => 'integer',
 		];
 	}
 }

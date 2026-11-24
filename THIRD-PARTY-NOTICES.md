@@ -152,6 +152,7 @@ Dépendances livrées avec SuiviTestIntrusion et leurs licences. Fichier génér
 | npm | detect-libc | 2.1.2 | Apache-2.0 |
 | npm | dijkstrajs | 1.0.3 | MIT |
 | npm | dompurify | 3.4.18 | MPL-2.0 ou Apache-2.0 |
+| npm | eckey-utils | 0.7.14 | ISC |
 | npm | emoji-regex | 8.0.0 | MIT |
 | npm | entities | 7.0.1 | BSD-2-Clause |
 | npm | estree-walker | 3.0.3 | MIT |
@@ -175,6 +176,7 @@ Dépendances livrées avec SuiviTestIntrusion et leurs licences. Fichier génér
 | npm | muggle-string | 0.4.1 | MIT |
 | npm | nanoid | 3.3.20 | MIT |
 | npm | nostics | 1.4.0 | MIT |
+| npm | openpgp | 6.3.3 | LGPL-3.0+ |
 | npm | p-limit | 2.3.0 | MIT |
 | npm | p-locate | 4.1.0 | MIT |
 | npm | p-try | 2.2.0 | MIT |

@@ -7,6 +7,7 @@ import { execFileSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
 import { expect, test, type Page } from '@playwright/test'
 import fr from '../../src/i18n/locales/fr.json' with { type: 'json' }
+import { activateAccount } from './activation'
 import { expectNoAccessibilityViolations } from './accessibility'
 
 const PASSWORD = 'girafe orange sous la pluie de mars'
@@ -21,10 +22,7 @@ async function signedInAdmin(page: Page): Promise<void> {
 	const output = execFileSync('php', ['artisan', 'suivi:create-admin', email, '--name=Admin Périmètre'], { cwd: '../backend', encoding: 'utf8' })
 	const token = /\/activation\/([A-Za-z0-9]{64})/.exec(output)?.[1] ?? ''
 
-	await page.goto(`/activation/${token}`)
-	await page.getByLabel(fr.auth.newPassword).fill(PASSWORD)
-	await page.getByLabel(fr.auth.confirmPassword).fill(PASSWORD)
-	await page.getByRole('button', { name: fr.auth.activate }).click()
+	await activateAccount(page, token, PASSWORD)
 	await page.getByLabel(fr.auth.email).fill(email)
 	await page.getByLabel(fr.auth.password).fill(PASSWORD)
 	await page.getByRole('button', { name: fr.auth.login }).click()

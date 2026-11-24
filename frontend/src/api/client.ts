@@ -57,6 +57,10 @@ export function apiGet(path: string): Promise<Response> {
 	return track(fetch(`${API_BASE}${path}`, {
 		method: 'GET',
 		credentials: 'same-origin',
+		// La page est servie en « Referrer-Policy: no-referrer » (13.06) et un GET de même
+		// origine n'envoie pas d'en-tête Origin : sans Referer, Sanctum ne reconnaît pas la
+		// SPA et ignore la session (401). « same-origin » ne l'envoie qu'à l'application.
+		referrerPolicy: 'same-origin',
 		headers: { Accept: 'application/json' },
 	}))
 }
@@ -127,6 +131,7 @@ async function send<T>(method: 'POST' | 'PUT' | 'PATCH' | 'DELETE', path: string
 	const response = await track(fetch(`${API_BASE}${path}`, {
 		method,
 		credentials: 'same-origin',
+		referrerPolicy: 'same-origin',
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
@@ -166,7 +171,7 @@ async function parse<T>(response: Response): Promise<T> {
 async function csrfToken(): Promise<string> {
 	let token = readCookie('XSRF-TOKEN')
 	if (token === null) {
-		await track(fetch('/sanctum/csrf-cookie', { credentials: 'same-origin' }))
+		await track(fetch('/sanctum/csrf-cookie', { credentials: 'same-origin', referrerPolicy: 'same-origin' }))
 		token = readCookie('XSRF-TOKEN')
 	}
 

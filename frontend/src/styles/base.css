@@ -93,6 +93,34 @@
 		color: var(--foreground0);
 	}
 
+	/*
+	 * Étapes d'un parcours (activation, écran 17 de 15.01) : sur une ligne,
+	 * séparées par « › », l'étape courante en gras.
+	 */
+	ol.steps {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 1ch;
+		padding: 0;
+		list-style: none;
+	}
+
+	ol.steps li + li::before {
+		content: '› ';
+	}
+
+	ol.steps [aria-current='step'] {
+		font-weight: bold;
+	}
+
+	/* Clé de récupération : grande, groupes de quatre lisibles, coupure entre groupes seulement. */
+	.recovery-key {
+		font-size: 1.25em;
+		letter-spacing: 0.1ch;
+		word-spacing: 1ch;
+		overflow-wrap: anywhere;
+	}
+
 	/* WebTUI supprime tout contour : le focus clavier doit rester visible (WCAG 2.4.7). */
 	:focus-visible {
 		outline: 2px solid var(--blue, var(--foreground0));
