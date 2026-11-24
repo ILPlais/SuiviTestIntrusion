@@ -1,0 +1,39 @@
+# Session: 2026-11-24
+**Date:** 2026-11-24
+**Started:** 13:35 (UTC)
+**Last Updated:** 16:20 (UTC)
+**Project:** SuiviTestIntrusion
+**Branch:** main (feature/identite-6, feature/ged-chiffree-1, feature/identite-7, feature/ged-chiffree-2)
+**Worktree:** session cloud (claude.ai/code)
+
+---
+<!-- ECC:SUMMARY:START -->
+## Session Summary
+
+### Tasks
+- Supprimer la branche de travail claude/project-thread-9atzn6 sur GitHub (faite par une session Remote Control sur le poste de Lionel, le conteneur cloud n'ayant pas le droit).
+- Sprint 6 : identite-6 (journal d'audit), ged-chiffree-1 (paire de clés, coffre, clé de récupération), identite-7 (cycle de vie des comptes), ged-chiffree-2 (clé en mémoire), dans cet ordre, chacune en branche feature/<id> fusionnée par --no-ff après CI verte.
+
+### Résultats
+- identite-6 : table audit_events, service AuditLog, API GET /api/v1/audit-events.
+- ged-chiffree-1 : openpgp.js 6.3.3 dans le Worker crypto, deux copies de la clé privée, clé de récupération ressaisie à l'activation, changement de mot de passe ; correction du Referer (401 Sanctum dans le build de production).
+- identite-7 : invitations, désactivation, suppression pseudonymisée, mot de passe oublié par lien administrateur + clé de récupération, écran Utilisateurs. Reports : notifications (exploitation-1), tâches à seul assigné (deroulement-2), contenus à seul détenteur et réinitialisation du coffre validée (ged-chiffree-9).
+- ged-chiffree-2 : effacement de la clé après inactivité (VAULT_IDLE_MINUTES) et à la mise en veille de l'onglet, bouton Verrouiller dans l'en-tête, limites dans l'aide (43.01).
+
+### Tools Used
+Bash, Read, Write, Edit, GitHub MCP (Actions), Remote Control
+
+### Stats
+- Total user messages: 1
+<!-- ECC:SUMMARY:END -->
+
+### Notes for Next Session
+- Lionel doit supprimer sur GitHub les branches feature/identite-6, feature/ged-chiffree-1, feature/identite-7 et feature/ged-chiffree-2 (le conteneur cloud ne peut pas supprimer de branche distante).
+- Fin du sprint 6 : mettre à jour les compteurs de 22.01 (stories terminées, Gantt) et de CLAUDE.md.
+- Reste hors story : historique des 5 derniers mots de passe (13.03), renvoi automatique d'une copie S2K périmée.
+
+### Context to Load
+```
+.stories/sprints/sprint-6.md
+docs/20-29 Développement/22 Planification/22.01 Planification du développement.md
+```

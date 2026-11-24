@@ -25,12 +25,12 @@ Application Web de suivi de tests d'intrusion. Le projet est en **début de dév
 
 ## Planification (ECC)
 
-Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 epics, 76 stories (56 en V1 dont 27 terminées, 20 reportées en V2 : mention « Reportée en V2 » dans la story), sprints 1 à 5 terminés ; planification en points dans `22.01`.
+Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 epics, 76 stories (56 en V1 dont 31 terminées, 20 reportées en V2 : mention « Reportée en V2 » dans la story), sprints 1 à 6 terminés ; planification en points dans `22.01`.
 
 - Projet personnel mené sur du temps libre : aucune date prévue (ni sprint, ni livraison). Un sprint est un lot d'environ 15 points ; seul le **temps réellement passé** compte, noté dans le tableau de `22.01` à la fin de chaque story.
 
 - Toute écriture dans `.stories/` passe par `ledger.js` du skill (`node <skill-dir>/scripts/ledger.js <commande> --root <racine>`), jamais à la main.
-- L'epic `decisions` (ADR crypto, KDF, LDAP/AD, infra, licence/i18n) passe **avant tout code**. Sprint 6 planifié (18 points : identite-6, ged-chiffree-1 étendue à la clé de récupération et passée à 8 points, identite-7, ged-chiffree-2) ; prochaine étape : `story-lifecycle implement identite-6`, puis les autres stories dans cet ordre ; prototype du chiffrement en flux dans le navigateur à faire en tête de ged-chiffree-3 ; décider du catalogue réglementaire laissé ouvert par vulnerabilites-4.
+- L'epic `decisions` (ADR crypto, KDF, LDAP/AD, infra, licence/i18n) passe **avant tout code**. Sprint 6 terminé (identite-6, ged-chiffree-1, identite-7, ged-chiffree-2) ; prochaine étape : planifier le sprint 7 (proposé dans `22.01` : ged-chiffree-3 à 6) et régénérer le Gantt ; prototype du chiffrement en flux dans le navigateur à faire en tête de ged-chiffree-3 ; décider du catalogue réglementaire laissé ouvert par vulnerabilites-4.
 - Pas d'issues GitHub : le suivi reste dans les fichiers.
 
 ## Reprise sur un autre poste
