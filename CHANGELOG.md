@@ -10,6 +10,7 @@ Ce fichier suit le format [Keep a Changelog](https://keepachangelog.com/fr/1.1.0
 - Limites de débit de l'API par classe (Standard, Écriture lourde, Export, Auth avec attente croissante), requêtes simultanées par utilisateur, réponse 429 avec `X-RateLimit-*` et `Retry-After`, corps JSON limités à 2 Mo (413) (socle-5).
 - Organisations clientes (tenants) et rôles par organisation (chef de projet, testeur, client final) ; isolation multi-tenant : chaque lecture filtrée par les organisations de l'utilisateur, 404 hors organisation ; API GET /api/v1/tenants (identite-5).
 - Fiches des références d'un test : organisations clientes (création et suppression par un administrateur, modification par le chef de projet), entreprise prestataire, profil du testeur (nom, poste, présentation) ; écrans Organisations, Entreprise et Mon profil ; présentations en Markdown, rendues dans le navigateur et assainies (engagement-1).
+- Journal d'audit : auteur, horodatage, organisation, objet, action, résumé avant / après débarrassé des secrets ; connexions, double authentification, comptes, organisations, tests, vulnérabilités, remédiations et fiche entreprise consignés ; rétention paramétrable (`AUDIT_RETENTION_DAYS`, purge quotidienne) ; API GET /api/v1/audit-events réservée aux administrateurs d'instance (identite-6).
 
 ### Modifications
 

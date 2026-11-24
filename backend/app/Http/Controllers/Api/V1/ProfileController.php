@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Audit\AuditLog;
+use App\Enums\AuditAction;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -32,6 +34,7 @@ class ProfileController extends Controller
 		/** @var User $user */
 		$user = $request->user();
 		$user->fill($valid)->save();
+		app(AuditLog::class)->recordChanges(AuditAction::ProfileUpdated, $user);
 
 		return new JsonResponse($user->toPublicArray());
 	}

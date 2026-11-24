@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Audit\AuditLog;
+use App\Enums\AuditAction;
 use App\Enums\RemediationPriority;
 use App\Enums\RemediationStatus;
 use App\Http\Controllers\Controller;
@@ -58,10 +60,22 @@ class RemediationController extends Controller
 			if (array_key_exists('priority', $valid)) {
 				$remediation->prioritize(RemediationPriority::tryFrom((string) $valid['priority']), $vulnerability->severity);
 			}
+			$previous = $remediation->exists ? $remediation->status : null;
 			if (array_key_exists('status', $valid)) {
 				$remediation->changeStatus(RemediationStatus::from($valid['status']), $valid['retest_result'] ?? null, $user);
 			}
 			$remediation->save();
+
+			// Changement de statut de remédiation : événement minimal du CDC (identite-6).
+			if (array_key_exists('status', $valid) && $remediation->status !== $previous) {
+				app(AuditLog::class)->record(
+					AuditAction::RemediationStatusChanged,
+					$remediation,
+					['status' => $previous?->value],
+					['status' => $remediation->status->value, 'retest_result' => $remediation->retest_result],
+					$user,
+				);
+			}
 		});
 
 		return VulnerabilityPresenter::response($vulnerability, $user);

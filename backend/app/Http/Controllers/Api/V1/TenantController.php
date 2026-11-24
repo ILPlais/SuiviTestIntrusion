@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Audit\AuditLog;
+use App\Enums\AuditAction;
 use App\Enums\TenantRole;
 use App\Http\Api\ApiListQuery;
 use App\Http\Controllers\Controller;
@@ -22,6 +24,15 @@ use Illuminate\Support\Facades\Gate;
  */
 class TenantController extends Controller
 {
+	/**
+	 * Reçoit le journal d'audit.
+	 *
+	 * @param AuditLog $audit Journal d'audit (identite-6).
+	 */
+	public function __construct(private readonly AuditLog $audit)
+	{
+	}
+
 	/**
 	 * Liste paginée des organisations accessibles, avec le rôle de l'utilisateur.
 	 *
@@ -59,6 +70,7 @@ class TenantController extends Controller
 		Gate::authorize('create', Tenant::class);
 
 		$tenant = Tenant::create($request->validate($this->rules(creating: true)));
+		$this->audit->record(AuditAction::TenantCreated, $tenant, after: AuditLog::snapshot($tenant, ['name', 'legal_name']));
 
 		return new JsonResponse(['data' => $this->present($tenant, $this->roles($request))], 201);
 	}
@@ -76,6 +88,7 @@ class TenantController extends Controller
 		Gate::authorize('update', $tenant);
 
 		$tenant->update($request->validate($this->rules(creating: false)));
+		$this->audit->recordChanges(AuditAction::TenantUpdated, $tenant);
 
 		return new JsonResponse(['data' => $this->present($tenant, $this->roles($request))]);
 	}
@@ -90,6 +103,9 @@ class TenantController extends Controller
 	{
 		Gate::authorize('delete', $tenant);
 
+		// Consigné avant la suppression : l'événement garde l'organisation, que la
+		// table du journal ne relie pas par clé étrangère.
+		$this->audit->record(AuditAction::TenantDeleted, $tenant, before: AuditLog::snapshot($tenant, ['name', 'legal_name']));
 		$tenant->delete();
 
 		return new JsonResponse(null, 204);

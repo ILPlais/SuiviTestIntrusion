@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Audit\AuditLog;
+use App\Enums\AuditAction;
 use App\Enums\TenantRole;
 use App\Enums\TestExposure;
 use App\Enums\TestStatus;
@@ -36,6 +38,13 @@ use Illuminate\Validation\ValidationException;
  */
 class PenetrationTestController extends Controller
 {
+	/**
+	 * Champs du test repris dans le journal d'audit à la création et à la suppression.
+	 *
+	 * @var list<string>
+	 */
+	private const AUDITED = ['reference', 'title', 'type', 'exposure', 'status', 'planned_start', 'planned_end'];
+
 	/**
 	 * Liste paginée des tests accessibles, filtrable par organisation, statut,
 	 * type et exposition.
@@ -98,6 +107,7 @@ class PenetrationTestController extends Controller
 		$attributes['tenant_id'] = $tenant->id;
 
 		$test = $this->guardReference(fn () => PenetrationTest::open($attributes, $this->user($request)));
+		app(AuditLog::class)->record(AuditAction::TestCreated, $test, after: AuditLog::snapshot($test, self::AUDITED));
 
 		return $this->detailResponse($request, $test, 201);
 	}
@@ -116,6 +126,7 @@ class PenetrationTestController extends Controller
 
 		$attributes = $this->validated($request, $test->tenant_id, $test);
 		$this->guardReference(fn () => $test->update($attributes));
+		app(AuditLog::class)->recordChanges(AuditAction::TestUpdated, $test);
 
 		return $this->detailResponse($request, $test);
 	}
@@ -176,6 +187,7 @@ class PenetrationTestController extends Controller
 	{
 		Gate::authorize('delete', $test);
 
+		app(AuditLog::class)->record(AuditAction::TestDeleted, $test, before: AuditLog::snapshot($test, self::AUDITED));
 		$test->delete();
 
 		return new JsonResponse(null, 204);

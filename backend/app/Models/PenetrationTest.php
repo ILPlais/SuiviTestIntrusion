@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Audit\AuditLog;
+use App\Enums\AuditAction;
 use App\Enums\PhaseCode;
 use App\Enums\TestExposure;
 use App\Enums\TestStatus;
@@ -105,6 +107,9 @@ class PenetrationTest extends Model
 			$this->status = $status;
 			$this->save();
 			$this->recordStatusChange($previous, $status, $author, $comment);
+			// Même transaction que l'historique : le journal d'audit (identite-6) ne
+			// peut pas diverger de test_status_changes.
+			app(AuditLog::class)->record(AuditAction::TestStatusChanged, $this, ['status' => $previous->value], ['status' => $status->value, 'comment' => $comment], $author);
 
 			return true;
 		});

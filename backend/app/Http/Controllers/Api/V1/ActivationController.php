@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Audit\AuditLog;
 use App\Auth\AuthenticationValue;
+use App\Enums\AuditAction;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -47,6 +49,8 @@ class ActivationController extends Controller
 			'auth' => ['required', 'string', AuthenticationValue::rule()],
 		]);
 
+		$user = $this->pendingQuery($data['token'])->first();
+
 		// Mise à jour conditionnelle en une requête : deux envois simultanés du même
 		// lien ne peuvent pas réussir tous les deux (usage unique).
 		$activated = $this->pendingQuery($data['token'])->update([
@@ -56,7 +60,8 @@ class ActivationController extends Controller
 			'updated_at' => now(),
 		]);
 
-		abort_if($activated === 0, 404);
+		abort_if($activated === 0 || $user === null, 404);
+		app(AuditLog::class)->record(AuditAction::AccountActivated, $user, actor: $user);
 
 		return response()->noContent();
 	}

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Audit\AuditLog;
 use App\Auth\AccountLockout;
 use App\Auth\TwoFactor;
+use App\Enums\AuditAction;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -23,12 +25,13 @@ use Illuminate\Validation\ValidationException;
 class TwoFactorController extends Controller
 {
 	/**
-	 * Reçoit le service TOTP et le service de verrouillage des comptes.
+	 * Reçoit le service TOTP, le service de verrouillage des comptes et le journal d'audit.
 	 *
 	 * @param TwoFactor $twoFactor Service TOTP.
 	 * @param AccountLockout $lockout Verrouillage des comptes.
+	 * @param AuditLog $audit Journal d'audit (identite-6).
 	 */
-	public function __construct(private readonly TwoFactor $twoFactor, private readonly AccountLockout $lockout)
+	public function __construct(private readonly TwoFactor $twoFactor, private readonly AccountLockout $lockout, private readonly AuditLog $audit)
 	{
 	}
 
@@ -69,6 +72,7 @@ class TwoFactorController extends Controller
 		$this->requireValidCode($user, $code);
 		$user->forceFill(['two_factor_confirmed_at' => now()])->save();
 		Log::notice('Double authentification activée.', ['utilisateur' => $user->id]);
+		$this->audit->record(AuditAction::TwoFactorEnabled, $user);
 
 		return new JsonResponse(['recovery_codes' => $this->twoFactor->regenerateRecoveryCodes($user)]);
 	}
@@ -86,6 +90,7 @@ class TwoFactorController extends Controller
 		abort_unless($user->hasTwoFactor(), 409);
 
 		$this->requireValidCode($user, $code);
+		$this->audit->record(AuditAction::RecoveryCodesRegenerated, $user);
 
 		return new JsonResponse(['recovery_codes' => $this->twoFactor->regenerateRecoveryCodes($user)]);
 	}
@@ -110,6 +115,7 @@ class TwoFactorController extends Controller
 			'two_factor_recovery_codes' => null,
 		])->save();
 		Log::notice('Double authentification désactivée.', ['utilisateur' => $user->id]);
+		$this->audit->record(AuditAction::TwoFactorDisabled, $user);
 
 		return response()->noContent();
 	}

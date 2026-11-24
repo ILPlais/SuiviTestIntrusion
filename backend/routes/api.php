@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ApiDocumentationController;
 use App\Http\Controllers\Api\V1\ActivationController;
+use App\Http\Controllers\Api\V1\AuditEventController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CompanyProfileController;
 use App\Http\Controllers\Api\V1\CspReportController;
@@ -68,6 +69,8 @@ Route::prefix('v1')->name('v1.')->middleware('throttle:standard')->group(functio
 		Route::get('company-profile', [CompanyProfileController::class, 'show'])->name('company-profile.show');
 		Route::put('company-profile', [CompanyProfileController::class, 'update'])->name('company-profile.update');
 		Route::patch('user/profile', [ProfileController::class, 'update'])->name('user.profile');
+		// Journal d'audit (identite-6) : lecture seule, administrateurs d'instance.
+		Route::get('audit-events', [AuditEventController::class, 'index'])->name('audit-events.index');
 	});
 });
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Audit\AuditLog;
+use App\Enums\AuditAction;
 use App\Http\Controllers\Controller;
 use App\Models\CompanyProfile;
 use Illuminate\Http\JsonResponse;
@@ -47,6 +49,14 @@ class CompanyProfileController extends Controller
 			'legal_name' => $valid['legal_name'] ?? null,
 			'presentation' => $valid['presentation'] ?? null,
 		]);
+
+		// Première écriture : pas d'état antérieur, la fiche entière est consignée.
+		$audit = app(AuditLog::class);
+		if ($profile->wasRecentlyCreated) {
+			$audit->record(AuditAction::CompanyProfileUpdated, $profile, after: AuditLog::snapshot($profile, ['name', 'legal_name', 'presentation']));
+		} else {
+			$audit->recordChanges(AuditAction::CompanyProfileUpdated, $profile);
+		}
 
 		return new JsonResponse(['data' => $this->present($profile)]);
 	}

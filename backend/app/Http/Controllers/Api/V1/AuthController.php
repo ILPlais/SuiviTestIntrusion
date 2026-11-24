@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Audit\AuditLog;
 use App\Auth\AccountLockout;
 use App\Auth\AuthenticationValue;
 use App\Auth\TwoFactor;
+use App\Enums\AuditAction;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -32,12 +34,13 @@ class AuthController extends Controller
 	private const PENDING_SECONDS = 300;
 
 	/**
-	 * Reçoit le service de verrouillage des comptes et le service TOTP.
+	 * Reçoit le service de verrouillage des comptes, le service TOTP et le journal d'audit.
 	 *
 	 * @param AccountLockout $lockout Verrouillage des comptes.
 	 * @param TwoFactor $twoFactor Service TOTP.
+	 * @param AuditLog $audit Journal d'audit (identite-6).
 	 */
-	public function __construct(private readonly AccountLockout $lockout, private readonly TwoFactor $twoFactor)
+	public function __construct(private readonly AccountLockout $lockout, private readonly TwoFactor $twoFactor, private readonly AuditLog $audit)
 	{
 	}
 
@@ -57,9 +60,14 @@ class AuthController extends Controller
 		// Connexion réservée à la SPA (session Sanctum) : une requête sans session n'en ouvre pas.
 		abort_unless($request->hasSession(), 403);
 
-		$user = User::query()->where('email', AuthenticationValue::normalizeEmail($data['email']))->first();
+		$email = AuthenticationValue::normalizeEmail($data['email']);
+		$user = User::query()->where('email', $email)->first();
 
 		if ($user === null || ! $this->verify($user, $data['auth'])) {
+			// Audit sans auteur (personne n'est authentifié) ; l'adresse tentée sert à
+			// repérer une attaque par dictionnaire, elle n'est pas un secret.
+			$this->audit->record(AuditAction::LoginFailed, $user, after: ['email' => $email]);
+
 			throw ValidationException::withMessages(['email' => [__('auth.failed')]]);
 		}
 
@@ -107,12 +115,14 @@ class AuthController extends Controller
 		if (! $valid) {
 			$this->lockout->recordFailure($user);
 			Log::warning('Code de double authentification refusé à la connexion.', ['utilisateur' => $user->id]);
+			$this->audit->record(AuditAction::TwoFactorChallengeFailed, $user);
 
 			throw ValidationException::withMessages(['code' => [__('auth.two_factor_invalid')]]);
 		}
 
 		if (! isset($data['code'])) {
 			Log::notice('Connexion avec un code de secours.', ['utilisateur' => $user->id]);
+			$this->audit->record(AuditAction::RecoveryCodeUsed, $user, actor: $user);
 		}
 
 		$request->session()->forget(self::PENDING_KEY);
@@ -129,6 +139,11 @@ class AuthController extends Controller
 	 */
 	public function logout(Request $request): Response
 	{
+		$user = $request->user();
+		if ($user instanceof User) {
+			$this->audit->record(AuditAction::Logout, $user, actor: $user);
+		}
+
 		Auth::guard('web')->logout();
 		$request->session()->invalidate();
 		$request->session()->regenerateToken();
@@ -147,6 +162,7 @@ class AuthController extends Controller
 	{
 		Auth::guard('web')->login($user);
 		$request->session()->regenerate();
+		$this->audit->record(AuditAction::LoginSucceeded, $user, actor: $user);
 
 		return new JsonResponse($user->toPublicArray());
 	}
