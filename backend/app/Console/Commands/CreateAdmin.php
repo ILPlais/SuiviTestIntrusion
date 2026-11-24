@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
  * Usage : php artisan suivi:create-admin <email> [--name=<nom>]
  *
  * Aucun e-mail n'est envoyé en V1 (13.06) : l'exploitant transmet le lien, à
- * usage unique et valable 24 heures, par un autre canal. Relancée pour un compte
+ * usage unique et valable 72 heures par défaut (AUTH_ACTIVATION_HOURS), par un autre canal. Relancée pour un compte
  * jamais activé, elle remplace son lien. Le premier compte créé
  * ainsi est le compte « root » de 11.06. Le jeton n'est stocké que par son
  * empreinte SHA-256.

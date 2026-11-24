@@ -1,7 +1,8 @@
 /**
  * Session de l'utilisateur (identite-1, ged-chiffree-1) : compte connecté,
  * connexion, activation avec coffre de clés, changement de mot de passe,
- * déconnexion, et état du coffre (clé privée déverrouillée ou non).
+ * réinitialisation par la clé de récupération (identite-7), déconnexion, et
+ * état du coffre (clé privée déverrouillée ou non).
  *
  * Le mot de passe saisi n'est jamais envoyé : le Worker crypto en dérive la
  * valeur d'authentification `auth` (13.03), seule transmise à l'API, et s'en
@@ -13,7 +14,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { ApiError, getJson, postJson, putJson } from '../api/client'
-import { computeAuth, enroll, lockSession, rotate, unlockSession, type VaultCopies } from '../crypto'
+import { computeAuth, enroll, lockSession, recover, rotate, unlockSession, type VaultCopies } from '../crypto'
 
 /** Compte connecté, tel que le renvoie GET /api/v1/user. */
 export interface CurrentUser {
@@ -31,6 +32,8 @@ export interface CurrentUser {
 	two_factor_setup_required: boolean
 	/** Empreinte de la paire de clés ; nulle pour un compte enrôlé avant le coffre (ged-chiffree-1). */
 	key_fingerprint: string | null
+	/** Peut inviter : administrateur, ou chef de projet pour ses clients finaux (identite-7). */
+	can_invite: boolean
 }
 
 /** Coffre servi par GET /api/v1/user/vault (copie 1 seulement). */
@@ -208,6 +211,41 @@ export const useAuthStore = defineStore('auth', () => {
 	}
 
 	/**
+	 * Réinitialisation du mot de passe (identite-7, 13.03), premier temps : ouvre
+	 * la copie 2 avec la clé de récupération dans un Worker éphémère et prépare le
+	 * nouveau mot de passe, la nouvelle clé de récupération et les nouvelles copies.
+	 * L'empreinte doit rester celle du compte : c'est la même paire de clés.
+	 *
+	 * @param email Adresse du compte (sel de `auth`).
+	 * @param recoveryCopy Copie 2, chiffrée par la clé de récupération.
+	 * @param recoveryKey Clé de récupération saisie (casse et tirets ignorés).
+	 * @param newPassword Nouveau mot de passe, conforme à la politique.
+	 * @returns L'enrôlement à confirmer, avec la nouvelle clé de récupération.
+	 */
+	async function prepareRecovery(email: string, recoveryCopy: string, recoveryKey: string, newPassword: string): Promise<Enrollment> {
+		return recover(recoveryCopy, recoveryKey, newPassword, await getInstanceId(), email)
+	}
+
+	/**
+	 * Réinitialisation, second temps : envoie le nouvel `auth` et les deux
+	 * nouvelles copies ; la nouvelle clé de récupération n'est pas envoyée.
+	 *
+	 * @param token Jeton du lien de réinitialisation.
+	 * @param recovery Réinitialisation préparée.
+	 * @param version Version de la copie lue (verrou optimiste).
+	 */
+	async function resetPassword(token: string, recovery: Enrollment, version: number): Promise<void> {
+		await postJson('/auth/password-reset', {
+			token,
+			auth: recovery.auth,
+			key_fingerprint: recovery.vault.fingerprint,
+			password_copy: recovery.vault.passwordCopy,
+			recovery_copy: recovery.vault.recoveryCopy,
+			version,
+		})
+	}
+
+	/**
 	 * Change le mot de passe (rotation de 13.02) : la copie 1 est rechiffrée dans le
 	 * Worker ; ni la clé publique, ni la copie 2, ni les fichiers ne changent. Si une
 	 * rotation faite ailleurs a changé la version entre-temps (409), on relit la
@@ -257,5 +295,5 @@ export const useAuthStore = defineStore('auth', () => {
 		}
 	}
 
-	return { user, vaultUnlocked, vaultError, fetchUser, login, verifyTwoFactor, cancelLogin, unlockVault, prepareEnrollment, activate, changePassword, logout }
+	return { user, vaultUnlocked, vaultError, fetchUser, login, verifyTwoFactor, cancelLogin, unlockVault, prepareEnrollment, activate, prepareRecovery, resetPassword, changePassword, logout }
 })

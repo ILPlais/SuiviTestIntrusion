@@ -71,6 +71,13 @@ async function logout(): Promise<void> {
 			<RouterLink :to="{ name: 'company' }">
 				<NfIcon name="company" />{{ t('nav.company') }}
 			</RouterLink>
+			<!-- Administrateurs, et chefs de projet pour inviter leurs clients finaux (identite-7). -->
+			<RouterLink
+				v-if="auth.user.can_invite"
+				:to="{ name: 'users' }"
+			>
+				<NfIcon name="profile" />{{ auth.user.is_instance_admin ? t('nav.users') : t('nav.invitations') }}
+			</RouterLink>
 			<!-- Le compte à droite, comme sur les maquettes de 15.01 (socle-9). -->
 			<span
 				class="nav-spacer"

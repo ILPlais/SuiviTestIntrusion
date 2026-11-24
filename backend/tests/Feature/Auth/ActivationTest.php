@@ -139,15 +139,17 @@ class ActivationTest extends TestCase
 	}
 
 	/**
-	 * Un lien d'activation expire après 24 heures.
+	 * Un lien d'activation expire après 72 heures (11.06, AUTH_ACTIVATION_HOURS).
 	 *
 	 * @return void
 	 */
-	public function test_an_activation_link_expires_after_24_hours(): void
+	public function test_an_activation_link_expires_after_72_hours(): void
 	{
 		$token = $this->createAdmin();
 
-		$this->travel(25)->hours();
+		$this->travel(71)->hours();
+		$this->getJson("/api/v1/auth/activation/{$token}")->assertOk();
+		$this->travel(2)->hours();
 
 		$this->getJson("/api/v1/auth/activation/{$token}")->assertNotFound();
 	}

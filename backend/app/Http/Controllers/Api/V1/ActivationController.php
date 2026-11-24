@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Accounts\AccountLifecycle;
 use App\Audit\AuditLog;
 use App\Auth\AuthenticationValue;
 use App\Enums\AuditAction;
@@ -17,7 +18,8 @@ use Illuminate\Support\Facades\Hash;
 /**
  * Activation d'un compte par son lien à usage unique (identite-1).
  *
- * Le lien est créé par la commande d'installation (suivi:create-admin) ; sans
+ * Le lien est créé par la commande d'installation (suivi:create-admin) ou par
+ * une invitation (identite-7), dont les rattachements s'appliquent ici ; sans
  * e-mail en V1, il est transmis par un autre canal (13.06). La SPA lit l'adresse
  * du compte, nécessaire au sel de `auth`, puis envoie `auth` calculé à partir du
  * mot de passe choisi, après contrôle de la politique dans le navigateur (13.03).
@@ -76,6 +78,8 @@ class ActivationController extends Controller
 		]);
 
 		abort_if($activated === 0 || $user === null, 404);
+		// Rattachements et rôles promis par les invitations en attente (identite-7).
+		app(AccountLifecycle::class)->acceptPendingInvitations($user->refresh());
 		// L'empreinte reste dans le journal, même après la suppression du compte (13.05).
 		app(AuditLog::class)->record(AuditAction::AccountActivated, $user, after: ['key_fingerprint' => $data['key_fingerprint']], actor: $user);
 

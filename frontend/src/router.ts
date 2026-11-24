@@ -38,6 +38,8 @@ export function createAppRouter(history: RouterHistory = createWebHistory()): Ro
 			},
 			{ path: '/entreprise', name: 'company', component: () => import('./views/CompanyView.vue'), meta: { requiresAuth: true } },
 			{ path: '/connexion', name: 'login', component: () => import('./views/LoginView.vue') },
+			{ path: '/utilisateurs', name: 'users', component: () => import('./views/UsersView.vue'), meta: { requiresAuth: true } },
+			{ path: '/reinitialisation/:token', name: 'password-reset', component: () => import('./views/PasswordResetView.vue'), props: true },
 			{ path: '/activation/:token', name: 'activation', component: () => import('./views/ActivationView.vue'), props: true },
 			{ path: '/:chemin(.*)*', redirect: { name: 'home' } },
 		],

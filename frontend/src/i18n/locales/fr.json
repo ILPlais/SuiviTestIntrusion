@@ -15,7 +15,9 @@
 	"nav": {
 		"tests": "Tests",
 		"organisations": "Organisations",
-		"company": "Entreprise"
+		"company": "Entreprise",
+		"users": "Utilisateurs",
+		"invitations": "Invitations"
 	},
 	"markdown": {
 		"help": "Mise en forme Markdown : **gras**, *italique*, listes avec « - », titres avec « ## », liens [texte](https://…).",
@@ -489,5 +491,75 @@
 		"changing": "Rechiffrement de votre clé…",
 		"changed": "Mot de passe changé.",
 		"wrongCurrent": "Mot de passe actuel incorrect."
+	},
+	"accounts": {
+		"heading": "Utilisateurs et invitations",
+		"tabsLabel": "Sections de l'administration des utilisateurs",
+		"usersTab": "Utilisateurs ({count})",
+		"invitationsTab": "Invitations ({count})",
+		"usersHeading": "Comptes de l'instance",
+		"invitationsHeading": "Invitations en attente",
+		"name": "Nom",
+		"status": "État",
+		"twoFactor": "Double auth.",
+		"actions": "Actions",
+		"admin": "administrateur d'instance",
+		"yes": "oui",
+		"no": "non",
+		"statuses": {
+			"active": "actif",
+			"invited": "invité",
+			"locked": "verrouillé",
+			"deactivated": "désactivé"
+		},
+		"lockedUntil": "jusqu'au {date}",
+		"invitedUntil": "lien valable jusqu'au {date}",
+		"unlock": "Déverrouiller",
+		"resetPassword": "Lien de réinitialisation",
+		"deactivate": "Désactiver",
+		"reactivate": "Réactiver",
+		"delete": "Supprimer…",
+		"deleteHeading": "Supprimer le compte de {name} ?",
+		"deleteWarning": "La suppression est définitive : mot de passe, double authentification, clés et rattachements sont effacés ; le compte devient « Utilisateur supprimé » dans l'historique, et son adresse peut être invitée à nouveau.",
+		"deleteNoContent": "Aucun contenu chiffré n'a ce compte pour seul détenteur.",
+		"deleteConfirm": "Pour confirmer, saisir {word}",
+		"deleteForever": "Supprimer définitivement",
+		"cancel": "Annuler",
+		"noInvitation": "Aucune invitation en attente.",
+		"target": "Organisation et rôle",
+		"expires": "Échéance du lien",
+		"expired": "lien échu",
+		"invitedBy": "Invité par",
+		"resend": "Nouveau lien",
+		"cancelInvitation": "Annuler l'invitation",
+		"invite": "Inviter un utilisateur",
+		"nameOptional": "Nom affiché (facultatif)",
+		"inviteAdmin": "Administrateur d'instance (sans organisation)",
+		"organisation": "Organisation",
+		"role": "Rôle",
+		"sendInvitation": "Inviter",
+		"invitationLink": "Lien d'activation de {email}, valable jusqu'au {date}. Aucun e-mail n'est envoyé : transmettez-le par un autre canal.",
+		"resetLink": "Lien de réinitialisation du mot de passe de {email}, valable jusqu'au {date}. Transmettez-le par un autre canal ; il faudra la clé de récupération du compte.",
+		"attached": "{email} a déjà un compte actif : il est rattaché à l'organisation, sans nouveau lien.",
+		"linkLabel": "Lien à transmettre",
+		"copyLink": "Copier le lien",
+		"copied": "Lien copié",
+		"linkOnce": "Ce lien ne sera plus affiché : le serveur n'en garde qu'une empreinte. En cas de perte, émettez-en un nouveau."
+	},
+	"reset": {
+		"heading": "Réinitialiser le mot de passe",
+		"invalidLink": "Ce lien de réinitialisation est inconnu, déjà utilisé ou échu. Demandez-en un nouveau à un administrateur.",
+		"steps": {
+			"code": "Double authentification",
+			"password": "Clé de récupération et nouveau mot de passe",
+			"recovery": "Nouvelle clé de récupération"
+		},
+		"codeIntro": "Saisissez le code de votre application d'authentification pour continuer.",
+		"intro": "{name} ({email}) : saisissez votre clé de récupération, puis choisissez un nouveau mot de passe. Vos fichiers chiffrés restent lisibles.",
+		"recoveryKey": "Clé de récupération",
+		"preparing": "Ouverture de la clé…",
+		"wrongRecoveryKey": "Cette clé de récupération n'ouvre pas la clé privée du compte.",
+		"finish": "Enregistrer le nouveau mot de passe",
+		"done": "Mot de passe réinitialisé : connectez-vous avec le nouveau. Toutes les autres sessions ont été fermées."
 	}
 }

@@ -50,6 +50,12 @@ enum AuditAction: string
 	/** Nouveaux codes de secours tirés (les anciens sont invalidés). */
 	case RecoveryCodesRegenerated = 'auth.recovery_codes_regenerated';
 
+	/** Lien de réinitialisation du mot de passe émis par un administrateur (identite-7). */
+	case PasswordResetIssued = 'auth.password_reset_issued';
+
+	/** Mot de passe réinitialisé par la clé de récupération (identite-7, 13.03). */
+	case PasswordReset = 'auth.password_reset';
+
 	// Cycle de vie des comptes (11.06 ; invitation et suivants : identite-7).
 
 	/** Compte créé (administrateur d'instance par la commande d'installation). */
@@ -57,6 +63,9 @@ enum AuditAction: string
 
 	/** Invitation envoyée. */
 	case AccountInvited = 'account.invited';
+
+	/** Invitation annulée par l'invitant, un administrateur ou la désactivation de l'invitant. */
+	case InvitationCancelled = 'account.invitation_cancelled';
 
 	/** Compte activé par son titulaire. */
 	case AccountActivated = 'account.activated';

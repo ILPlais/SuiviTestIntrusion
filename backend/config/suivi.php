@@ -17,8 +17,10 @@ return [
 		// Échecs consécutifs qui verrouillent le compte, et durée du verrouillage (minutes).
 		'lockout_failures' => (int) env('AUTH_LOCKOUT_FAILURES', 10),
 		'lockout_minutes' => (int) env('AUTH_LOCKOUT_MINUTES', 15),
-		// Durée de validité d'un lien d'activation (heures).
-		'activation_hours' => (int) env('AUTH_ACTIVATION_HOURS', 24),
+		// Durée de validité d'un lien d'activation ou d'invitation (heures, 72 selon 11.06).
+		'activation_hours' => (int) env('AUTH_ACTIVATION_HOURS', 72),
+		// Durée de validité d'un lien de réinitialisation du mot de passe (heures, identite-7).
+		'reset_hours' => (int) env('AUTH_RESET_HOURS', 24),
 		// Double authentification imposée à tous les comptes (identite-3, politique d'instance).
 		'two_factor_required' => (bool) env('AUTH_TWO_FACTOR_REQUIRED', false),
 	],

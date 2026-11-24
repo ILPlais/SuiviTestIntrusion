@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -42,9 +43,13 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string|null $private_key_password_copy
  * @property string|null $private_key_recovery_copy
  * @property int $key_version
+ * @property \Carbon\CarbonImmutable|\Illuminate\Support\Carbon|null $deactivated_at
+ * @property \Carbon\CarbonImmutable|\Illuminate\Support\Carbon|null $pseudonymized_at
+ * @property string|null $reset_token_hash
+ * @property \Carbon\CarbonImmutable|\Illuminate\Support\Carbon|null $reset_expires_at
  */
 #[Fillable(['name', 'email', 'password', 'job_title', 'presentation'])]
-#[Hidden(['password', 'remember_token', 'activation_token_hash', 'two_factor_secret', 'two_factor_recovery_codes', 'public_key', 'private_key_password_copy', 'private_key_recovery_copy'])]
+#[Hidden(['password', 'remember_token', 'activation_token_hash', 'reset_token_hash', 'two_factor_secret', 'two_factor_recovery_codes', 'public_key', 'private_key_password_copy', 'private_key_recovery_copy'])]
 class User extends Authenticatable
 {
 	use HasApiTokens;
@@ -100,6 +105,54 @@ class User extends Authenticatable
 	}
 
 	/**
+	 * Invitations reçues par ce compte (identite-7).
+	 *
+	 * @return HasMany<Invitation, $this>
+	 */
+	public function invitations(): HasMany
+	{
+		return $this->hasMany(Invitation::class);
+	}
+
+	/**
+	 * Vrai si le compte peut se connecter : activé, ni désactivé ni supprimé (identite-7).
+	 *
+	 * @return bool
+	 */
+	public function canSignIn(): bool
+	{
+		return $this->getAttributes()['password'] !== null && $this->deactivated_at === null && $this->pseudonymized_at === null;
+	}
+
+	/**
+	 * État du compte affiché à l'administration (écran 16 de 15.01) : supprimé,
+	 * désactivé, invité (jamais activé), verrouillé ou actif, dans cet ordre de priorité.
+	 *
+	 * @return 'deleted'|'deactivated'|'invited'|'locked'|'active'
+	 */
+	public function status(): string
+	{
+		return match (true) {
+			$this->pseudonymized_at !== null => 'deleted',
+			$this->deactivated_at !== null => 'deactivated',
+			$this->getAttributes()['password'] === null => 'invited',
+			$this->locked_until !== null && $this->locked_until->isFuture() => 'locked',
+			default => 'active',
+		};
+	}
+
+	/**
+	 * Vrai si le compte peut inviter : administrateur d'instance, ou chef de projet
+	 * d'au moins une organisation, qui invite alors ses clients finaux (11.06).
+	 *
+	 * @return bool
+	 */
+	public function canInvite(): bool
+	{
+		return $this->is_instance_admin || in_array(TenantRole::ProjectManager, $this->tenantRoles(), true);
+	}
+
+	/**
 	 * Vrai si la double authentification est confirmée (identite-3).
 	 *
 	 * @return bool
@@ -114,7 +167,7 @@ class User extends Authenticatable
 	 * « two_factor_setup_required » : la politique d'instance impose un second
 	 * facteur que le compte n'a pas encore.
 	 *
-	 * @return array{id: int, name: string, email: string, is_instance_admin: bool, job_title: string|null, presentation: string|null, two_factor_enabled: bool, two_factor_setup_required: bool}
+	 * @return array{id: int, name: string, email: string, is_instance_admin: bool, job_title: string|null, presentation: string|null, two_factor_enabled: bool, two_factor_setup_required: bool, key_fingerprint: string|null, can_invite: bool}
 	 */
 	public function toPublicArray(): array
 	{
@@ -129,6 +182,8 @@ class User extends Authenticatable
 			'two_factor_setup_required' => (bool) config('suivi.authentication.two_factor_required') && ! $this->hasTwoFactor(),
 			// Empreinte de la paire de clés (ged-chiffree-1) ; nulle pour un compte enrôlé avant le coffre.
 			'key_fingerprint' => $this->key_fingerprint,
+			// Bouton « Inviter » de la SPA (identite-7) ; le serveur contrôle chaque invitation.
+			'can_invite' => $this->canInvite(),
 		];
 	}
 
@@ -163,6 +218,9 @@ class User extends Authenticatable
 			'two_factor_recovery_codes' => 'array',
 			'two_factor_last_timestep' => 'integer',
 			'key_version' => 'integer',
+			'deactivated_at' => 'datetime',
+			'pseudonymized_at' => 'datetime',
+			'reset_expires_at' => 'datetime',
 		];
 	}
 }

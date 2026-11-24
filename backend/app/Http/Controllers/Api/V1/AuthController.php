@@ -71,6 +71,14 @@ class AuthController extends Controller
 			throw ValidationException::withMessages(['email' => [__('auth.failed')]]);
 		}
 
+		// Compte désactivé (identite-7) : refus explicite, donné seulement à qui connaît
+		// le mot de passe ; il ne révèle donc rien à un attaquant qui énumère les adresses.
+		if ($user->deactivated_at !== null) {
+			$this->audit->record(AuditAction::LoginFailed, $user, after: ['email' => $email, 'reason' => 'deactivated']);
+
+			throw ValidationException::withMessages(['email' => [__('auth.account_disabled')]]);
+		}
+
 		// Second facteur actif : le premier facteur est mémorisé dans la session (renouvelée
 		// contre la fixation), sans ouvrir de session authentifiée (identite-3).
 		if ($user->hasTwoFactor()) {
