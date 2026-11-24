@@ -53,6 +53,12 @@ async function unlock(): Promise<void> {
 			v-else
 			@submit.prevent="unlock"
 		>
+			<p
+				v-if="auth.vaultLockReason"
+				role="status"
+			>
+				{{ t(`vault.lockReasons.${auth.vaultLockReason}`) }}
+			</p>
 			<p>{{ t('vault.locked') }}</p>
 			<p>
 				<label for="vault-password">{{ t('auth.password') }}</label>
@@ -80,5 +86,14 @@ async function unlock(): Promise<void> {
 				/>{{ t('vault.unlock') }}
 			</button>
 		</form>
+		<details>
+			<summary>{{ t('vault.limitsHeading') }}</summary>
+			<ul>
+				<li>{{ t('vault.limits.idle') }}</li>
+				<li>{{ t('vault.limits.sleep') }}</li>
+				<li>{{ t('vault.limits.memory') }}</li>
+				<li>{{ t('vault.limits.reload') }}</li>
+			</ul>
+		</details>
 	</template>
 </template>

@@ -202,4 +202,17 @@ class ActivationTest extends TestCase
 		$this->assertMatchesRegularExpression('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/', $first);
 		$this->assertSame($first, $this->getJson('/api/v1/instance')->json('instance_id'));
 	}
+
+	/**
+	 * Le délai d'inactivité du coffre est publié, jamais en dessous d'une minute (ged-chiffree-2).
+	 *
+	 * @return void
+	 */
+	public function test_the_vault_idle_delay_is_published(): void
+	{
+		$this->getJson('/api/v1/instance')->assertJsonPath('vault_idle_minutes', 30);
+
+		config(['suivi.vault.idle_minutes' => 0]);
+		$this->getJson('/api/v1/instance')->assertJsonPath('vault_idle_minutes', 1);
+	}
 }

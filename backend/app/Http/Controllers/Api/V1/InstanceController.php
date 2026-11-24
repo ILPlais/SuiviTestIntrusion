@@ -7,18 +7,24 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Identifiant public de l'instance (13.03), lu par la SPA pour calculer le sel
- * de la valeur d'authentification sans révéler l'existence d'un compte.
+ * Informations publiques de l'instance, lues par la SPA avant toute connexion :
+ * identifiant (13.03), qui sert au sel de la valeur d'authentification sans
+ * révéler l'existence d'un compte, et délai d'inactivité après lequel la clé
+ * privée est effacée de la mémoire du navigateur (ged-chiffree-2, 12.01 §4.3).
  */
 class InstanceController extends Controller
 {
 	/**
-	 * Renvoie les informations publiques de l'instance (identifiant utilisé pour dériver la valeur d'authentification).
+	 * Renvoie les informations publiques de l'instance (identifiant du sel de `auth`, délai de verrouillage du coffre).
 	 *
 	 * @return JsonResponse
 	 */
 	public function __invoke(): JsonResponse
 	{
-		return new JsonResponse(['instance_id' => DB::table('instance_settings')->value('instance_id')]);
+		return new JsonResponse([
+			'instance_id' => DB::table('instance_settings')->value('instance_id'),
+			// Au moins une minute : un délai nul effacerait la clé aussitôt déverrouillée.
+			'vault_idle_minutes' => max(1, (int) config('suivi.vault.idle_minutes')),
+		]);
 	}
 }

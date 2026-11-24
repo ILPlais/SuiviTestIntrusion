@@ -57,6 +57,29 @@ async function logout(): Promise<void> {
 					visible-label
 				/>
 			</span>
+			<!-- État du coffre et verrouillage à la demande (15.01, ged-chiffree-2). -->
+			<span
+				v-if="auth.user?.key_fingerprint"
+				class="vault-state"
+			>
+				<template v-if="auth.vaultUnlocked">
+					<span role="status">
+						<NfIcon name="key" />{{ t('vault.stateUnlocked') }}
+					</span>
+					<button
+						type="button"
+						@click="auth.lockVault()"
+					>
+						<NfIcon name="security" />{{ t('vault.lock') }}
+					</button>
+				</template>
+				<RouterLink
+					v-else
+					:to="{ name: 'security' }"
+				>
+					<NfIcon name="security" />{{ t('vault.stateLocked') }}
+				</RouterLink>
+			</span>
 		</div>
 		<nav
 			v-if="auth.user"

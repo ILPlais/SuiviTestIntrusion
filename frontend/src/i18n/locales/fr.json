@@ -490,7 +490,22 @@
 		"change": "Changer le mot de passe",
 		"changing": "Rechiffrement de votre clé…",
 		"changed": "Mot de passe changé.",
-		"wrongCurrent": "Mot de passe actuel incorrect."
+		"wrongCurrent": "Mot de passe actuel incorrect.",
+		"stateUnlocked": "Coffre déverrouillé",
+		"stateLocked": "Coffre verrouillé",
+		"lock": "Verrouiller",
+		"lockReasons": {
+			"manual": "Coffre verrouillé à votre demande.",
+			"idle": "Coffre verrouillé après une période d'inactivité.",
+			"sleep": "Coffre verrouillé : l'onglet a été mis en veille."
+		},
+		"limitsHeading": "Limites de la protection de votre clé",
+		"limits": {
+			"idle": "Sans clic ni frappe pendant le délai fixé par l'administrateur (30 minutes par défaut), la clé déchiffrée est effacée de la mémoire ; votre mot de passe sera redemandé.",
+			"sleep": "La clé est aussi effacée dès que le navigateur met l'onglet en veille. Si l'ordinateur se met en veille sans que le navigateur le signale, elle l'est au réveil, une fois le délai dépassé.",
+			"memory": "Tant qu'elle est déverrouillée, la clé reste dans la mémoire de ce navigateur : rien ne la protège d'une personne qui a accès à l'ordinateur ouvert, d'une extension malveillante ou d'un logiciel qui lit la mémoire. Verrouillez le coffre avant de vous absenter.",
+			"reload": "Recharger la page ou ouvrir un autre onglet ne transmet pas la clé : il faut la déverrouiller à nouveau."
+		}
 	},
 	"accounts": {
 		"heading": "Utilisateurs et invitations",
