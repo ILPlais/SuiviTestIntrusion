@@ -49,7 +49,7 @@ test('un administrateur déclare le périmètre réseau d\'un test', async ({ pa
 	await page.getByRole('button', { name: fr.tests.create }).click()
 	await expect(page.getByRole('heading', { name: `${reference} — Test externe du site vitrine` })).toBeVisible()
 
-	await page.getByRole('link', { name: fr.testMenu.scope }).click()
+	await page.getByRole('link', { name: fr.testMenu.scope, exact: true }).click()
 	await expect(page.getByText(fr.scope.noSecret)).toBeVisible()
 
 	// Machine incluse, avec ses plages interdites.

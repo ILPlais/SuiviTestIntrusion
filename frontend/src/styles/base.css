@@ -312,7 +312,7 @@
 
 	.test-menu .menu-group {
 		margin-top: 0.4lh;
-		color: var(--subtext0);
+		color: var(--subtext1);
 	}
 
 	.test-menu a {
@@ -379,7 +379,7 @@
 
 	.crumbs {
 		margin: 0;
-		color: var(--subtext0);
+		color: var(--subtext1);
 	}
 
 	/* Badges : statuts, sévérités, priorités, toujours accompagnés d'un texte. */
@@ -477,7 +477,7 @@
 
 	.tabs button {
 		background: transparent;
-		color: var(--subtext0);
+		color: var(--subtext1);
 		padding: 0;
 	}
 
@@ -573,7 +573,7 @@
 	/* Ligne d'un objet exclu du périmètre : atténuée, mais lisible. */
 	tr.excluded td,
 	tr.excluded th {
-		color: var(--subtext0);
+		color: var(--subtext1);
 	}
 
 	/* Notes et avertissements. */

@@ -63,7 +63,7 @@ test('un administrateur cote une vulnérabilité, rédige sa remédiation et lit
 	await expect(page.getByText(fr.risk.none).first()).toBeVisible()
 
 	// Constat : création rapide, puis la fiche s'ouvre.
-	await page.getByRole('link', { name: fr.testMenu.vulnerabilities }).click()
+	await page.getByRole('link', { name: fr.testMenu.vulnerabilities, exact: true }).click()
 	await page.getByLabel(fr.vulnerabilities.title).fill('Exécution de code à distance sur le CMS')
 	await page.getByRole('button', { name: fr.vulnerabilities.create }).click()
 	await expect(page.getByRole('heading', { name: 'V-001 — Exécution de code à distance sur le CMS' })).toBeVisible()
@@ -97,9 +97,9 @@ test('un administrateur cote une vulnérabilité, rédige sa remédiation et lit
 	await expectNoAccessibilityViolations(page)
 
 	// Liste du test, puis synthèse du risque sur la fiche.
-	await page.getByRole('link', { name: fr.testMenu.vulnerabilities }).click()
+	await page.getByRole('link', { name: fr.testMenu.vulnerabilities, exact: true }).click()
 	await expect(page.getByRole('cell', { name: 'Critique 9,8' })).toBeVisible()
-	await page.getByRole('link', { name: fr.testMenu.synthesis }).click()
+	await page.getByRole('link', { name: fr.testMenu.synthesis, exact: true }).click()
 	await expect(page.getByRole('heading', { name: fr.risk.maxScore })).toBeVisible()
 	await expect(page.getByText('Risque : Critique 9,8', { exact: true })).toBeVisible()
 	await expect(page.getByRole('definition').filter({ hasText: '3 — Dégâts majeurs sur la production' })).toBeVisible()
