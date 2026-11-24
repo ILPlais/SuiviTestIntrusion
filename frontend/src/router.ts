@@ -23,10 +23,19 @@ export function createAppRouter(history: RouterHistory = createWebHistory()): Ro
 			{ path: '/organisations', name: 'organisations', component: () => import('./views/OrganisationsView.vue'), meta: { requiresAuth: true } },
 			{ path: '/organisations/:id', name: 'organisation', component: () => import('./views/OrganisationView.vue'), props: true, meta: { requiresAuth: true } },
 			{ path: '/tests', name: 'tests', component: () => import('./views/TestsView.vue'), meta: { requiresAuth: true } },
-			{ path: '/tests/:id', name: 'test', component: () => import('./views/TestView.vue'), props: true, meta: { requiresAuth: true } },
-			{ path: '/tests/:id/perimetre', name: 'test-scope', component: () => import('./views/ScopeView.vue'), props: true, meta: { requiresAuth: true } },
-			{ path: '/tests/:id/vulnerabilites', name: 'test-vulnerabilities', component: () => import('./views/VulnerabilitiesView.vue'), props: true, meta: { requiresAuth: true } },
-			{ path: '/vulnerabilites/:id', name: 'vulnerability', component: () => import('./views/VulnerabilityView.vue'), props: true, meta: { requiresAuth: true } },
+			// Écrans d'un test, dans son gabarit (menu, bandeau) : socle-9, maquettes de 15.01.
+			{
+				path: '/tests/:id',
+				component: () => import('./views/TestLayout.vue'),
+				props: true,
+				meta: { requiresAuth: true },
+				children: [
+					{ path: '', name: 'test', component: () => import('./views/TestView.vue'), props: true },
+					{ path: 'perimetre', name: 'test-scope', component: () => import('./views/ScopeView.vue'), props: true },
+					{ path: 'vulnerabilites', name: 'test-vulnerabilities', component: () => import('./views/VulnerabilitiesView.vue'), props: true },
+					{ path: 'vulnerabilites/:vulnerabilityId', name: 'vulnerability', component: () => import('./views/VulnerabilityView.vue'), props: true },
+				],
+			},
 			{ path: '/entreprise', name: 'company', component: () => import('./views/CompanyView.vue'), meta: { requiresAuth: true } },
 			{ path: '/connexion', name: 'login', component: () => import('./views/LoginView.vue') },
 			{ path: '/activation/:token', name: 'activation', component: () => import('./views/ActivationView.vue'), props: true },

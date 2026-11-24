@@ -5,6 +5,9 @@
 	l'organisation ; ajout, modification et suppression par l'équipe du test
 	(testeurs, chef de projet, administrateur).
 
+	Mise en page de la maquette 04 (socle-9) : barre d'actions qui ouvre les
+	formulaires d'ajout, inclusion en badge, lignes exclues atténuées.
+
 	Aucun secret n'est saisi ici : celui d'un compte sera chiffré dans le
 	navigateur avec la GED (ged-chiffree, 13.01).
 -->
@@ -51,6 +54,9 @@ const error = ref<string | null>(null)
 const hostForm = ref({ address: '', hostname: '', operating_system: '', ...emptyCommon() })
 const serviceForm = ref({ parent_id: '', protocol: 'tcp' as ServiceProtocol, port: '', name: '', version: '' })
 const accountForm = ref({ parent_id: '', username: '', role_description: '' })
+
+/** Formulaire d'ajout ouvert depuis la barre d'actions (maquette 04), ou aucun. */
+const adding = ref<'host' | 'service' | 'account' | null>(null)
 
 /** Objet en cours de modification, et sa saisie (champs communs et détail). */
 const editing = ref<ScopeObject | null>(null)
@@ -319,13 +325,36 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 		visible-label
 	/>
 	<template v-if="test">
-		<p>
-			<RouterLink :to="{ name: 'test', params: { id: test.id } }">
-				{{ t('scope.back') }}
-			</RouterLink>
+		<div
+			v-if="canManage"
+			class="toolbar"
+		>
+			<button
+				type="button"
+				:aria-expanded="adding === 'host'"
+				@click="adding = adding === 'host' ? null : 'host'"
+			>
+				<ActionIcon name="create" />{{ t('scope.addHost') }}
+			</button>
+			<button
+				v-if="grouped.hosts.length > 0"
+				type="button"
+				:aria-expanded="adding === 'service'"
+				@click="adding = adding === 'service' ? null : 'service'"
+			>
+				<ActionIcon name="create" />{{ t('scope.addService') }}
+			</button>
+			<button
+				type="button"
+				:aria-expanded="adding === 'account'"
+				@click="adding = adding === 'account' ? null : 'account'"
+			>
+				<ActionIcon name="create" />{{ t('scope.addAccount') }}
+			</button>
+		</div>
+		<p class="note">
+			{{ t('scope.noSecret') }}
 		</p>
-		<h2>{{ t('scope.heading', { test: `${test.reference} — ${test.title}` }) }}</h2>
-		<p>{{ t('scope.noSecret') }}</p>
 
 		<h3>{{ t('scope.hosts') }}</h3>
 		<p v-if="grouped.hosts.length === 0">
@@ -337,6 +366,9 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 				<tr>
 					<th scope="col">
 						{{ t('scope.host') }}
+					</th>
+					<th scope="col">
+						{{ t('scope.addressColumn') }}
 					</th>
 					<th scope="col">
 						{{ t('scope.services') }}
@@ -362,11 +394,16 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 				<tr
 					v-for="entry in grouped.hosts"
 					:key="entry.host.id"
+					:class="{ excluded: !entry.host.included }"
 				>
 					<th scope="row">
-						{{ entry.host.label }}<br>
-						<small>{{ entry.host.host?.address }}<template v-if="entry.host.host?.operating_system"> · {{ entry.host.host.operating_system }}</template></small>
+						{{ entry.host.label }}
 					</th>
+					<td>
+						{{ entry.host.host?.address }}<template v-if="entry.host.host?.operating_system">
+							<br><small>{{ entry.host.host.operating_system }}</small>
+						</template>
+					</td>
 					<td>
 						<span v-if="entry.services.length === 0">{{ t('scope.noService') }}</span>
 						<ul v-else>
@@ -401,30 +438,39 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 							</li>
 						</ul>
 					</td>
-					<td>{{ entry.host.included ? t('scope.included') : t('scope.excluded') }}</td>
+					<td>
+						<span
+							class="tag"
+							:class="entry.host.included ? 'tag-green' : 'tag-red'"
+						>{{ entry.host.included ? t('scope.included') : t('scope.excluded') }}</span>
+					</td>
 					<td>{{ entry.host.constraints ?? '' }}</td>
 					<td>{{ entry.host.comment ?? '' }}</td>
-					<td v-if="canManage">
+					<td
+						v-if="canManage"
+						class="row-actions"
+					>
 						<button
 							type="button"
 							:disabled="busy"
 							@click="toggle(entry.host)"
 						>
-							{{ entry.host.included ? t('scope.exclude', { label: entry.host.label }) : t('scope.include', { label: entry.host.label }) }}
+							<span aria-hidden="true">{{ entry.host.included ? t('scope.excludeShort') : t('scope.includeShort') }}</span>
+							<span class="visually-hidden">{{ entry.host.included ? t('scope.exclude', { label: entry.host.label }) : t('scope.include', { label: entry.host.label }) }}</span>
 						</button>
 						<button
 							type="button"
 							:disabled="busy"
 							@click="edit(entry.host)"
 						>
-							<ActionIcon name="edit" />{{ t('scope.editObject', { label: entry.host.label }) }}
+							<ActionIcon name="edit" /><span class="visually-hidden">{{ t('scope.editObject', { label: entry.host.label }) }}</span>
 						</button>
 						<button
 							type="button"
 							:disabled="busy"
 							@click="remove(entry.host)"
 						>
-							<ActionIcon name="delete" />{{ t('scope.deleteObject', { label: entry.host.label }) }}
+							<ActionIcon name="delete" /><span class="visually-hidden">{{ t('scope.deleteObject', { label: entry.host.label }) }}</span>
 						</button>
 					</td>
 				</tr>
@@ -466,28 +512,37 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 				<tr
 					v-for="entry in grouped.accounts"
 					:key="entry.account.id"
+					:class="{ excluded: !entry.account.included }"
 				>
 					<th scope="row">
 						{{ entry.account.label }}
 					</th>
 					<td>{{ entry.account.account?.role_description ?? '' }}</td>
 					<td>{{ entry.hostLabel ?? t('scope.noHost') }}</td>
-					<td>{{ entry.account.included ? t('scope.included') : t('scope.excluded') }}</td>
+					<td>
+						<span
+							class="tag"
+							:class="entry.account.included ? 'tag-green' : 'tag-red'"
+						>{{ entry.account.included ? t('scope.included') : t('scope.excluded') }}</span>
+					</td>
 					<td>{{ entry.account.comment ?? '' }}</td>
-					<td v-if="canManage">
+					<td
+						v-if="canManage"
+						class="row-actions"
+					>
 						<button
 							type="button"
 							:disabled="busy"
 							@click="edit(entry.account)"
 						>
-							<ActionIcon name="edit" />{{ t('scope.editObject', { label: entry.account.label }) }}
+							<ActionIcon name="edit" /><span class="visually-hidden">{{ t('scope.editObject', { label: entry.account.label }) }}</span>
 						</button>
 						<button
 							type="button"
 							:disabled="busy"
 							@click="remove(entry.account)"
 						>
-							<ActionIcon name="delete" />{{ t('scope.deleteObject', { label: entry.account.label }) }}
+							<ActionIcon name="delete" /><span class="visually-hidden">{{ t('scope.deleteObject', { label: entry.account.label }) }}</span>
 						</button>
 					</td>
 				</tr>
@@ -498,7 +553,7 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 			v-if="editing"
 			@submit.prevent="saveEdit"
 		>
-			<fieldset>
+			<fieldset class="panel">
 				<legend>{{ t('scope.editing', { label: editing.label }) }}</legend>
 				<label for="perimetre-modif-libelle">{{ t('scope.label') }}</label>
 				<input
@@ -556,8 +611,11 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 		</form>
 
 		<template v-if="canManage && !editing">
-			<form @submit.prevent="addHost">
-				<fieldset>
+			<form
+				v-if="adding === 'host'"
+				@submit.prevent="addHost"
+			>
+				<fieldset class="panel">
 					<legend>{{ t('scope.addHost') }}</legend>
 					<label for="perimetre-adresse">{{ t('scope.address') }}</label>
 					<input
@@ -603,16 +661,16 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 						<ActionIcon
 							name="create"
 							:busy="busy"
-						/>{{ t('scope.addHost') }}
+						/>{{ t('scope.create') }}
 					</button>
 				</fieldset>
 			</form>
 
 			<form
-				v-if="grouped.hosts.length > 0"
+				v-if="adding === 'service' && grouped.hosts.length > 0"
 				@submit.prevent="addService"
 			>
-				<fieldset>
+				<fieldset class="panel">
 					<legend>{{ t('scope.addService') }}</legend>
 					<label for="perimetre-service-machine">{{ t('scope.host') }}</label>
 					<select
@@ -669,13 +727,16 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 						<ActionIcon
 							name="create"
 							:busy="busy"
-						/>{{ t('scope.addService') }}
+						/>{{ t('scope.create') }}
 					</button>
 				</fieldset>
 			</form>
 
-			<form @submit.prevent="addAccount">
-				<fieldset>
+			<form
+				v-if="adding === 'account'"
+				@submit.prevent="addAccount"
+			>
+				<fieldset class="panel">
 					<legend>{{ t('scope.addAccount') }}</legend>
 					<label for="perimetre-identifiant">{{ t('scope.username') }}</label>
 					<input
@@ -714,7 +775,7 @@ watch(() => grouped.value.hosts.map((entry) => entry.host.id), (ids) => {
 						<ActionIcon
 							name="create"
 							:busy="busy"
-						/>{{ t('scope.addAccount') }}
+						/>{{ t('scope.create') }}
 					</button>
 				</fieldset>
 			</form>

@@ -31,6 +31,10 @@
 		"info": { "nf": "md-information", "code": "f02fc" },
 		"home": { "nf": "md-home", "code": "f02dc" },
 		"phases": { "nf": "md-format_list_numbered", "code": "f027b" },
-		"preview": { "nf": "md-eye", "code": "f0208" }
+		"preview": { "nf": "md-eye", "code": "f0208" },
+		"dashboard": { "nf": "md-view_dashboard", "code": "f056e" },
+		"scope": { "nf": "md-lan", "code": "f0317" },
+		"vulnerabilities": { "nf": "md-bug", "code": "f00e4" },
+		"search": { "nf": "md-magnify", "code": "f0349" }
 	}
 }

@@ -1,14 +1,16 @@
 <!--
 	Synthèse du risque d'un test (resultats-1, 11.12, maquette 02 de 15.01) :
-	gravité technique (maximum CVSS des vulnérabilités ouvertes), score moyen
-	pondéré par la priorité, profil d'impact business et compteurs. Les barres
-	en caractères sont décoratives : chaque compteur est écrit en clair.
+	cadres « Gravité technique » (maximum CVSS des vulnérabilités ouvertes),
+	« Score agrégé » (moyenne pondérée par la priorité) et « Profil d'impact
+	business », puis compteurs par sévérité, priorité, statut de remédiation et
+	phase. Les barres en caractères sont décoratives : chaque compteur est écrit.
 -->
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getJson } from '../api/client'
 import { textBar, type TestRisk } from '../api/risk'
+import { severityTag } from '../api/testContext'
 import { IMPACT_AXES, PRIORITIES, REMEDIATION_STATUSES, SEVERITIES } from '../api/vulnerabilities'
 import { formatScore } from '../utils/cvss31'
 
@@ -25,7 +27,7 @@ const failed = ref(false)
 /** Largeur des barres, en caractères. */
 const BAR_WIDTH = 16
 
-/** Niveaux affichés dans le compteur par sévérité, du plus grave au moins grave. */
+/** Niveaux du compteur par sévérité, du plus grave au moins grave. */
 const SEVERITY_ROWS = [...SEVERITIES].reverse()
 
 /**
@@ -62,121 +64,188 @@ watch(() => props.testId, load, { immediate: true })
 </script>
 
 <template>
-	<section aria-labelledby="synthese-risque">
-		<h3 id="synthese-risque">
-			{{ t('risk.heading') }}
-		</h3>
-		<p
-			v-if="failed"
-			role="alert"
-		>
-			{{ t('risk.unavailable') }}
-		</p>
-		<template v-if="risk">
-			<dl>
-				<dt>{{ t('risk.maxScore') }}</dt>
-				<dd>
-					<template v-if="risk.max_score !== null && risk.max_severity !== null">
-						<strong>{{ t(`vulnerabilities.severities.${risk.max_severity}`) }} {{ formatScore(risk.max_score, locale) }}</strong>
-						({{ t('vulnerabilities.cvssVersion', { version: risk.cvss_version }) }})
-					</template>
-					<template v-else>
-						{{ t('risk.none') }}
-					</template>
-				</dd>
-				<dt>{{ t('risk.weightedAverage') }}</dt>
-				<dd>{{ risk.weighted_average !== null ? t('risk.informative', { score: formatScore(risk.weighted_average, locale) }) : t('risk.none') }}</dd>
-				<dt>{{ t('risk.openCount') }}</dt>
-				<dd>{{ t('risk.openOfTotal', { open: risk.open_count, total: risk.total_count }) }}</dd>
-				<template
-					v-for="axis in IMPACT_AXES"
-					:key="axis"
+	<p
+		v-if="failed"
+		role="alert"
+	>
+		{{ t('risk.unavailable') }}
+	</p>
+	<template v-if="risk">
+		<div class="grid-3">
+			<section
+				class="panel"
+				aria-labelledby="risque-gravite"
+			>
+				<h3
+					id="risque-gravite"
+					class="panel-title"
 				>
-					<dt>{{ t('risk.impact', { axis: t(`vulnerabilities.axes.${axis}`) }) }}</dt>
-					<dd>{{ t('vulnerabilities.level', { level: risk.business_profile[axis], label: t(`vulnerabilities.levels.${axis}.${risk.business_profile[axis]}`) }) }}</dd>
+					{{ t('risk.maxScore') }}
+				</h3>
+				<template v-if="risk.max_score !== null && risk.max_severity !== null">
+					<p class="kpi-value">
+						{{ formatScore(risk.max_score, locale) }}
+					</p>
+					<p>
+						<span
+							class="tag"
+							:class="severityTag(risk.max_severity)"
+						>{{ t(`vulnerabilities.severities.${risk.max_severity}`) }}</span>
+						{{ t('vulnerabilities.cvssVersion', { version: risk.cvss_version }) }}
+					</p>
 				</template>
-			</dl>
+				<p v-else>
+					{{ t('risk.none') }}
+				</p>
+				<p><small>{{ t('risk.openOfTotal', { open: risk.open_count, total: risk.total_count }) }}</small></p>
+			</section>
+			<section
+				class="panel"
+				aria-labelledby="risque-agrege"
+			>
+				<h3
+					id="risque-agrege"
+					class="panel-title"
+				>
+					{{ t('risk.weightedAverage') }}
+				</h3>
+				<template v-if="risk.weighted_average !== null">
+					<p class="kpi-value">
+						{{ formatScore(risk.weighted_average, locale) }}
+					</p>
+					<p><small>{{ t('risk.informativeNote') }}</small></p>
+				</template>
+				<p v-else>
+					{{ t('risk.none') }}
+				</p>
+			</section>
+			<section
+				class="panel"
+				aria-labelledby="risque-impact"
+			>
+				<h3
+					id="risque-impact"
+					class="panel-title"
+				>
+					{{ t('risk.businessProfile') }}
+				</h3>
+				<dl>
+					<template
+						v-for="axis in IMPACT_AXES"
+						:key="axis"
+					>
+						<dt>{{ t(`vulnerabilities.axes.${axis}`) }}</dt>
+						<dd>{{ t('vulnerabilities.level', { level: risk.business_profile[axis], label: t(`vulnerabilities.levels.${axis}.${risk.business_profile[axis]}`) }) }}</dd>
+					</template>
+				</dl>
+			</section>
+		</div>
 
-			<table>
-				<caption>{{ t('risk.bySeverity') }}</caption>
-				<tbody>
-					<tr
+		<div class="grid-3">
+			<section
+				class="panel"
+				aria-labelledby="risque-severite"
+			>
+				<h3
+					id="risque-severite"
+					class="panel-title"
+				>
+					{{ t('risk.bySeverity') }}
+				</h3>
+				<div class="bars">
+					<template
 						v-for="severity in SEVERITY_ROWS"
 						:key="severity"
 					>
-						<th scope="row">
-							{{ t(`vulnerabilities.severities.${severity}`) }}
-						</th>
-						<td aria-hidden="true">
-							{{ textBar(risk.by_severity[severity], maxOf(risk.by_severity), BAR_WIDTH).filled }}<span class="bar-empty">{{ textBar(risk.by_severity[severity], maxOf(risk.by_severity), BAR_WIDTH).empty }}</span>
-						</td>
-						<td>{{ risk.by_severity[severity] }}</td>
-					</tr>
-					<tr>
-						<th scope="row">
-							{{ t('vulnerabilities.unrated') }}
-						</th>
-						<td aria-hidden="true">
-							{{ textBar(risk.by_severity.unrated, maxOf(risk.by_severity), BAR_WIDTH).filled }}<span class="bar-empty">{{ textBar(risk.by_severity.unrated, maxOf(risk.by_severity), BAR_WIDTH).empty }}</span>
-						</td>
-						<td>{{ risk.by_severity.unrated }}</td>
-					</tr>
-				</tbody>
-			</table>
-
-			<table>
-				<caption>{{ t('risk.byPriority') }}</caption>
-				<tbody>
-					<tr
+						<span>{{ t(`vulnerabilities.severities.${severity}`) }}</span>
+						<span
+							class="bar"
+							aria-hidden="true"
+						>{{ textBar(risk.by_severity[severity], maxOf(risk.by_severity), BAR_WIDTH).filled }}<span class="bar-empty">{{ textBar(risk.by_severity[severity], maxOf(risk.by_severity), BAR_WIDTH).empty }}</span></span>
+						<span>{{ risk.by_severity[severity] }}</span>
+					</template>
+					<span>{{ t('vulnerabilities.unrated') }}</span>
+					<span
+						class="bar"
+						aria-hidden="true"
+					>{{ textBar(risk.by_severity.unrated, maxOf(risk.by_severity), BAR_WIDTH).filled }}<span class="bar-empty">{{ textBar(risk.by_severity.unrated, maxOf(risk.by_severity), BAR_WIDTH).empty }}</span></span>
+					<span>{{ risk.by_severity.unrated }}</span>
+				</div>
+			</section>
+			<section
+				class="panel"
+				aria-labelledby="risque-priorite"
+			>
+				<h3
+					id="risque-priorite"
+					class="panel-title"
+				>
+					{{ t('risk.byPriority') }}
+				</h3>
+				<div class="bars">
+					<template
 						v-for="priority in PRIORITIES"
 						:key="priority"
 					>
-						<th scope="row">
-							{{ t(`vulnerabilities.remediation.priorities.${priority}`) }}
-						</th>
-						<td aria-hidden="true">
-							{{ textBar(risk.by_priority[priority], maxOf(risk.by_priority), BAR_WIDTH).filled }}<span class="bar-empty">{{ textBar(risk.by_priority[priority], maxOf(risk.by_priority), BAR_WIDTH).empty }}</span>
-						</td>
-						<td>{{ risk.by_priority[priority] }}</td>
-					</tr>
-				</tbody>
-			</table>
-
-			<table>
-				<caption>{{ t('risk.byRemediationStatus') }}</caption>
-				<tbody>
-					<tr
+						<span>{{ priority }}</span>
+						<span
+							class="bar"
+							aria-hidden="true"
+						>{{ textBar(risk.by_priority[priority], maxOf(risk.by_priority), BAR_WIDTH).filled }}<span class="bar-empty">{{ textBar(risk.by_priority[priority], maxOf(risk.by_priority), BAR_WIDTH).empty }}</span></span>
+						<span>{{ risk.by_priority[priority] }}</span>
+					</template>
+				</div>
+			</section>
+			<section
+				class="panel"
+				aria-labelledby="risque-remediation"
+			>
+				<h3
+					id="risque-remediation"
+					class="panel-title"
+				>
+					{{ t('risk.byRemediationStatus') }}
+				</h3>
+				<div class="bars">
+					<template
 						v-for="status in REMEDIATION_STATUSES"
 						:key="status"
 					>
-						<th scope="row">
-							{{ t(`vulnerabilities.remediation.statuses.${status}`) }}
-						</th>
-						<td aria-hidden="true">
-							{{ textBar(risk.by_remediation_status[status], maxOf(risk.by_remediation_status), BAR_WIDTH).filled }}<span class="bar-empty">{{ textBar(risk.by_remediation_status[status], maxOf(risk.by_remediation_status), BAR_WIDTH).empty }}</span>
-						</td>
-						<td>{{ risk.by_remediation_status[status] }}</td>
-					</tr>
-				</tbody>
-			</table>
+						<span>{{ t(`vulnerabilities.remediation.statuses.${status}`) }}</span>
+						<span
+							class="bar"
+							aria-hidden="true"
+						>{{ textBar(risk.by_remediation_status[status], maxOf(risk.by_remediation_status), BAR_WIDTH).filled }}<span class="bar-empty">{{ textBar(risk.by_remediation_status[status], maxOf(risk.by_remediation_status), BAR_WIDTH).empty }}</span></span>
+						<span>{{ risk.by_remediation_status[status] }}</span>
+					</template>
+				</div>
+				<p><small>{{ t('risk.verifiedExcluded') }}</small></p>
+			</section>
+		</div>
 
-			<table>
-				<caption>{{ t('risk.byPhase') }}</caption>
-				<tbody>
-					<tr
-						v-for="(count, phase) in risk.by_phase"
-						:key="phase"
-					>
-						<th scope="row">
-							{{ t(`tests.phaseNames.${phase}`) }}
-						</th>
-						<td aria-hidden="true">
-							{{ textBar(count, maxOf(risk.by_phase), BAR_WIDTH).filled }}<span class="bar-empty">{{ textBar(count, maxOf(risk.by_phase), BAR_WIDTH).empty }}</span>
-						</td>
-						<td>{{ count }}</td>
-					</tr>
-				</tbody>
-			</table>
-		</template>
-	</section>
+		<section
+			class="panel"
+			aria-labelledby="risque-phases"
+		>
+			<h3
+				id="risque-phases"
+				class="panel-title"
+			>
+				{{ t('risk.byPhase') }}
+			</h3>
+			<div class="bars">
+				<template
+					v-for="(count, phase) in risk.by_phase"
+					:key="phase"
+				>
+					<span>{{ t(`tests.phaseNames.${phase}`) }}</span>
+					<span
+						class="bar"
+						aria-hidden="true"
+					>{{ textBar(count, maxOf(risk.by_phase), BAR_WIDTH * 2).filled }}<span class="bar-empty">{{ textBar(count, maxOf(risk.by_phase), BAR_WIDTH * 2).empty }}</span></span>
+					<span>{{ count }}</span>
+				</template>
+			</div>
+		</section>
+	</template>
 </template>

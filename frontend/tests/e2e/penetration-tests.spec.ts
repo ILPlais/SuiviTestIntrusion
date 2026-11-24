@@ -41,10 +41,11 @@ test('un administrateur crée un test, change son statut et lit l\'historique', 
 	await page.getByRole('button', { name: fr.organisations.create }).click()
 	await expect(page.getByRole('heading', { name: organisation })).toBeVisible()
 
-	await page.getByRole('link', { name: fr.nav.tests, exact: true }).click()
-	await page.getByLabel(fr.tests.organisation).selectOption({ label: organisation })
-	await page.getByLabel(fr.tests.reference).fill(reference)
-	await page.getByLabel(fr.tests.title).fill('Test externe du site vitrine')
+	await page.getByRole('banner').getByRole('link', { name: fr.nav.tests, exact: true }).click()
+	await page.getByRole('button', { name: fr.tests.newTest }).click()
+	await page.getByLabel(fr.tests.organisation, { exact: true }).selectOption({ label: organisation })
+	await page.getByLabel(fr.tests.reference, { exact: true }).fill(reference)
+	await page.getByLabel(fr.tests.title, { exact: true }).fill('Test externe du site vitrine')
 	await page.getByLabel(fr.tests.type).selectOption({ label: fr.tests.types.black_box })
 	await page.getByLabel(fr.tests.exposure).selectOption({ label: fr.tests.exposures.external })
 	await page.getByLabel(fr.tests.plannedStart).fill('2026-12-01T09:00')
@@ -53,10 +54,10 @@ test('un administrateur crée un test, change son statut et lit l\'historique', 
 	await page.getByRole('button', { name: fr.tests.create }).click()
 
 	await expect(page.getByRole('heading', { name: `${reference} — Test externe du site vitrine` })).toBeVisible()
-	await expect(page.getByText(fr.tests.types.black_box)).toBeVisible()
+	await expect(page.getByRole('definition').filter({ hasText: fr.tests.types.black_box })).toBeVisible()
 	await expect(page.getByText('1 décembre 2026 à 09:00:00')).toBeVisible()
-	await expect(page.getByRole('listitem').filter({ hasText: fr.tests.phaseNames.reconnaissance })).toBeVisible()
-	await expect(page.getByRole('listitem').filter({ hasText: fr.tests.phaseNames.cleanup })).toBeVisible()
+	await expect(page.getByText(fr.tests.phaseNames.reconnaissance, { exact: true })).toBeVisible()
+	await expect(page.getByText(fr.tests.phaseNames.cleanup, { exact: true })).toBeVisible()
 
 	await page.getByLabel(fr.tests.newStatus).selectOption({ label: fr.tests.statuses.in_progress })
 	await page.getByRole('button', { name: fr.tests.applyStatus }).click()
@@ -73,7 +74,7 @@ test('un administrateur crée un test, change son statut et lit l\'historique', 
 	await expect(history.filter({ hasText: 'créé au statut « Planifié » (Admin Tests)' })).toBeVisible()
 	await expectNoAccessibilityViolations(page)
 
-	await page.getByRole('link', { name: fr.nav.tests, exact: true }).click()
+	await page.getByRole('banner').getByRole('link', { name: fr.nav.tests, exact: true }).click()
 	await expect(page.getByRole('cell', { name: organisation })).toBeVisible()
 	await expect(page.getByRole('link', { name: reference })).toBeVisible()
 	await expectNoAccessibilityViolations(page)

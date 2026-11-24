@@ -39,6 +39,8 @@ export interface PenetrationTestSummary {
 	can_manage: boolean
 	/** Vrai si l'utilisateur peut tenir le périmètre (équipe du test, testeurs compris). */
 	can_manage_scope: boolean
+	/** Risque résumé : score maximal et niveau des vulnérabilités ouvertes (resultats-1). */
+	risk: { max_score: number | null, max_severity: 'none' | 'minor' | 'important' | 'major' | 'critical' | null }
 }
 
 /** Phase fixe d'un test. */
