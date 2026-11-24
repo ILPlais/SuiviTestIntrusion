@@ -14,6 +14,7 @@ En tant que testeur, je veux m'attribuer une tâche libre sans écraser le trava
 
 - [ ] Attribution par le chef de projet, un ou plusieurs assignés par tâche
 - [ ] Auto-attribution d'une tâche libre (sans assigné)
+- [ ] À la désactivation d'un compte (identite-7), tâches dont il est le seul assigné signalées au chef de projet du test (11.06)
 - [ ] Conflit 409 si la ressource a changé depuis le chargement, avec avertissement dans l'interface
 
 ## Technical Notes
