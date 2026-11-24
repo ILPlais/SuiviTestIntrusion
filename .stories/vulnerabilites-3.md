@@ -2,7 +2,7 @@
 
 **ID:** vulnerabilites-3
 **Epic:** vulnerabilites
-**Sprint:** unassigned
+**Sprint:** 5
 **Status:** todo
 **Points:** 3
 

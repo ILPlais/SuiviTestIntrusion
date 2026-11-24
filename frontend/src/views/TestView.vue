@@ -354,6 +354,12 @@ watch(() => props.id, load, { immediate: true })
 			</button>
 		</form>
 
+		<p>
+			<RouterLink :to="{ name: 'test-scope', params: { id: test.id } }">
+				{{ t('tests.scopeLink') }}
+			</RouterLink>
+		</p>
+
 		<h3>{{ t('tests.phases') }}</h3>
 		<ol>
 			<li
