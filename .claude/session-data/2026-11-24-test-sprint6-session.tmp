@@ -1,0 +1,39 @@
+# Session: 2026-11-24
+
+**Started:** ~17:25
+**Last Updated:** ~18:00
+**Project:** SuiviTestIntrusion (copie principale, branche `main`)
+**Topic:** Test complet du sprint 6 (identite-6, ged-chiffree-1, identite-7, ged-chiffree-2) avant une pause ; aucun code modifié.
+
+---
+
+## What We Are Building
+
+Application Web de suivi de tests d'intrusion (Laravel 13 dans `backend/`, SPA Vue 3 dans `frontend/`). Le sprint 6 est terminé et fusionné dans `main` (`c7b4c0d`). Cette session l'a seulement testé, à la demande « Tester le sprint 6 ».
+
+---
+
+## What WORKED (with evidence)
+
+- **CI GitHub** : verte sur `main` à `c7b4c0d`, et sur `feature/ged-chiffree-2` et `feature/identite-7`.
+- **Tests locaux** sous WSL, sur une extraction `git archive origin/main` dans le système de fichiers natif (`~/sti-s6`, supprimée ensuite) :
+  - PHP-CS-Fixer : 0 fichier sur 160 à corriger ; Larastan : aucune erreur ;
+  - PHPUnit (SQLite) : 274 tests réussis (1 417 assertions) ;
+  - ESLint et vue-tsc sans erreur ; Vitest : 113 tests réussis sur 17 fichiers ; build OK ;
+  - licences : 6 tests réussis, 213 dépendances acceptées ;
+  - e2e Vite : 18/18, et e2e du build de production (Chromium, Firefox) : 4/4, **avec un délai `expect` porté à 30 s**.
+
+---
+
+## What Did NOT Work (and why)
+
+- **e2e avec le délai normal de 5 s** : 12 échecs en local (10 Vite, 2 production), tous sur « Bonjour … » après la connexion. L'instantané montre l'utilisateur authentifié et le bouton « Vérification… » : le déverrouillage du coffre (dérivation de clé dans le Worker, sprint 6) dépasse 5 s sous WSL. C'est de la lenteur, pas un défaut : la CI passe avec 5 s. Contournement local : une config jetable `{ ...base, expect: { timeout: 30_000 }, timeout: 180_000 }`.
+- **`/tmp` de WSL** : vidé quand la distribution s'arrête entre deux appels `wsl.exe`. Il faut travailler dans `~` ou tout enchaîner dans un seul script.
+
+---
+
+## Notes for Next Session
+
+- Piste d'amélioration (fiche `53.xx` à créer si l'utilisateur le veut) : la connexion dépasse 5 s sur un poste lent à cause du déverrouillage du coffre.
+- Prochaine étape (CLAUDE.md) : planifier le sprint 7 (ged-chiffree-3 à 6, proposé dans `22.01`) et régénérer le Gantt ; prototype du chiffrement en flux en tête de ged-chiffree-3.
+- `.claude/Administrateur.txt` est non suivi et n'a pas été commité (fichier de l'utilisateur).
