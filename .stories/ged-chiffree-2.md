@@ -3,7 +3,7 @@
 **ID:** ged-chiffree-2
 **Epic:** ged-chiffree
 **Sprint:** 6
-**Status:** todo
+**Status:** in-progress
 **Points:** 2
 
 ## Context
