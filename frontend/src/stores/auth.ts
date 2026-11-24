@@ -15,6 +15,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { ApiError, getJson, postJson, putJson } from '../api/client'
 import { computeAuth, enroll, lockSession, recover, rotate, unlockSession, type VaultCopies } from '../crypto'
+import { startIdleLock, type LockReason } from '../crypto/idleLock'
 
 /** Compte connecté, tel que le renvoie GET /api/v1/user. */
 export interface CurrentUser {
@@ -51,11 +52,33 @@ export interface Enrollment {
 	vault: VaultCopies
 }
 
-/** Identifiant public de l'instance, lu une fois (sel de `auth`). */
-let instanceId: string | null = null
+/** Informations publiques de l'instance (GET /api/v1/instance). */
+interface InstanceInfo {
+	/** Identifiant public, sel de `auth` (13.03). */
+	instance_id: string
+	/** Minutes d'inactivité avant l'effacement de la clé privée (ged-chiffree-2). */
+	vault_idle_minutes: number
+}
+
+/** Informations de l'instance, lues une fois. */
+let instance: InstanceInfo | null = null
+
+/** Arrête la surveillance de l'inactivité de la clé déverrouillée, s'il y en a une. */
+let stopIdleLock: (() => void) | null = null
 
 /** Mot de passe gardé entre les deux temps d'une connexion avec second facteur. */
 let pendingPassword: string | null = null
+
+/**
+ * Informations de l'instance, demandées à l'API au premier besoin.
+ *
+ * @returns L'identifiant et le délai d'inactivité du coffre.
+ */
+async function getInstance(): Promise<InstanceInfo> {
+	instance ??= await getJson<InstanceInfo>('/instance')
+
+	return instance
+}
 
 /**
  * Identifiant public de l'instance, demandé à l'API au premier besoin.
@@ -63,9 +86,7 @@ let pendingPassword: string | null = null
  * @returns L'identifiant de l'instance.
  */
 async function getInstanceId(): Promise<string> {
-	instanceId ??= (await getJson<{ instance_id: string }>('/instance')).instance_id
-
-	return instanceId
+	return (await getInstance()).instance_id
 }
 
 /** Store Pinia de la session. */
@@ -78,6 +99,23 @@ export const useAuthStore = defineStore('auth', () => {
 
 	/** Le déverrouillage a échoué après une connexion réussie (copie illisible, mémoire). */
 	const vaultError = ref<string | null>(null)
+
+	/** Motif du dernier verrouillage, affiché à l'utilisateur (ged-chiffree-2). */
+	const vaultLockReason = ref<LockReason | 'manual' | null>(null)
+
+	/**
+	 * Verrouille la clé : le Worker de session est arrêté et la clé effacée de la
+	 * mémoire ; le mot de passe sera redemandé (13.04, ged-chiffree-2).
+	 *
+	 * @param reason Motif : demande de l'utilisateur, inactivité ou mise en veille.
+	 */
+	function lockVault(reason: LockReason | 'manual' = 'manual'): void {
+		stopIdleLock?.()
+		stopIdleLock = null
+		lockSession()
+		vaultLockReason.value = vaultUnlocked.value ? reason : vaultLockReason.value
+		vaultUnlocked.value = false
+	}
 
 	/**
 	 * Vérifie la session auprès de l'API ; ne lève pas d'exception.
@@ -115,6 +153,10 @@ export const useAuthStore = defineStore('auth', () => {
 				throw new Error('fingerprint_mismatch')
 			}
 			vaultUnlocked.value = true
+			vaultLockReason.value = null
+			// Effacement après inactivité ou mise en veille de l'onglet (ged-chiffree-2).
+			stopIdleLock?.()
+			stopIdleLock = startIdleLock({ timeoutMs: (await getInstance()).vault_idle_minutes * 60_000, onLock: lockVault })
 		} catch (caught) {
 			vaultUnlocked.value = false
 			vaultError.value = caught instanceof Error ? caught.message : 'failed'
@@ -285,8 +327,8 @@ export const useAuthStore = defineStore('auth', () => {
 
 	/** Déconnexion : la clé est effacée (Worker arrêté) et la session oubliée, même si l'API ne répond pas. */
 	async function logout(): Promise<void> {
-		lockSession()
-		vaultUnlocked.value = false
+		lockVault()
+		vaultLockReason.value = null
 		pendingPassword = null
 		try {
 			await postJson('/auth/logout')
@@ -295,5 +337,5 @@ export const useAuthStore = defineStore('auth', () => {
 		}
 	}
 
-	return { user, vaultUnlocked, vaultError, fetchUser, login, verifyTwoFactor, cancelLogin, unlockVault, prepareEnrollment, activate, prepareRecovery, resetPassword, changePassword, logout }
+	return { user, vaultUnlocked, vaultError, vaultLockReason, lockVault, fetchUser, login, verifyTwoFactor, cancelLogin, unlockVault, prepareEnrollment, activate, prepareRecovery, resetPassword, changePassword, logout }
 })

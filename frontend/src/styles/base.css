@@ -164,6 +164,15 @@
 		gap: 0 2ch;
 	}
 
+	/* État du coffre, à droite du titre comme sur les maquettes de 15.01. */
+	header .vault-state {
+		display: flex;
+		align-items: center;
+		gap: 2ch;
+		margin-inline-start: auto;
+		color: var(--foreground1);
+	}
+
 	/* Emplacement du throbber global, réservé pour éviter tout décalage. */
 	header .activity {
 		min-width: 22ch;

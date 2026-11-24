@@ -26,6 +26,15 @@ return [
 	],
 
 	/*
+	| Coffre de clés dans le navigateur (ged-chiffree-2, 12.01 §4.3, 13.04) : la
+	| clé privée déchiffrée est effacée (Worker crypto arrêté) après ce nombre de
+	| minutes sans clic ni frappe, et dès que le navigateur met l'onglet en veille.
+	*/
+	'vault' => [
+		'idle_minutes' => (int) env('VAULT_IDLE_MINUTES', 30),
+	],
+
+	/*
 	| Journal d'audit (identite-6, 11.02). Les événements plus anciens que la
 	| rétention sont purgés chaque jour par `php artisan model:prune` (service
 	| scheduler) ; 0 conserve tout. Une année par défaut : assez pour retracer
