@@ -108,9 +108,13 @@
 		padding: 1lh 2ch;
 	}
 
+	/*
+	 * Pleine largeur (socle-9, maquettes de 15.01) : le menu du test et les écrans
+	 * denses (synthèse, périmètre) en ont besoin ; les champs gardent 60 caractères.
+	 */
 	main {
 		flex: 1;
-		max-width: 100ch;
+		min-width: 0;
 	}
 
 	main > * + * {
@@ -270,6 +274,286 @@
 	 */
 	.bar-empty {
 		opacity: 0.35;
+	}
+
+	/*
+	 * ---- Mise en page des maquettes (socle-9, 15.01, sources/maquettes.css) ----
+	 */
+
+	/* En-tête : titre et activité, puis navigation ; le compte à droite. */
+	header nav .nav-spacer {
+		flex: 1;
+	}
+
+	/* Écran d'un test : menu latéral à gauche, contenu à droite. */
+	.test-layout {
+		display: grid;
+		grid-template-columns: 30ch minmax(0, 1fr);
+		gap: 1lh 2ch;
+		align-items: start;
+	}
+
+	.test-layout > .test-content {
+		display: flex;
+		flex-direction: column;
+		gap: 1lh;
+		min-width: 0;
+	}
+
+	/* Menu du test : entrées par étape, entrée courante en aplat. */
+	.test-menu ol {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.15lh;
+	}
+
+	.test-menu .menu-group {
+		margin-top: 0.4lh;
+		color: var(--subtext0);
+	}
+
+	.test-menu a {
+		display: flex;
+		align-items: center;
+		gap: 1ch;
+		min-height: 24px;
+		padding: 0 1ch;
+		text-decoration: none;
+		color: var(--foreground0);
+	}
+
+	.test-menu a.current {
+		background: var(--foreground0);
+		color: var(--background0);
+		font-weight: var(--font-weight-bold);
+	}
+
+	.test-menu .count {
+		margin-inline-start: auto;
+	}
+
+	/* Cadres titrés : bordure arrondie, titre posé dans le trait (fieldset ou section). */
+	.panel,
+	fieldset.panel {
+		position: relative;
+		border: 2px solid var(--foreground0);
+		border-radius: 6px;
+		padding: 1lh 1.5ch 0.5lh;
+		margin: 0;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5lh;
+	}
+
+	.panel.soft {
+		border-color: var(--surface1);
+	}
+
+	.panel > .panel-title,
+	.panel > legend {
+		position: absolute;
+		top: -0.7lh;
+		left: 1ch;
+		margin: 0;
+		padding: 0 1ch;
+		background: var(--background0);
+		font-size: 1em;
+		font-weight: var(--font-weight-bold);
+	}
+
+	/* Bandeau du test : titre, statut, type, risque, dates sur une ligne. */
+	.test-banner {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.3lh 2ch;
+	}
+
+	.test-banner h2 {
+		margin: 0;
+	}
+
+	.crumbs {
+		margin: 0;
+		color: var(--subtext0);
+	}
+
+	/* Badges : statuts, sévérités, priorités, toujours accompagnés d'un texte. */
+	.tag {
+		display: inline-block;
+		padding: 0 1ch;
+		white-space: nowrap;
+		background: var(--surface1);
+		color: var(--text);
+	}
+
+	.tag-red { background: var(--red); }
+	.tag-peach { background: var(--peach); }
+	.tag-yellow { background: var(--yellow); }
+	.tag-green { background: var(--green); }
+	.tag-blue { background: var(--blue); }
+	.tag-grey { background: var(--overlay0); }
+	.tag-outline { background: transparent; box-shadow: inset 0 0 0 1px var(--foreground0); }
+
+	/*
+	 * Contraste du texte des badges (13.07, 4,5:1) : en Mocha, toutes les teintes
+	 * sont pastel, texte foncé ; en Latte, rouge, bleu et gris foncés prennent un
+	 * texte clair, pêche, jaune et vert un texte foncé.
+	 */
+	:is(.tag-red, .tag-peach, .tag-yellow, .tag-green, .tag-blue, .tag-grey) {
+		color: #11111b;
+	}
+
+	[data-webtui-theme='catppuccin-latte'] :is(.tag-red, .tag-blue) {
+		color: #eff1f5;
+	}
+
+	/* Grilles de cadres. */
+	.grid-2,
+	.grid-3 {
+		display: grid;
+		gap: 1.5lh 2ch;
+		align-items: stretch;
+	}
+
+	.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	.grid-wide-left { grid-template-columns: minmax(0, 1fr) 46ch; }
+
+	:is(.grid-2, .grid-3) > table {
+		align-self: start;
+	}
+
+	/* Indicateur chiffré d'un cadre de synthèse. */
+	.kpi-value {
+		font-size: 1.8em;
+		font-weight: var(--font-weight-bold);
+		line-height: 1.1;
+	}
+
+	/* Barres en caractères : libellé, barre, nombre. */
+	.bars {
+		display: grid;
+		grid-template-columns: max-content 1fr max-content;
+		gap: 0.1lh 1.5ch;
+		align-items: center;
+	}
+
+	.bar {
+		white-space: pre;
+	}
+
+	/* Barre d'actions : boutons et filtres sur une ligne. */
+	.toolbar {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5lh 1.5ch;
+	}
+
+	.toolbar .spacer {
+		flex: 1;
+	}
+
+	.toolbar label {
+		display: inline-flex;
+		align-items: center;
+		gap: 1ch;
+		font-weight: normal;
+	}
+
+	/* Onglets d'un écran. */
+	.tabs {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.3lh 3ch;
+		border-bottom: 2px solid var(--surface1);
+		padding-bottom: 0.2lh;
+	}
+
+	.tabs button {
+		background: transparent;
+		color: var(--subtext0);
+		padding: 0;
+	}
+
+	.tabs button[aria-selected='true'] {
+		color: var(--foreground0);
+		font-weight: var(--font-weight-bold);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.35lh;
+	}
+
+	/* Boutons segmentés (métriques CVSS) : une ligne par métrique, nom à gauche. */
+	fieldset.metric-row {
+		border: none;
+		margin: 0;
+		padding: 0;
+		min-width: 0;
+	}
+
+	fieldset.metric-row > legend {
+		float: left;
+		width: 30ch;
+		padding: 0;
+	}
+
+	.segments {
+		display: inline-flex;
+		flex-wrap: wrap;
+		gap: 0.5ch;
+	}
+
+	.segments label {
+		display: inline-flex;
+		align-items: center;
+		min-height: 24px;
+		padding: 0 1ch;
+		background: var(--surface0);
+		font-weight: normal;
+		cursor: pointer;
+	}
+
+	/* Le bouton radio reste dans le flux (clavier, lecteurs d'écran), invisible à l'œil. */
+	.segments input {
+		position: absolute;
+		opacity: 0;
+		width: 1px;
+		height: 1px;
+	}
+
+	.segments label:has(input:checked) {
+		background: var(--foreground0);
+		color: var(--background0);
+		font-weight: var(--font-weight-bold);
+	}
+
+	.segments label:has(input:focus-visible) {
+		outline: 2px solid var(--blue, var(--foreground0));
+		outline-offset: 2px;
+	}
+
+	/* Ligne d'un objet exclu du périmètre : atténuée, mais lisible. */
+	tr.excluded td,
+	tr.excluded th {
+		color: var(--subtext0);
+	}
+
+	/* Notes et avertissements. */
+	.note,
+	.warn {
+		padding: 0.3lh 1.5ch;
+		border-inline-start: 4px solid var(--blue);
+		background: var(--mantle);
+	}
+
+	.warn {
+		border-color: var(--peach);
 	}
 
 	/* Masqué à l'écran, lu par les lecteurs d'écran. */

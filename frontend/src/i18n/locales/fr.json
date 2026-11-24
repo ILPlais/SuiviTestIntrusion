@@ -95,7 +95,31 @@
 			"cleanup": "Nettoyage"
 		},
 		"scopeLink": "Périmètre du test",
-		"vulnerabilitiesLink": "Vulnérabilités du test"
+		"vulnerabilitiesLink": "Vulnérabilités du test",
+		"sheet": "Fiche du test",
+		"newTest": "Nouveau test",
+		"filters": "Filtres",
+		"search": "Référence ou titre",
+		"filterOrganisation": "Organisation affichée",
+		"allOrganisations": "Toutes",
+		"filterStatus": "Statut affiché",
+		"openTests": "Ouverts (hors validés)",
+		"allTests": "Tous",
+		"listCount": "{shown} tests affichés sur {total}",
+		"period": "Période prévue",
+		"risk": "Risque",
+		"noRisk": "aucun"
+	},
+	"testMenu": {
+		"label": "Sections du test",
+		"synthesis": "Synthèse",
+		"prepare": "Préparer",
+		"test": "Tester",
+		"scope": "Périmètre",
+		"vulnerabilities": "Vulnérabilités",
+		"risk": "Risque : {severity} {score}",
+		"noRisk": "Risque : aucune vulnérabilité ouverte cotée",
+		"crumbSeparator": "›"
 	},
 	"scope": {
 		"heading": "Périmètre — {test}",
@@ -305,24 +329,35 @@
 				"P3": "P3 — moyen terme",
 				"P4": "P4 — opportunité"
 			},
-			"overriddenNote": "(surchargée par le chef de projet ; suggestion depuis la cotation : {priority})"
+			"overriddenNote": "(surchargée par le chef de projet ; suggestion depuis la cotation : {priority})",
+			"current": "État de la remédiation"
 		},
-		"partialRating": "La cotation est incomplète : choisissez une valeur pour les huit métriques, ou retirez la cotation."
+		"partialRating": "La cotation est incomplète : choisissez une valeur pour les huit métriques, ou retirez la cotation.",
+		"tabsLabel": "Parties de la fiche",
+		"tabs": {
+			"finding": "Constat",
+			"rating": "Cotation",
+			"remediation": "Remédiation"
+		},
+		"remediationTag": "Remédiation : {status}"
 	},
 	"risk": {
 		"heading": "Synthèse du risque",
 		"unavailable": "Le risque du test n'a pas pu être calculé.",
 		"maxScore": "Gravité technique",
 		"none": "aucune vulnérabilité ouverte cotée",
-		"weightedAverage": "Score moyen pondéré",
+		"weightedAverage": "Score agrégé",
 		"informative": "{score} (informatif, pondéré par la priorité)",
 		"openCount": "Vulnérabilités ouvertes",
-		"openOfTotal": "{open} sur {total}",
+		"openOfTotal": "{open} vulnérabilités ouvertes sur {total}",
 		"impact": "Impact {axis}",
-		"bySeverity": "Vulnérabilités ouvertes par sévérité",
-		"byPriority": "Vulnérabilités ouvertes par priorité",
-		"byRemediationStatus": "Vulnérabilités par statut de remédiation",
-		"byPhase": "Vulnérabilités ouvertes par phase"
+		"bySeverity": "Par sévérité",
+		"byPriority": "Par priorité",
+		"byRemediationStatus": "Remédiation",
+		"byPhase": "Vulnérabilités ouvertes par phase",
+		"informativeNote": "Moyenne pondérée par la priorité (P1 = 4 … P4 = 1), informative : ne remplace jamais le maximum.",
+		"businessProfile": "Profil d'impact business",
+		"verifiedExcluded": "Les vulnérabilités vérifiées sont exclues des indicateurs."
 	},
 	"company": {
 		"heading": "Entreprise prestataire",

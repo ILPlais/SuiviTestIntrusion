@@ -15,6 +15,7 @@ use App\Models\TestStatusChange;
 use App\Models\User;
 use App\Policies\PenetrationTestPolicy;
 use App\Policies\ScopeObjectPolicy;
+use App\Results\TestRisk;
 use Carbon\CarbonInterface;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
@@ -53,7 +54,7 @@ class PenetrationTestController extends Controller
 			filterable: ['tenant_id', 'status', 'type', 'exposure'],
 			defaultSort: 'created_at',
 		)->respond(
-			PenetrationTest::query()->with(['tenant', 'creator']),
+			PenetrationTest::query()->with(['tenant', 'creator', 'vulnerabilities.remediation', 'vulnerabilities.phase']),
 			fn (PenetrationTest $test) => $this->summary($test, $user, $roles),
 		);
 	}
@@ -256,7 +257,7 @@ class PenetrationTestController extends Controller
 	 */
 	private function detailResponse(Request $request, PenetrationTest $test, int $status = 200): JsonResponse
 	{
-		$test->load(['tenant', 'creator', 'phases', 'statusChanges.author']);
+		$test->load(['tenant', 'creator', 'phases', 'statusChanges.author', 'vulnerabilities.remediation', 'vulnerabilities.phase']);
 		$user = $this->user($request);
 
 		return new JsonResponse(['data' => $this->detail($test, $user, $user->tenantRoles())], $status);
@@ -306,6 +307,9 @@ class PenetrationTestController extends Controller
 			'can_manage' => PenetrationTestPolicy::manages($user, $roles[$test->tenant_id] ?? null),
 			// Le périmètre est tenu par toute l'équipe, testeurs compris (engagement-4).
 			'can_manage_scope' => ScopeObjectPolicy::manages($user, $roles[$test->tenant_id] ?? null),
+			// Résumé du risque (resultats-1) : colonne « Risque » de la liste et bandeau
+			// du test (maquettes 01 et 02 de 15.01) ; le détail est sur /tests/{id}/risk.
+			'risk' => $this->riskSummary($test),
 		];
 	}
 
@@ -339,6 +343,19 @@ class PenetrationTestController extends Controller
 				];
 			})->all(),
 		];
+	}
+
+	/**
+	 * Score maximal et niveau des vulnérabilités ouvertes du test.
+	 *
+	 * @param PenetrationTest $test Test, vulnérabilités chargées avec remédiation et phase.
+	 * @return array{max_score: float|null, max_severity: string|null}
+	 */
+	private function riskSummary(PenetrationTest $test): array
+	{
+		$risk = TestRisk::compute($test->vulnerabilities);
+
+		return ['max_score' => $risk['max_score'], 'max_severity' => $risk['max_severity']];
 	}
 
 	/**

@@ -11,6 +11,7 @@ import { ApiError, getJson, postJson } from '../api/client'
 import type { PenetrationTest } from '../api/penetrationTests'
 import type { Vulnerability } from '../api/vulnerabilities'
 import ActionIcon from '../components/ActionIcon.vue'
+import { severityTag } from '../api/testContext'
 import LoadingThrobber from '../components/LoadingThrobber.vue'
 import { formatScore } from '../utils/cvss31'
 
@@ -78,7 +79,7 @@ async function create(): Promise<void> {
 			title: form.value.title.trim(),
 			phase_id: form.value.phase_id,
 		})).data
-		await router.push({ name: 'vulnerability', params: { id: created.id } })
+		await router.push({ name: 'vulnerability', params: { id: props.id, vulnerabilityId: created.id } })
 	} catch (caught) {
 		error.value = caught instanceof ApiError ? caught.firstMessage() : t('auth.unexpected')
 	} finally {
@@ -105,13 +106,6 @@ watch(() => props.id, load, { immediate: true })
 		visible-label
 	/>
 	<template v-if="test">
-		<p>
-			<RouterLink :to="{ name: 'test', params: { id: test.id } }">
-				{{ t('vulnerabilities.back') }}
-			</RouterLink>
-		</p>
-		<h2>{{ t('vulnerabilities.heading', { test: `${test.reference} — ${test.title}` }) }}</h2>
-
 		<p v-if="vulnerabilities.length === 0">
 			{{ t('vulnerabilities.empty') }}
 		</p>
@@ -142,16 +136,19 @@ watch(() => props.id, load, { immediate: true })
 					:key="vulnerability.id"
 				>
 					<th scope="row">
-						<RouterLink :to="{ name: 'vulnerability', params: { id: vulnerability.id } }">
+						<RouterLink :to="{ name: 'vulnerability', params: { id: test.id, vulnerabilityId: vulnerability.id } }">
 							{{ vulnerability.reference }}
 						</RouterLink>
 					</th>
 					<td>{{ vulnerability.title }}</td>
 					<td>{{ t(`tests.phaseNames.${vulnerability.phase.code}`) }}</td>
 					<td>
-						<template v-if="vulnerability.severity !== null">
-							{{ t(`vulnerabilities.severities.${vulnerability.severity}`) }} {{ vulnerability.cvss_score !== null ? formatScore(vulnerability.cvss_score, locale) : '' }}
-						</template>
+						<span
+							v-if="vulnerability.severity !== null"
+							class="tag"
+							:class="severityTag(vulnerability.severity)"
+						>
+							{{ t(`vulnerabilities.severities.${vulnerability.severity}`) }} {{ vulnerability.cvss_score !== null ? formatScore(vulnerability.cvss_score, locale) : '' }}</span>
 						<template v-else>
 							{{ t('vulnerabilities.unrated') }}
 						</template>
@@ -165,7 +162,7 @@ watch(() => props.id, load, { immediate: true })
 			v-if="test.can_manage_scope"
 			@submit.prevent="create"
 		>
-			<fieldset>
+			<fieldset class="panel">
 				<legend>{{ t('vulnerabilities.add') }}</legend>
 				<label for="vulnerabilite-titre">{{ t('vulnerabilities.title') }}</label>
 				<input

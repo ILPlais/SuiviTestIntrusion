@@ -149,6 +149,16 @@ class PenetrationTest extends Model
 	}
 
 	/**
+	 * Vulnérabilités du test (vulnerabilites-3).
+	 *
+	 * @return HasMany<Vulnerability, $this>
+	 */
+	public function vulnerabilities(): HasMany
+	{
+		return $this->hasMany(Vulnerability::class, 'test_id');
+	}
+
+	/**
 	 * Compte qui a créé le test.
 	 *
 	 * @return BelongsTo<User, $this>

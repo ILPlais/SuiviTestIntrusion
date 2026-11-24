@@ -71,6 +71,11 @@ async function logout(): Promise<void> {
 			<RouterLink :to="{ name: 'company' }">
 				<NfIcon name="company" />{{ t('nav.company') }}
 			</RouterLink>
+			<!-- Le compte à droite, comme sur les maquettes de 15.01 (socle-9). -->
+			<span
+				class="nav-spacer"
+				aria-hidden="true"
+			/>
 			<RouterLink :to="{ name: 'profile' }">
 				<NfIcon name="profile" />{{ auth.user.name }}
 			</RouterLink>

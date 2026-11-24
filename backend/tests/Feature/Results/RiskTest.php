@@ -136,6 +136,24 @@ class RiskTest extends TestCase
 	}
 
 	/**
+	 * La liste et la fiche des tests portent le risque en résumé (score maximal
+	 * et niveau des vulnérabilités ouvertes), pour la colonne « Risque » et le
+	 * bandeau du test (maquettes 01 et 02 de 15.01).
+	 *
+	 * @return void
+	 */
+	public function test_tests_carry_a_risk_summary(): void
+	{
+		$this->getJson('/api/v1/tests')->assertJsonPath('data.0.risk', ['max_score' => null, 'max_severity' => null]);
+
+		$this->vulnerability('CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N');
+		$this->vulnerability('CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H');
+
+		$this->getJson('/api/v1/tests')->assertJsonPath('data.0.risk', ['max_score' => 9.8, 'max_severity' => 'critical']);
+		$this->getJson("/api/v1/tests/{$this->test->id}")->assertJsonPath('data.risk.max_severity', 'critical');
+	}
+
+	/**
 	 * Le risque d'un test étranger est introuvable.
 	 *
 	 * @return void

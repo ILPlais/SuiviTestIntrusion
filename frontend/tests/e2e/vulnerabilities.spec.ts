@@ -40,7 +40,7 @@ async function signedInAdmin(page: Page): Promise<void> {
  * @param label Libellé de la valeur, avec sa lettre : « Réseau (N) ».
  */
 async function chooseMetric(page: Page, metric: keyof typeof fr.vulnerabilities.metrics, label: string): Promise<void> {
-	await page.getByRole('group', { name: fr.vulnerabilities.metrics[metric] }).getByLabel(label).check()
+	await page.getByRole('group', { name: fr.vulnerabilities.metrics[metric] }).getByText(label).click()
 }
 
 test('un administrateur cote une vulnérabilité, rédige sa remédiation et lit le risque du test', async ({ page }) => {
@@ -54,6 +54,7 @@ test('un administrateur cote une vulnérabilité, rédige sa remédiation et lit
 	await expect(page.getByRole('heading', { name: organisation })).toBeVisible()
 
 	await page.getByRole('link', { name: fr.nav.tests, exact: true }).click()
+	await page.getByRole('button', { name: fr.tests.newTest }).click()
 	await page.getByLabel(fr.tests.organisation).selectOption({ label: organisation })
 	await page.getByLabel(fr.tests.reference).fill(reference)
 	await page.getByLabel(fr.tests.title).fill('Test externe du site vitrine')
@@ -62,12 +63,14 @@ test('un administrateur cote une vulnérabilité, rédige sa remédiation et lit
 	await expect(page.getByText(fr.risk.none).first()).toBeVisible()
 
 	// Constat : création rapide, puis la fiche s'ouvre.
-	await page.getByRole('link', { name: fr.tests.vulnerabilitiesLink }).click()
+	await page.getByRole('link', { name: fr.testMenu.vulnerabilities }).click()
 	await page.getByLabel(fr.vulnerabilities.title).fill('Exécution de code à distance sur le CMS')
 	await page.getByRole('button', { name: fr.vulnerabilities.create }).click()
 	await expect(page.getByRole('heading', { name: 'V-001 — Exécution de code à distance sur le CMS' })).toBeVisible()
 
-	// Cotation : AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H = 9,8, aperçu avant l'enregistrement.
+	// Constat, puis cotation : AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H = 9,8, aperçu avant l'enregistrement.
+	await page.getByLabel(fr.vulnerabilities.cveIds).fill('CVE-2026-0042')
+	await page.getByRole('tab', { name: fr.vulnerabilities.tabs.rating }).click()
 	await chooseMetric(page, 'AV', 'Réseau (N)')
 	await chooseMetric(page, 'AC', 'Faible (L)')
 	await chooseMetric(page, 'PR', 'Aucun (N)')
@@ -77,7 +80,6 @@ test('un administrateur cote une vulnérabilité, rédige sa remédiation et lit
 	await chooseMetric(page, 'I', 'Élevé (H)')
 	await chooseMetric(page, 'A', 'Élevé (H)')
 	await expect(page.getByText('Score calculé : 9,8 (Critique)')).toBeVisible()
-	await page.getByLabel(fr.vulnerabilities.cveIds).fill('CVE-2026-0042')
 	await page.getByLabel(fr.vulnerabilities.axes.operational).selectOption({ index: 3 })
 	await expectNoAccessibilityViolations(page)
 	await page.getByRole('button', { name: fr.vulnerabilities.save }).click()
@@ -85,6 +87,7 @@ test('un administrateur cote une vulnérabilité, rédige sa remédiation et lit
 	await expect(page.getByText('Critique 9,8 (CVSS 3.1)')).toBeVisible()
 
 	// Remédiation : recommandations et statut ; priorité suggérée P1.
+	await page.getByRole('tab', { name: fr.vulnerabilities.tabs.remediation }).click()
 	await page.getByLabel(fr.vulnerabilities.remediation.recommendations).fill('Mettre à jour le CMS en 4.2.3.')
 	await page.getByLabel(fr.vulnerabilities.remediation.status).selectOption({ label: fr.vulnerabilities.remediation.statuses.in_progress })
 	await page.getByRole('button', { name: fr.vulnerabilities.remediation.save }).click()
@@ -94,11 +97,11 @@ test('un administrateur cote une vulnérabilité, rédige sa remédiation et lit
 	await expectNoAccessibilityViolations(page)
 
 	// Liste du test, puis synthèse du risque sur la fiche.
-	await page.getByRole('link', { name: fr.vulnerabilities.backToList }).click()
+	await page.getByRole('link', { name: fr.testMenu.vulnerabilities }).click()
 	await expect(page.getByRole('cell', { name: 'Critique 9,8' })).toBeVisible()
-	await page.getByRole('link', { name: fr.vulnerabilities.back }).click()
-	await expect(page.getByRole('heading', { name: fr.risk.heading })).toBeVisible()
-	await expect(page.getByText('Critique 9,8', { exact: true })).toBeVisible()
+	await page.getByRole('link', { name: fr.testMenu.synthesis }).click()
+	await expect(page.getByRole('heading', { name: fr.risk.maxScore })).toBeVisible()
+	await expect(page.getByText('Risque : Critique 9,8', { exact: true })).toBeVisible()
 	await expect(page.getByRole('definition').filter({ hasText: '3 — Dégâts majeurs sur la production' })).toBeVisible()
 	await expectNoAccessibilityViolations(page)
 
