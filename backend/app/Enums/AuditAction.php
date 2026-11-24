@@ -44,6 +44,9 @@ enum AuditAction: string
 	/** Double authentification désactivée par l'utilisateur. */
 	case TwoFactorDisabled = 'auth.two_factor_disabled';
 
+	/** Mot de passe changé : nouvelle valeur d'authentification et copie 1 de la clé (ged-chiffree-1). */
+	case PasswordChanged = 'auth.password_changed';
+
 	/** Nouveaux codes de secours tirés (les anciens sont invalidés). */
 	case RecoveryCodesRegenerated = 'auth.recovery_codes_regenerated';
 

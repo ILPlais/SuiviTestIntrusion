@@ -27,6 +27,27 @@ export default defineConfig({
 	plugins: [vue({ template: { compilerOptions: { hoistStatic: false } } }), iconFontLicense],
 	// Aucun fichier intégré en URL data: (WebAssembly d'argon2id compris) : la CSP de 13.04 les refuse.
 	build: { assetsInlineLimit: 0 },
+	/*
+	 * Worker crypto en module ES : openpgp.js (LGPL) y reste un fichier séparé,
+	 * non fusionné avec le code de l'application, donc remplaçable (13.07). Ce
+	 * fichier n'est chargé que par le Worker ; le fil principal ne l'importe pas (13.04).
+	 */
+	worker: {
+		format: 'es',
+		rollupOptions: {
+			output: {
+				/**
+				 * Range openpgp.js dans son propre fichier.
+				 *
+				 * @param id Chemin du module.
+				 * @returns Le nom du fichier séparé, ou undefined pour le reste.
+				 */
+				manualChunks(id: string) {
+					return id.includes('/node_modules/openpgp/') ? 'openpgp' : undefined
+				},
+			},
+		},
+	},
 	server: {
 		proxy: {
 			'/api': 'http://localhost:8000',

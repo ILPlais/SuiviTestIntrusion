@@ -2,6 +2,7 @@
 	"$comment": "Licences autorisées pour les dépendances livrées (13.07). LGPL et polices sous OFL : exception nommée par paquet.",
 	"allowed": ["MIT", "BSD-2-Clause", "BSD-3-Clause", "ISC", "0BSD", "Apache-2.0", "MPL-2.0"],
 	"exceptions": {
-		"@fontsource/cascadia-code": "OFL-1.1"
+		"@fontsource/cascadia-code": "OFL-1.1",
+		"openpgp": "LGPL-3.0+"
 	}
 }

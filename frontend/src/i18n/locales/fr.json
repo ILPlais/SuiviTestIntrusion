@@ -448,5 +448,46 @@
 		"disable": "Désactiver la double authentification",
 		"codeForAction": "Code actuel de l'application",
 		"done": "J'ai conservé mes codes"
+	},
+	"enrollment": {
+		"stepsLabel": "Étapes de l'activation",
+		"steps": {
+			"password": "Mot de passe",
+			"keys": "Paire de clés",
+			"recovery": "Clé de récupération"
+		},
+		"next": "Générer ma paire de clés",
+		"generating": "Génération de votre paire de clés et protection par votre mot de passe… Cela prend quelques secondes."
+	},
+	"recovery": {
+		"heading": "Votre clé de récupération",
+		"intro": "Elle seule permet de retrouver vos preuves si vous oubliez votre mot de passe. Elle n'est affichée qu'une fois et n'est jamais envoyée au serveur.",
+		"copy": "Copier",
+		"copied": "Copiée",
+		"download": "Télécharger (.txt)",
+		"storage": "Rangez-la hors de cet ordinateur : gestionnaire de mots de passe, papier sous clé.",
+		"retype": "Saisissez la clé pour confirmer que vous l'avez conservée",
+		"rule": "Espaces, tirets et casse ignorés.",
+		"missing": "Il manque {count} caractère. | Il manque {count} caractères.",
+		"mismatch": "La clé saisie ne correspond pas.",
+		"matches": "La clé correspond.",
+		"fileHeading": "Clé de récupération — Suivi des tests d'intrusion",
+		"fileAdvice": "Conservez ce fichier hors de l'ordinateur, puis supprimez-le. Sans cette clé ni votre mot de passe, vos preuves sont perdues."
+	},
+	"vault": {
+		"heading": "Coffre de clés",
+		"unlocked": "Votre clé privée est déverrouillée pour cette session.",
+		"locked": "Votre clé privée est verrouillée. Saisissez votre mot de passe pour la déverrouiller.",
+		"none": "Ce compte n'a pas encore de paire de clés.",
+		"fingerprint": "Empreinte de votre clé :",
+		"unlock": "Déverrouiller",
+		"unlockFailed": "Déverrouillage impossible : mot de passe incorrect, ou copie de la clé illisible.",
+		"passwordHeading": "Changer le mot de passe",
+		"passwordIntro": "Seule votre clé privée est rechiffrée : vos fichiers et votre clé de récupération ne changent pas. Vos autres sessions seront fermées.",
+		"currentPassword": "Mot de passe actuel",
+		"change": "Changer le mot de passe",
+		"changing": "Rechiffrement de votre clé…",
+		"changed": "Mot de passe changé.",
+		"wrongCurrent": "Mot de passe actuel incorrect."
 	}
 }

@@ -3,6 +3,7 @@
 	(QR code dessiné localement dans un canvas, clé affichée pour une saisie à la
 	main), codes de secours affichés une seule fois, renouvellement et désactivation.
 	Le QR code n'utilise ni service tiers ni URL data: (CSP de 13.04).
+	Suivis du coffre de clés et du changement de mot de passe (ged-chiffree-1).
 -->
 <script setup lang="ts">
 import { nextTick, ref } from 'vue'
@@ -11,6 +12,8 @@ import QRCode from 'qrcode'
 import { ApiError, deleteJson, postJson } from '../api/client'
 import { useAuthStore } from '../stores/auth'
 import ActionIcon from '../components/ActionIcon.vue'
+import PasswordChangeForm from '../components/PasswordChangeForm.vue'
+import VaultPanel from '../components/VaultPanel.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -212,5 +215,8 @@ function disable(): Promise<void> {
 		>
 			{{ error }}
 		</p>
+
+		<VaultPanel />
+		<PasswordChangeForm />
 	</section>
 </template>

@@ -5,6 +5,7 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
+use Tests\Concerns\BuildsVaults;
 use Tests\TestCase;
 
 /**
@@ -17,6 +18,7 @@ use Tests\TestCase;
  */
 class ActivationTest extends TestCase
 {
+	use BuildsVaults;
 	use RefreshDatabase;
 
 	/**
@@ -70,7 +72,7 @@ class ActivationTest extends TestCase
 	public function test_the_command_refuses_an_active_account(): void
 	{
 		$token = $this->createAdmin();
-		$this->postJson('/api/v1/auth/activate', ['token' => $token, 'auth' => base64_encode(random_bytes(32))])->assertNoContent();
+		$this->postJson('/api/v1/auth/activate', ['token' => $token, 'auth' => base64_encode(random_bytes(32))] + $this->vaultPayload())->assertNoContent();
 
 		$this->assertSame(1, Artisan::call('suivi:create-admin', ['email' => 'root@example.org']));
 	}
@@ -117,7 +119,7 @@ class ActivationTest extends TestCase
 		$token = $this->createAdmin();
 		$auth = base64_encode(random_bytes(32));
 
-		$this->postJson('/api/v1/auth/activate', ['token' => $token, 'auth' => $auth])->assertNoContent();
+		$this->postJson('/api/v1/auth/activate', ['token' => $token, 'auth' => $auth] + $this->vaultPayload())->assertNoContent();
 
 		$this->postJson('/api/v1/auth/login', ['email' => 'root@example.org', 'auth' => $auth])->assertOk();
 	}
@@ -130,10 +132,10 @@ class ActivationTest extends TestCase
 	public function test_an_activation_link_works_only_once(): void
 	{
 		$token = $this->createAdmin();
-		$this->postJson('/api/v1/auth/activate', ['token' => $token, 'auth' => base64_encode(random_bytes(32))])->assertNoContent();
+		$this->postJson('/api/v1/auth/activate', ['token' => $token, 'auth' => base64_encode(random_bytes(32))] + $this->vaultPayload())->assertNoContent();
 
 		$this->getJson("/api/v1/auth/activation/{$token}")->assertNotFound();
-		$this->postJson('/api/v1/auth/activate', ['token' => $token, 'auth' => base64_encode(random_bytes(32))])->assertNotFound();
+		$this->postJson('/api/v1/auth/activate', ['token' => $token, 'auth' => base64_encode(random_bytes(32))] + $this->vaultPayload())->assertNotFound();
 	}
 
 	/**
