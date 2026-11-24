@@ -30,7 +30,7 @@ Le backlog est suivi avec le skill `ecc:story-lifecycle` dans `.stories/` : 10 e
 - Projet personnel mené sur du temps libre : aucune date prévue (ni sprint, ni livraison). Un sprint est un lot d'environ 15 points ; seul le **temps réellement passé** compte, noté dans le tableau de `22.01` à la fin de chaque story.
 
 - Toute écriture dans `.stories/` passe par `ledger.js` du skill (`node <skill-dir>/scripts/ledger.js <commande> --root <racine>`), jamais à la main.
-- L'epic `decisions` (ADR crypto, KDF, LDAP/AD, infra, licence/i18n) passe **avant tout code**. Prochaine étape : `story-lifecycle plan-sprint 6` (proposé dans `22.01` : identite-6, ged-chiffree-1, identite-7, ged-chiffree-2), puis l’implémentation story par story ; décider du catalogue réglementaire laissé ouvert par vulnerabilites-4.
+- L'epic `decisions` (ADR crypto, KDF, LDAP/AD, infra, licence/i18n) passe **avant tout code**. Sprint 6 planifié (18 points : identite-6, ged-chiffree-1 étendue à la clé de récupération et passée à 8 points, identite-7, ged-chiffree-2) ; prochaine étape : `story-lifecycle implement identite-6`, puis les autres stories dans cet ordre ; prototype du chiffrement en flux dans le navigateur à faire en tête de ged-chiffree-3 ; décider du catalogue réglementaire laissé ouvert par vulnerabilites-4.
 - Pas d'issues GitHub : le suivi reste dans les fichiers.
 
 ## Reprise sur un autre poste

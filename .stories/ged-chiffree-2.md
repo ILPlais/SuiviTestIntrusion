@@ -2,7 +2,7 @@
 
 **ID:** ged-chiffree-2
 **Epic:** ged-chiffree
-**Sprint:** unassigned
+**Sprint:** 6
 **Status:** todo
 **Points:** 2
 
