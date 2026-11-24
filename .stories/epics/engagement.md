@@ -30,7 +30,7 @@ Saisir le cadre d'un test : acteurs, questionnaire d'engagement, périmètre, ob
 | [[engagement-1]] | Références entreprise, testeurs et clients             | done   |
 | [[engagement-2]] | Création d'un test et statuts                          | done   |
 | [[engagement-3]] | Questionnaire d'engagement                             | todo   |
-| [[engagement-4]] | Périmètre réseau                                       | review |
+| [[engagement-4]] | Périmètre réseau                                       | done   |
 | [[engagement-5]] | Périmètre étendu (physique, radio, ingénierie sociale) | todo   |
 | [[engagement-6]] | Diagramme réseau Mermaid, objectifs et méthodologies   | todo   |
 | [[engagement-7]] | Périmètre applicatif et ressources                     | todo   |
