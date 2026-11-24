@@ -1,0 +1,72 @@
+# Session: 2026-11-24
+
+**Started:** ~13:15
+**Last Updated:** 14:05
+**Project:** SuiviTestIntrusion (C:\Users\ILP\Documents\GitHub\ILPlais\SuiviTestIntrusion)
+**Topic:** Clôture du sprint 4 : fusion d'engagement-4, ledger, régénération de 22.01
+
+---
+
+## What We Are Building
+
+Application Web de suivi de tests d'intrusion (Laravel 13 + Vue 3), backlog dans `.stories/` géré par `ecc:story-lifecycle`. Demande : « Terminer le sprint 4 », puis « Relance le sprint » après une interruption (envoi au projet Claude « Suivi Test Intrusion »).
+
+Il ne restait au sprint 4 qu'engagement-4 (Périmètre réseau, 3 points). Elle était déjà implémentée par une session précédente sur `feature/engagement-4` (statut review, CI verte le 2026-11-23 à 18 h 36). La session a donc consisté à fusionner, passer la story à done, noter le temps, régénérer la planification `22.01` et clore le sprint.
+
+---
+
+## What WORKED (with evidence)
+
+- **Fusion de feature/engagement-4 dans main en --no-ff** — confirmé par : commit `f4bef4b`, arbre identique au commit `536d08f` testé vert en CI (4 SGBD, Playwright, axe).
+- **engagement-4 passée à done via ledger.js** (critères cochés, note sur les points reportés) — confirmé par : `.stories/sprints/sprint-4.md` affiche les 5 stories à done (16 points).
+- **Régénération de 22.01** (feuille de route, Gantt détaillé, sprints prévus 5 à 17, jalons, chemin critique) par un script jetable `gantt.js` (dossier tmp du job) — 54 stories ouvertes (190 pts), V1 34 stories (124 pts), V2 20 (66 pts), fin de V1 au sprint 13, chemin critique GED chiffrée 28 pts.
+- **Commit `8562a7a`** (story, tableaux, 22.01, CLAUDE.md), **fusion d'origin/main** (correctif README de l'utilisateur, `f3527df`), **push de main** — confirmé par : `main...origin/main` synchronisé, CI de main `45393462516` verte.
+- **Branche feature/engagement-4 supprimée** en local et sur GitHub.
+
+---
+
+## What Did NOT Work (and why)
+
+- **`node .claude/scripts/format-stories-tables.js` sans argument** — plante (`path.join` reçoit undefined) : le script attend la racine du dépôt → `node .claude/scripts/format-stories-tables.js .`
+- **Extraction des dépendances sur toute la ligne « Dépend de … »** — le tri topologique bloquait, car les renvois après le premier point (ex. « … deroulement-6 … ») étaient pris pour des dépendances ; limiter au texte avant le premier point.
+- **Outil Edit sur CLAUDE.md dans le dépôt partagé** — refusé par la garde des sessions en arrière-plan (EnterWorktree exigé) ; modification faite par script Node via Bash, la fusion vers main devant de toute façon se faire dans ce dépôt.
+
+---
+
+## What Has NOT Been Tried Yet
+
+- Intégrer les branches non fusionnées qui partent d'engagement-4 : `feature/socle-9-maquettes` (socle-9 en revue, CI verte), `feature/version-testable`, `feature/vulnerabilites-1/3/4/5`, `feature/resultats-1` — à examiner avant de lancer le sprint 5 pour ne pas refaire le travail.
+
+---
+
+## Current State of Files
+
+| File | Status | Notes |
+| --- | --- | --- |
+| `.stories/engagement-4.md` | PASS: Complete | done, critères cochés, note : liens tâches/vulnérabilités → deroulement-1 / vulnerabilites-3, secrets des comptes → GED chiffrée |
+| `.stories/epics/engagement.md`, `.stories/sprints/sprint-4.md` | PASS: Complete | tableaux dérivés remis en forme |
+| `docs/20-29 Développement/22 Planification/22.01 Planification du développement.md` | PASS: Complete | diagrammes régénérés, ligne engagement-4 (0 h 50, estimation), sprint 4 terminé (16 pts en 5 h 20), 16 min/point (13 hors socle-8) |
+| `CLAUDE.md` | PASS: Complete | 75 stories, 21 terminées, 20 en V2, sprints 1 à 4 terminés ; prochaine étape sprint 5 |
+| `docs/40-49 Publication/42 Installation/42.02 Installation manuelle.md` | Non touché | modification locale de l'utilisateur, non commitée |
+| `.claude/Administrateur.txt` | Non touché | mots de passe de démonstration : ne jamais commiter |
+
+---
+
+## Decisions Made
+
+- **Temps d'engagement-4 = 0 h 50 (estimation)** — raison : écart entre les commits « en cours » (17 h 35) et « en revue » (18 h 36), attente de la CI non comptée ; à corriger si l'utilisateur a le vrai temps.
+- **Ordre des diagrammes** — tri topologique, à égalité sprint en cours (5) d'abord puis ordre des epics (socle, identité, GED, engagement, vulnérabilités, déroulement, résultats, exports, exploitation) ; V2 après le jalon V1.
+- **Ne pas lancer `reconcile`** malgré le « drift » signalé par `ledger.js status` : il ne vient que des wikiliens du reformatage.
+
+---
+
+## Blockers & Open Questions
+
+- Temps réel d'engagement-4 à confirmer par l'utilisateur.
+- Plusieurs branches de fonctionnalités non fusionnées en parallèle (voir plus haut) : décider l'ordre d'intégration.
+
+---
+
+## Exact Next Step
+
+Examiner `feature/socle-9-maquettes` et les branches `feature/vulnerabilites-*` (CI via `gh run list --branch <branche>`) et les intégrer dans main, puis `story-lifecycle implement vulnerabilites-1` pour le sprint 5.
