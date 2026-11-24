@@ -79,6 +79,12 @@ return [
 		'cwe_ids.*' => [
 			'regex' => 'Un identifiant CWE s\'écrit CWE-NNN.',
 		],
+		'resources.*' => [
+			'url' => 'Une ressource doit être une adresse web (http ou https).',
+		],
+		'retest_result' => [
+			'required_if' => 'Le résultat du retest est obligatoire pour marquer la correction vérifiée.',
+		],
 		'sort' => [
 			'in' => 'Le tri n\'est pas autorisé sur ce champ.',
 		],

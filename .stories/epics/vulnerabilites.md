@@ -31,6 +31,6 @@ Documenter chaque vulnérabilité, calculer sa gravité CVSS et piloter sa remé
 | [[vulnerabilites-2]] | Moteur CVSS v4.0                                     | todo   |
 | [[vulnerabilites-3]] | Fiche vulnérabilité                                  | review |
 | [[vulnerabilites-4]] | Impact business                                      | review |
-| [[vulnerabilites-5]] | Fiche de remédiation et priorités                    | todo   |
+| [[vulnerabilites-5]] | Fiche de remédiation et priorités                    | review |
 | [[vulnerabilites-6]] | Règle d'agrégation pour un test mixte v3.1 / v4.0    | todo   |
 | [[vulnerabilites-7]] | Références MITRE ATT&CK sur tâches et vulnérabilités | todo   |

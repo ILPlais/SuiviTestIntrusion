@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\InstanceController;
 use App\Http\Controllers\Api\V1\PenetrationTestController;
 use App\Http\Controllers\Api\V1\ProfileController;
+use App\Http\Controllers\Api\V1\RemediationController;
 use App\Http\Controllers\Api\V1\ScopeObjectController;
 use App\Http\Controllers\Api\V1\TenantController;
 use App\Http\Controllers\Api\V1\TwoFactorController;
@@ -59,6 +60,8 @@ Route::prefix('v1')->name('v1.')->middleware('throttle:standard')->group(functio
 		Route::apiResource('tests.scope-objects', ScopeObjectController::class)->shallow();
 		// Fiches de vulnérabilité (vulnerabilites-3) : même découpage que le périmètre.
 		Route::apiResource('tests.vulnerabilities', VulnerabilityController::class)->shallow();
+		// Fiche de remédiation (vulnerabilites-5), créée avec la vulnérabilité : modification seule.
+		Route::patch('vulnerabilities/{vulnerability}/remediation', [RemediationController::class, 'update'])->name('vulnerabilities.remediation');
 		Route::get('company-profile', [CompanyProfileController::class, 'show'])->name('company-profile.show');
 		Route::put('company-profile', [CompanyProfileController::class, 'update'])->name('company-profile.update');
 		Route::patch('user/profile', [ProfileController::class, 'update'])->name('user.profile');

@@ -15,6 +15,40 @@ export const IMPACT_AXES = ['operational', 'legal', 'financial', 'reputation'] a
 /** Axe de l'impact business. */
 export type ImpactAxis = typeof IMPACT_AXES[number]
 
+/** Priorité de correction (11.09). */
+export type RemediationPriority = 'P1' | 'P2' | 'P3' | 'P4'
+
+/** Priorités proposées. */
+export const PRIORITIES: readonly RemediationPriority[] = ['P1', 'P2', 'P3', 'P4']
+
+/** Statut de remédiation ; une vulnérabilité est ouverte tant qu'elle n'est pas vérifiée. */
+export type RemediationStatus = 'todo' | 'in_progress' | 'fixed' | 'verified'
+
+/** Statuts proposés, dans l'ordre du cycle. */
+export const REMEDIATION_STATUSES: readonly RemediationStatus[] = ['todo', 'in_progress', 'fixed', 'verified']
+
+/** Fiche de remédiation d'une vulnérabilité (vulnerabilites-5). */
+export interface Remediation {
+	status: RemediationStatus
+	priority: RemediationPriority
+	/** Priorité tirée du niveau CVSS (Critique → P1 … Mineur → P4). */
+	suggested_priority: RemediationPriority
+	priority_overridden: boolean
+	/** Markdown. */
+	recommendations: string | null
+	/** Adresses web (http ou https), contrôlées par le serveur. */
+	resources: string[]
+	retest_result: string | null
+	verified_at: string | null
+	verified_by: string | null
+	/** Rédiger et suivre le statut : équipe du test. */
+	can_edit: boolean
+	/** Surcharger la priorité : chef de projet ou administrateur. */
+	can_prioritize: boolean
+	/** Déclarer la correction : équipe ou client. */
+	can_declare_fixed: boolean
+}
+
 /** Composant concerné : objet du périmètre du test. */
 export interface AffectedComponent {
 	id: string
@@ -42,6 +76,7 @@ export interface Vulnerability {
 	/** Note de 0 (non applicable) à 4 par axe (vulnerabilites-4). */
 	business_impact: Record<ImpactAxis, number>
 	scope_objects: AffectedComponent[]
+	remediation: Remediation | null
 	created_by: string | null
 	created_at: string
 	updated_at: string
