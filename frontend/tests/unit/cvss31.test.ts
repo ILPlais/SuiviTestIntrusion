@@ -4,7 +4,7 @@
  * pendant la saisie soit le score que le serveur enregistrera.
  */
 import { describe, expect, it } from 'vitest'
-import { cvss31Score, cvss31Severity, parseCvss31, roundUp, toCvss31Vector } from '../../src/utils/cvss31'
+import { cvss31Score, cvss31Severity, formatScore, parseCvss31, roundUp, toCvss31Vector } from '../../src/utils/cvss31'
 
 const REFERENCES: Array<[string, number]> = [
 	['CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H', 9.8],
@@ -41,6 +41,14 @@ describe('cvss31Severity', () => {
 		expect([0, 0.1, 3.9, 4, 6.9, 7, 8.9, 9, 10].map(cvss31Severity)).toEqual([
 			'none', 'minor', 'minor', 'important', 'important', 'major', 'major', 'critical', 'critical',
 		])
+	})
+})
+
+describe('formatScore', () => {
+	it('affiche le dixième avec le séparateur de la langue', () => {
+		expect(formatScore(9.8, 'fr')).toBe('9,8')
+		expect(formatScore(10, 'fr')).toBe('10,0')
+		expect(formatScore(0, 'en')).toBe('0.0')
 	})
 })
 

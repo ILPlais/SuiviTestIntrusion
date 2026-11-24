@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Fiche de remédiation d'une vulnérabilité (vulnerabilites-5, 11.09) : une
@@ -39,7 +40,7 @@ class RemediationController extends Controller
 			'recommendations' => ['sometimes', 'nullable', 'string', 'max:20000'],
 			'resources' => ['sometimes', 'array', 'max:50'],
 			// Adresses web seulement : un lien javascript: ou data: serait cliquable dans la fiche.
-			'resources.*' => ['string', 'max:2048', 'url:http,https'],
+			'resources.*' => ['string', 'distinct', 'max:2048', 'url:http,https'],
 			'priority' => ['sometimes', 'nullable', Rule::enum(RemediationPriority::class)],
 			'status' => ['sometimes', Rule::enum(RemediationStatus::class)],
 			'retest_result' => ['nullable', 'string', 'max:2000', 'required_if:status,verified'],
@@ -68,18 +69,26 @@ class RemediationController extends Controller
 
 	/**
 	 * Vérifie les droits selon les champs envoyés : déclarer « Corrigé » seul
-	 * suffit au client ; tout autre changement exige l'équipe, et la priorité le
-	 * chef de projet.
+	 * suffit au client, mais seulement depuis « À faire » ou « En cours » (il ne
+	 * peut pas annuler un retest) ; tout autre changement exige l'équipe, et la
+	 * priorité le chef de projet.
 	 *
 	 * @param array<string, mixed> $valid Champs validés.
 	 * @param Vulnerability $vulnerability Vulnérabilité visée.
 	 * @return void
+	 *
+	 * @throws ValidationException Si le client déclare une correction déjà déclarée ou vérifiée.
 	 */
 	private function authorizeChanges(array $valid, Vulnerability $vulnerability): void
 	{
 		$onlyDeclaresFix = array_keys($valid) === ['status'] && $valid['status'] === RemediationStatus::Fixed->value;
-		if ($onlyDeclaresFix) {
+		if ($onlyDeclaresFix && Gate::denies('remediate', $vulnerability)) {
 			Gate::authorize('declareFixed', $vulnerability);
+			// Statut converti en énumération par le modèle (et non la chaîne de la base).
+			$current = $vulnerability->remediation()->first()?->status;
+			if (! in_array($current, [RemediationStatus::Todo, RemediationStatus::InProgress], true)) {
+				throw ValidationException::withMessages(['status' => [__('validation.custom.status.already_fixed')]]);
+			}
 
 			return;
 		}

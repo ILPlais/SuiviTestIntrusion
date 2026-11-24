@@ -111,6 +111,18 @@ export function cvss31Score(metrics: Cvss31Metrics): number {
 }
 
 /**
+ * Affiche un score au dixième, avec le séparateur décimal de la langue
+ * (« 9,8 » en français, comme les maquettes de 15.01).
+ *
+ * @param score Score de 0 à 10.
+ * @param locale Langue de l'interface (« fr »).
+ * @returns Le score mis en forme.
+ */
+export function formatScore(score: number, locale: string): string {
+	return new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(score)
+}
+
+/**
  * Niveau de sévérité d'un score (échelle de 11.10).
  *
  * @param score Score de 0 à 10.

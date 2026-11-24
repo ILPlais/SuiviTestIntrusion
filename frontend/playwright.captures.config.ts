@@ -26,7 +26,7 @@ export default defineConfig({
 		{
 			command: 'php artisan serve --port=8000',
 			cwd: '../backend',
-			env: { ...process.env as Record<string, string>, SANCTUM_STATEFUL_DOMAINS: 'localhost:5173', API_RATE_AUTH: '1000' },
+			env: { ...process.env as Record<string, string>, SANCTUM_STATEFUL_DOMAINS: 'localhost:5173', API_RATE_AUTH: '1000', API_RATE_STANDARD: '1000' },
 			url: 'http://localhost:8000/up',
 			reuseExistingServer: true,
 			timeout: 120_000,

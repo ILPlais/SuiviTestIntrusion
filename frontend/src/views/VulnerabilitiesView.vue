@@ -12,13 +12,14 @@ import type { PenetrationTest } from '../api/penetrationTests'
 import type { Vulnerability } from '../api/vulnerabilities'
 import ActionIcon from '../components/ActionIcon.vue'
 import LoadingThrobber from '../components/LoadingThrobber.vue'
+import { formatScore } from '../utils/cvss31'
 
 const props = defineProps<{
 	/** Identifiant (ULID) du test. */
 	id: string
 }>()
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const router = useRouter()
 
 const test = ref<PenetrationTest | null>(null)
@@ -149,7 +150,7 @@ watch(() => props.id, load, { immediate: true })
 					<td>{{ t(`tests.phaseNames.${vulnerability.phase.code}`) }}</td>
 					<td>
 						<template v-if="vulnerability.severity !== null">
-							{{ t(`vulnerabilities.severities.${vulnerability.severity}`) }} {{ vulnerability.cvss_score?.toFixed(1) }}
+							{{ t(`vulnerabilities.severities.${vulnerability.severity}`) }} {{ vulnerability.cvss_score !== null ? formatScore(vulnerability.cvss_score, locale) : '' }}
 						</template>
 						<template v-else>
 							{{ t('vulnerabilities.unrated') }}

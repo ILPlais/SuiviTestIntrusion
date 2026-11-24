@@ -105,7 +105,9 @@ class Remediation extends Model
 
 	/**
 	 * Change le statut : « Vérifié » date le retest et garde son résultat et son
-	 * auteur ; tout autre statut efface la trace d'un retest antérieur.
+	 * auteur ; tout autre statut efface la trace d'un retest antérieur. Un statut
+	 * inchangé ne refait pas le retest : seul le résultat fourni est corrigé, la
+	 * date et l'auteur d'origine restent.
 	 *
 	 * @param RemediationStatus $status Nouveau statut.
 	 * @param string|null $retestResult Résultat du retest (exigé pour « Vérifié », validé en amont).
@@ -114,6 +116,14 @@ class Remediation extends Model
 	 */
 	public function changeStatus(RemediationStatus $status, ?string $retestResult, User $author): void
 	{
+		if ($this->exists && $this->status === $status) {
+			if ($status === RemediationStatus::Verified && $retestResult !== null) {
+				$this->retest_result = $retestResult;
+			}
+
+			return;
+		}
+
 		$this->status = $status;
 		if ($status === RemediationStatus::Verified) {
 			$this->verified_at = Date::now();
