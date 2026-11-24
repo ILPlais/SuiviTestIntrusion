@@ -8,11 +8,11 @@
 
 | ID                   | Title                                  | Points | Status |
 | -------------------- | -------------------------------------- | ------ | ------ |
-| [[resultats-1]]      | Risque global d'un test                | 3      | review |
-| [[socle-9]]          | Interface conforme aux maquettes 15.01 | 5      | review |
-| [[vulnerabilites-1]] | Moteur CVSS v3.1                       | 3      | review |
-| [[vulnerabilites-3]] | Fiche vulnérabilité                    | 3      | review |
-| [[vulnerabilites-4]] | Impact business                        | 2      | review |
-| [[vulnerabilites-5]] | Fiche de remédiation et priorités      | 3      | review |
+| [[resultats-1]]      | Risque global d'un test                | 3      | done   |
+| [[socle-9]]          | Interface conforme aux maquettes 15.01 | 5      | done   |
+| [[vulnerabilites-1]] | Moteur CVSS v3.1                       | 3      | done   |
+| [[vulnerabilites-3]] | Fiche vulnérabilité                    | 3      | done   |
+| [[vulnerabilites-4]] | Impact business                        | 2      | done   |
+| [[vulnerabilites-5]] | Fiche de remédiation et priorités      | 3      | done   |
 
 ## Total Points: 19

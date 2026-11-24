@@ -1,0 +1,124 @@
+# Session: 2026-11-24
+
+**Started:** ~11:15
+**Last Updated:** 13:15
+**Project:** SuiviTestIntrusion (worktree `.claude/worktrees/engagement-4`)
+**Topic:** Maquettes validées, sprint 5 (périmètre, vulnérabilités, risque) et mise en conformité avec les maquettes (socle-9) ; fusion dans `main` demandée mais pas encore faite.
+
+---
+
+## What We Are Building
+
+Application Web de suivi de tests d'intrusion (Laravel 13 / PHP 8.5 dans `backend/`, SPA Vue 3 + TS + vue-i18n + WebTUI Catppuccin dans `frontend/`). Cette session a d'abord produit les maquettes de la V1 (`docs/10-19 Conception/15 Maquettes/`), validées et fusionnées par l'utilisateur. Elle a ensuite planifié le sprint 5 et développé une « version testable » de bout en bout : le périmètre réseau d'un test, les vulnérabilités avec cotation CVSS 3.1, l'impact business, la remédiation et le risque global du test.
+
+Les stories ont été développées en **branches empilées** (chacune créée depuis la précédente), toutes poussées sur GitHub :
+`feature/engagement-4` → `vulnerabilites-1` → `vulnerabilites-3` → `vulnerabilites-4` → `vulnerabilites-5` → `resultats-1` → `version-testable` → `socle-9-maquettes`.
+
+Après un essai, l'utilisateur a jugé que l'écran ne correspondait pas aux maquettes. La story `socle-9` a donc réaligné les écrans 01, 02, 04, 09 et 10 sur les maquettes. Verdict de l'utilisateur : « Ça m'a l'air bon. » Il a ensuite demandé : **« Tu peux fusionner dans `main`. »**
+
+---
+
+## What WORKED (with evidence)
+
+- **Back-end du sprint 5** (CVSS 3.1 `app/Cvss/Cvss31.php`, `Vulnerability`, `Remediation`, `ScopeObject`, `TestRisk`, commande `suivi:demo`). Confirmé par : `php artisan test`, phpstan et `composer lint` passent via `verif.sh back`, et la CI GitHub est verte.
+- **Front-end**. Les éléments :
+  - `TestLayout.vue` avec ses vues enfants : synthèse, périmètre, liste des vulnérabilités, fiche à onglets ;
+  - `RiskSummary.vue` ;
+  - `src/utils/cvss31.ts`.
+
+  Confirmé par : eslint, vue-tsc et vitest passent via `verif.sh front`, les e2e Playwright + axe passent en Latte et en Mocha, et la CI est verte.
+- **CI par branche** : succès sur le dernier commit de chaque branche. Seule exception, `resultats-1` à `3caf8a1` : cet échec venait de la limite de débit, corrigée dans les branches suivantes. `socle-9-maquettes` est vert à `4fe8c25`.
+- **Essai manuel** de l'utilisateur sur la version `socle-9`, sans remarque bloquante.
+
+---
+
+## What Did NOT Work (and why)
+
+- **Copier `node_modules` depuis un ancien `main`** : erreur Vite `ENOENT @webtui/css/base.css`, parce que la dépendance manquait dans cette copie. Il faut lancer `npm ci` dans `~/e4-front`.
+- **Lancer `pkill` dans la même commande que l'installation** : `pkill` se tue lui-même (exit 15). Il faut le lancer séparément.
+- **Limite de débit Standard à 60/min en e2e** : les e2e échouaient en CI. On met `API_RATE_STANDARD: '1000'` (et `API_RATE_AUTH`) dans `playwright*.config.ts`.
+- **Contrastes axe**, dans les deux thèmes :
+  - `subtext0` (4,36:1) échoue ; on le remplace par `subtext1` ;
+  - `tag-grey` en Mocha (3,83:1) échoue ; on le passe en `overlay2` ;
+  - `tag-blue` en Latte (4,34:1) échoue ; on le passe en `sapphire` avec un texte foncé.
+- **Libellés ambigus dans les e2e** (Organisation, Référence, Titre, liens du menu, lien « Tests » présent dans l'en-tête et dans le fil d'Ariane) : la recherche par libellé ne trouvait pas un élément unique. Il faut utiliser `{ exact: true }` et `getByRole('banner')`.
+- **Clé FK auto-référente PostgreSQL déclarée dans `Schema::create`** : elle échoue. Il faut l'ajouter dans un `Schema::table` séparé.
+- **`value('status')` sur Remediation** : la méthode renvoie un enum, donc la comparaison est fausse. Il faut utiliser `first()?->status`.
+- **Réécrire `glyphs.json` en JSON** : cela reformate tout le fichier. Il faut l'éditer à la main.
+- **Commandes git complexes, avec redirection ou `-C`, depuis le worktree** : l'isolation les refuse. Il faut s'en tenir à des commandes simples, une par appel, dans le worktree.
+
+---
+
+## What Has NOT Been Tried Yet
+
+- La fusion de la pile dans `main`, à mener selon la procédure de l'« Exact Next Step ».
+- Le catalogue réglementaire de `vulnerabilites-4` : critère d'acceptation non livré, noté dans la story.
+
+---
+
+## Current State of Files
+
+| File | Status | Notes |
+| --- | --- | --- |
+| `docs/10-19 Conception/15 Maquettes/**` | PASS: Complete | Déjà fusionné dans `main` par l'utilisateur |
+| `backend/app/Cvss/*`, `app/Enums/Severity.php`, `RemediationPriority.php`, `RemediationStatus.php`, `ScopeObjectType.php`, `ServiceProtocol.php` | PASS: Complete | Branches empilées, non fusionnées |
+| `backend/app/Models/{ScopeObject,ScopeHost,ScopeService,ScopeAccount,Vulnerability,Remediation}.php` | PASS: Complete | idem |
+| `backend/app/Http/Controllers/Api/V1/{ScopeObject,Vulnerability,Remediation,TestRisk}Controller.php`, `VulnerabilityPresenter`, policies | PASS: Complete | idem |
+| `backend/app/Results/TestRisk.php`, `app/Console/Commands/DemoData.php` | PASS: Complete | idem |
+| `backend/database/migrations/2026_11_25_*`, `2026_11_26_*` | PASS: Complete | idem |
+| `backend/routes/api.php`, `lang/fr/validation.php`, tests Feature/Unit | PASS: Complete | idem |
+| `frontend/src/router.ts`, `views/{TestLayout,TestsView,TestView,ScopeView,VulnerabilitiesView,VulnerabilityView}.vue`, `components/RiskSummary.vue` | PASS: Complete | idem |
+| `frontend/src/api/{testContext,scope,vulnerabilities,risk,penetrationTests}.ts`, `utils/cvss31.ts` | PASS: Complete | idem |
+| `frontend/src/styles/base.css`, `i18n/locales/fr.json`, `icons/glyphs.json` + sous-ensemble de police | PASS: Complete | idem |
+| `frontend/tests/e2e/{scope,vulnerabilities,penetration-tests}.spec.ts`, `playwright*.config.ts` | PASS: Complete | idem |
+| `docs/40-49 Publication/42 Installation/42.01 …` | PASS: Complete | Nouvelle section « Essayer l'application » |
+| `.stories/` | In Progress | 7 stories en `review` : `engagement-4`, `vulnerabilites-1/3/4/5`, `resultats-1`, `socle-9` ; `sprint-5.md` créé. Passage en `done` à faire après la fusion |
+| `docs/20-29 Développement/22 Planification/22.01 …` | Not Started | Temps passés et sprints 4 et 5 à marquer comme terminés |
+
+---
+
+## Decisions Made
+
+- **Branches empilées plutôt qu'une branche par story depuis `main`** : chaque story dépendait de la précédente. La fusion se fait donc branche par branche, dans l'ordre de la pile, en `--no-ff`.
+- **Échelle de sévérité `none`/`minor`/`important`/`major`/`critical`** et priorité P1–P4 suggérée à partir de la sévérité. Le risque du test est calculé à la lecture, sur les vulnérabilités ouvertes : une vulnérabilité en remédiation n'est pas encore vérifiée.
+- **Droits sur la remédiation** : un client ne peut passer à `fixed` que depuis `todo` ou `in_progress`, sinon la réponse est 422. Un nouvel enregistrement sans changement de statut ne réinitialise pas `verified_at`.
+- **CSP `style-src 'self'`** : aucun `<style>` dans les SFC. Tous les styles vont dans `src/styles/base.css`.
+- **Contrastes WCAG** : les couleurs Catppuccin ont été choisies pour passer axe dans les deux thèmes (voir plus haut).
+
+---
+
+## Blockers & Open Questions
+
+- Aucun blocage. Deux points d'attention :
+  - le checkout principal de l'utilisateur (sur `main`) contient des modifications non commitées (`42.02 Installation manuelle.md`, `.claude/Administrateur.txt`). Il ne faut pas y toucher : la fusion se fait depuis le worktree ;
+  - `origin/main` a avancé à `73ebced` (README seulement), sans conflit attendu.
+
+---
+
+## Exact Next Step
+
+Fusionner dans `main` depuis le worktree `engagement-4`, avec des commandes git simples (options longues, messages en français, signature Co-Authored-By et Claude-Session) :
+
+1. `git switch --detach origin/main`
+2. Fusionner les branches dans cet ordre : `git merge --no-ff --message "Fusion de feature/<id> : …" feature/<id>`. Ordre : `engagement-4`, `vulnerabilites-1`, `vulnerabilites-3`, `vulnerabilites-4`, `vulnerabilites-5`, `resultats-1`, `version-testable`, `socle-9-maquettes`.
+3. Lancer `verif.sh all` sur le résultat : `MSYS_NO_PATHCONV=1 wsl.exe -d Ubuntu-26.04 --exec bash --login <chemin>/verif.sh all`. Le script était dans le dossier tmp du job ; le recréer si besoin. Il synchronise vers `~/e4` et `~/e4-front`, puis lance test, phpstan, lint, eslint, vue-tsc et vitest.
+4. Mettre à jour le ledger :
+   - lancer `ledger.js apply` : les 7 stories passent de `review` à `done` ;
+   - lancer `node ../.claude/scripts/format-stories-tables.js ..`, jamais `reconcile` ;
+   - dans `22.01`, noter les temps : engagement-4 ~1 h 30, vulnerabilites-1 0 h 20, -3 0 h 45, -4 0 h 20, -5 0 h 45, resultats-1 0 h 40, socle-9 ~2 h 00 ;
+   - dans `22.01`, marquer les sprints 4 et 5 comme terminés ;
+   - commiter.
+5. `git push origin HEAD:main`, puis vérifier la CI de `main`.
+6. Supprimer les branches : `git branch --delete feature/<id>` et `git push origin --delete feature/<id>`, pour les 8 branches.
+7. Dire à l'utilisateur de lancer `git pull --ff-only` dans son checkout principal. Sa modification de `42.02` n'entre pas en conflit, car la pile ne touche que `42.01`.
+8. Copier cette note dans `.claude/session-data/` du dépôt et la commiter sur `main` (règle de CLAUDE.md).
+
+---
+
+## Environment & Setup Notes
+
+- Outils dans WSL Ubuntu-26.04. Copies de travail : `~/e4` (back-end, avec vendor et .env) et `~/e4-front` (front-end, `npm ci` fait).
+- CI : `"/c/Program Files/GitHub CLI/gh.exe" run list --branch <branche>`.
+- Ledger : `node C:/Users/ILP/.claude/plugins/cache/ecc/ecc/2.2.3/skills/story-lifecycle/scripts/ledger.js apply --input <json> --root ..`. Les statuts n'avancent que d'un cran à la fois.
+- Le hook GateGuard exige une justification factuelle avant la première modification de chaque fichier.
+- Serveurs de démonstration arrêtés ; l'utilisateur a redémarré son PC.

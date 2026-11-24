@@ -3,7 +3,7 @@
 **ID:** vulnerabilites-4
 **Epic:** vulnerabilites
 **Sprint:** 5
-**Status:** review
+**Status:** done
 **Points:** 2
 
 ## Context
@@ -21,6 +21,6 @@ Dépend de vulnerabilites-3.
 
 ## Definition of Done
 
-- [ ] Tests written first cover the acceptance criteria
-- [ ] Code review and verification loop passed
-- [ ] Code merged to main
+- [x] Tests written first cover the acceptance criteria
+- [x] Code review and verification loop passed
+- [x] Code merged to main

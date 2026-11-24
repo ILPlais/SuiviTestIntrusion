@@ -25,7 +25,7 @@ Synthétiser le risque d'un test et l'avancement global (CDC 11.12).
 
 | ID              | Title                                         | Status |
 | --------------- | --------------------------------------------- | ------ |
-| [[resultats-1]] | Risque global d'un test                       | review |
+| [[resultats-1]] | Risque global d'un test                       | done   |
 | [[resultats-2]] | Graphiques du tableau de bord                 | todo   |
 | [[resultats-3]] | Conclusions, mesures et contre-mesures        | todo   |
 | [[resultats-4]] | Tableau de bord multi-tests                   | todo   |
