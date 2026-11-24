@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\RemediationController;
 use App\Http\Controllers\Api\V1\ScopeObjectController;
 use App\Http\Controllers\Api\V1\TenantController;
+use App\Http\Controllers\Api\V1\TestRiskController;
 use App\Http\Controllers\Api\V1\TwoFactorController;
 use App\Http\Controllers\Api\V1\VulnerabilityController;
 use Illuminate\Support\Facades\Route;
@@ -62,6 +63,8 @@ Route::prefix('v1')->name('v1.')->middleware('throttle:standard')->group(functio
 		Route::apiResource('tests.vulnerabilities', VulnerabilityController::class)->shallow();
 		// Fiche de remédiation (vulnerabilites-5), créée avec la vulnérabilité : modification seule.
 		Route::patch('vulnerabilities/{vulnerability}/remediation', [RemediationController::class, 'update'])->name('vulnerabilities.remediation');
+		// Risque global d'un test (resultats-1), calculé à la lecture.
+		Route::get('tests/{test}/risk', TestRiskController::class)->name('tests.risk');
 		Route::get('company-profile', [CompanyProfileController::class, 'show'])->name('company-profile.show');
 		Route::put('company-profile', [CompanyProfileController::class, 'update'])->name('company-profile.update');
 		Route::patch('user/profile', [ProfileController::class, 'update'])->name('user.profile');

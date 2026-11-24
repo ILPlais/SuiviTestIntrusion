@@ -308,6 +308,21 @@
 			"overriddenNote": "(surchargée par le chef de projet ; suggestion depuis la cotation : {priority})"
 		}
 	},
+	"risk": {
+		"heading": "Synthèse du risque",
+		"unavailable": "Le risque du test n'a pas pu être calculé.",
+		"maxScore": "Gravité technique",
+		"none": "aucune vulnérabilité ouverte cotée",
+		"weightedAverage": "Score moyen pondéré",
+		"informative": "{score} (informatif, pondéré par la priorité)",
+		"openCount": "Vulnérabilités ouvertes",
+		"openOfTotal": "{open} sur {total}",
+		"impact": "Impact {axis}",
+		"bySeverity": "Vulnérabilités ouvertes par sévérité",
+		"byPriority": "Vulnérabilités ouvertes par priorité",
+		"byRemediationStatus": "Vulnérabilités par statut de remédiation",
+		"byPhase": "Vulnérabilités ouvertes par phase"
+	},
 	"company": {
 		"heading": "Entreprise prestataire",
 		"empty": "La fiche de l'entreprise n'est pas encore remplie.",

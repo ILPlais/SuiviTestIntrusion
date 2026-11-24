@@ -264,6 +264,14 @@
 		gap: 1ch;
 	}
 
+	/*
+	 * Barres en caractères du risque global (resultats-1, maquette 02) : partie
+	 * vide estompée ; les barres sont décoratives, chaque compteur est écrit.
+	 */
+	.bar-empty {
+		opacity: 0.35;
+	}
+
 	/* Masqué à l'écran, lu par les lecteurs d'écran. */
 	.visually-hidden {
 		position: absolute;
